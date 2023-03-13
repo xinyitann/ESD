@@ -1,10 +1,10 @@
 <template>
-  <nav class="navbar navbar-expand-lg bg-blue" data-bs-theme="dark">
+  <nav class="navbar navbar-expand-lg bg-blue sticky-top" data-bs-theme="dark">
     <div class="container-fluid">
       <router-link to="/" class="nav-link">
         <img src="../assets/logo.jpg" class="w-50">
       </router-link>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation" style="color: white;">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse justify-content-end" id="navbarText">
