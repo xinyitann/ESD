@@ -76,7 +76,7 @@
                 <router-link
                 to="/properties"
                 class="opacity-75 text-white text-decoration-none footer-link"
-                >Properties</router-link
+                >All Properties</router-link
                 >
             </li>
             <li class="my-2">
