@@ -10,6 +10,7 @@ import ErrorPage from '../views/error.vue'
 import AddListingPage from "../views/addListing.vue"
 import ViewBookingPage from "../views/viewBooking.vue"
 import ViewMyPropertyPage from "../views/viewMyProperty.vue"
+import HomePage from "../views/home.vue"
 
 
 const routes = [
@@ -68,6 +69,11 @@ const routes = [
         name: "MyProperty",
         component: ViewMyPropertyPage,
     },
+    {
+        path: "/home",
+        name: "HomePage",
+        component: HomePage,  
+    }
 ]
 
 const router = createRouter({
