@@ -10,7 +10,7 @@
       <div class="collapse navbar-collapse justify-content-end" id="navbarText">
         <ul class="navbar-nav me-2">
           <li class="nav-item mx-2">
-            <router-link to="/properties" class="nav-link">Property</router-link>
+            <router-link to="/properties" class="nav-link">Properties</router-link>
           </li>
           <li class="nav-item mx-2">
             <router-link to="/booking" class="nav-link">Booking</router-link>
@@ -30,6 +30,11 @@
 export default {
   name: 'NavBar',
   props: {
+  },
+  data(){ // or could put it in props
+    return{
+
+    }
   }
 }
 </script>
