@@ -38,7 +38,9 @@
                         </select>
                     </div>
                     <div class="d-flex justify-content-around">
-                        <button type="submit" class="btn" style="background-color: #6d8363; color: white;">Cancel</button>
+                        <router-link to="/">
+                            <button type="submit" class="btn" style="background-color: #6d8363; color: white;">Cancel</button>
+                        </router-link>
                         <button type="submit" class="btn" style="background-color: #447098; color: white;">Submit</button>
                     </div>
                 </form>

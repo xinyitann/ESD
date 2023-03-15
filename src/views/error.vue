@@ -9,7 +9,7 @@
                     <h1>Oops!</h1>
                     <h3>Error 404 - Page not found</h3>
                     <p>The page you requested could not be found. We are working on it.</p>
-                    <router-link to="/" class="nav-link">
+                    <router-link to="/">
                         <button class="btn btn-primary">Back to Home</button>
                     </router-link>
                 </div>
