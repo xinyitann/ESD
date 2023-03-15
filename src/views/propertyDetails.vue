@@ -62,7 +62,11 @@
                                 </div>
                                 <div class="row">
                                     <div class="col"></div>
-                                    <div class="col-xxl-6 d-xxl-flex justify-content-xxl-center align-items-xxl-center"><a class="btn btn-danger float-start" type="button" href="booking">Book Appointment</a></div>
+                                    <div class="col-xxl-6 d-xxl-flex justify-content-xxl-center align-items-xxl-center">
+                                        <router-link to="/bookingnow">
+                                        <a class="btn btn-danger float-start" type="button">Book Appointment</a>
+                                    </router-link></div>
+                                        
                                     <div class="col"></div>
                                 </div>
                             </div>

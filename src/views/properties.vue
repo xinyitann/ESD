@@ -58,7 +58,9 @@
                             <h5 class="card-text">1216 sqft</h5>
                             <h5 class="card-text">$600,000</h5>
                             <h5 class="card-text text-end">Bidding in progress</h5>
-                            <a class="btn btn-light float-end" href="propertyDetails" type="button" style="background-color: #447098; color: white;" >View Details</a>
+                            <router-link to="/propertyDetails">
+                             <a class="btn btn-light float-end" type="button" style="background-color: #447098; color: white;" >View Details</a>
+                            </router-link>
                         </div>
                         <!-- <div class="d-flex"><img class="rounded-circle flex-shrink-0 me-3 fit-cover" width="50" height="50" src="https://cdn.bootstrapstudio.io/placeholders/1400x800.png">
                             <div>

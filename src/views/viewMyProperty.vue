@@ -1,24 +1,30 @@
 <template>
     <div>
-
+    <!--header-->
         <div class="container">
-            <div class="row">
-                <div class="col-md-6"></div>
-                <div class="col-md-6"></div>
-            </div>
-        </div>
-        <div class="container">
-            <div class="row">
-                <div class="col-md-4"></div>
-                <div class="col-md-4">
-                    <h1 class="text-center align-content-center" style="padding-top: 10px;margin-top: 16px;margin-bottom: 20px;">Properties Managed&nbsp;</h1>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6"></div>
+                    <div class="col-md-6"></div>
                 </div>
-                <div class="col-md-4"></div>
             </div>
-        </div>
-        <div class="container">
-            <div class="row float-end ">
-                <div class="col text-right"><button class="btn btn-primary" type="button" style="background-color: #447098; color: white;" href="../views/addListing.vue">Add Listing</button></div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-4"></div>
+                    <div class="col-md-4">
+                        <h1 class="text-center align-content-center" style="padding-top: 10px;margin-top: 16px;margin-bottom: 20px;">Properties Managed&nbsp;</h1>
+                    </div>
+                    <div class="col-md-4"></div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="row float-end">
+                    <router-link to="/addListing">
+                    <div class="col text-right">
+                        <button class="btn" type="button" style="background-color: #447098; color: white;">Add Listing</button>
+                    </div>
+                </router-link>
+                </div>
             </div>
         </div>
 
