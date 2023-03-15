@@ -86,16 +86,16 @@ INSERT INTO `property` (`property_id`, `agent_id`,`customer_id`, `name`, `addres
 
 -- Table structure for table `property_images`
 DROP TABLE IF EXISTS property_images;
-CREATE TABLE property_images.pic (
+CREATE TABLE property_images(
 `propertyID_image` INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
 `img` mediumBLOB,
 `property_id` int(11) NOT NULL,
 PRIMARY KEY(`propertyID_image`),
-constraint property_image_fk1 foreign key (property_id) references property(property_id)
+constraint property_images_fk1 foreign key (property_id) references property(property_id)
 )
 ENGINE = InnoDB;
 -- Dumping data for table `property_images`
-insert into pic(propertyID_image,img) values(1,'//Users//perlineong//Documents//SMU//AY 2022-2023//IS 214 - ESD//project//Databases//property_images_upload');
+insert into property_images(propertyID_image,img) values(1,'//Users//perlineong//Documents//SMU//AY 2022-2023//IS 214 - ESD//project//Databases//property_images_upload');
 
 
 -- Table structure for table `booking`
@@ -143,7 +143,7 @@ CREATE TABLE IF NOT EXISTS `bidding` (
   `highest_bid` float(53) NOT NULL,
   `customer_id` int(11) NOT NULL,
   PRIMARY KEY (`bidding_id`),
-  constraint bidding_fk1 foreign key (customer_id) references customer(customer_id),
+  constraint bidding_fk1 foreign key (customer_id) references customer(customer_id)
   
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
