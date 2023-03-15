@@ -20,3 +20,9 @@ CREATE TABLE IF NOT EXISTS `error` (
   `error_message` varchar(50) NOT NULL,
   PRIMARY KEY (`error_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `error`
+--
+
+INSERT INTO `error` (`error_message`) VALUES ('Something went wrong');
