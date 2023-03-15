@@ -10,7 +10,7 @@
       <div class="collapse navbar-collapse justify-content-end" id="navbarText">
         <ul class="navbar-nav me-2">
           <li class="nav-item mx-2">
-            <router-link to="/properties" class="nav-link">Properties</router-link>
+            <router-link to="/properties" class="nav-link">All Properties</router-link>
           </li>
           <li class="nav-item mx-2">
             <router-link to="/bookingnow" class="nav-link">Book an Appointment</router-link>
