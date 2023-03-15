@@ -68,16 +68,23 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col"></div>
                 </div>
                 <div class="row">
-                    <div class="col">
+                    <div class="col"></div>
+                    <div class="col-xxl-8">
                         <div class="card border-light">
 
                             <!--Bidding information-->
                             <div class="card-body">
                                 <h4 class="text-center card-title">Bidding Details&nbsp;</h4>
                                 <p class="d-xxl-flex justify-content-xxl-center card-text">5 days 3 hrs / Sunday 10 pm / 7 bids / $ 900,000</p>
+                                <div class="row">
+                                    <div class="col"></div>
+                                    <div class="input-group"><input class="form-control" type="text" placeholder="Enter your bid" fdprocessedid="4gn2t1a"><button class="btn " type="button" fdprocessedid="82x11p" style="background-color: #447098; color: white;" >Place Bid</button></div>
+                                    
+                                    <div class="col"></div>
+                                </div>
+                               
                             </div>
                         </div>
                     </div>
