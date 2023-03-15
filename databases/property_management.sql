@@ -56,6 +56,8 @@ INSERT INTO `customer` (`customer_id`, `name`, `phone`, `email`) VALUES
 -- --------------------------------------------------------
 
 
+
+
 -- Table structure for table `property`
 DROP TABLE IF EXISTS property;
 CREATE TABLE IF NOT EXISTS property (
@@ -84,19 +86,14 @@ INSERT INTO `property` (`property_id`, `agent_id`,`customer_id`, `name`, `addres
 ('1','1','1', 'Waterfront condominium', 'waterfront street 17', '123456', 'Condominium','5929',  '4', 'north','2011', '13150000','');
 
 
--- Table structure for table `property_images`
 DROP TABLE IF EXISTS property_images;
 CREATE TABLE property_images(
-`propertyID_image` INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
-`img` mediumBLOB,
-`property_id` int(11) NOT NULL,
-PRIMARY KEY(`propertyID_image`),
-constraint property_images_fk1 foreign key (property_id) references property(property_id)
-)
-ENGINE = InnoDB;
--- Dumping data for table `property_images`
-insert into property_images(propertyID_image,img) values(1,'//Users//perlineong//Documents//SMU//AY 2022-2023//IS 214 - ESD//project//Databases//property_images_upload');
-
+    `propertyID_image` INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
+	`img` mediumBLOB,
+	`property_id` int(11) NOT NULL,
+    PRIMARY KEY(`propertyID_image`),
+	constraint property_images_fk1 foreign key (property_id) references property(property_id)
+);
 
 -- Table structure for table `booking`
 DROP TABLE IF EXISTS booking;
@@ -146,7 +143,6 @@ CREATE TABLE IF NOT EXISTS `bidding` (
   constraint bidding_fk1 foreign key (customer_id) references customer(customer_id)
   
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
-
 
 
 
