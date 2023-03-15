@@ -13,7 +13,10 @@
             <router-link to="/properties" class="nav-link">Properties</router-link>
           </li>
           <li class="nav-item mx-2">
-            <router-link to="/booking" class="nav-link">Booking</router-link>
+            <router-link to="/bookingnow" class="nav-link">Book an Appointment</router-link>
+          </li>
+          <li class="nav-item mx-2">
+            <router-link to="/viewbooking" class="nav-link">My Bookings</router-link>
           </li>
           <li class="nav-item mx-2">
             <router-link to="/profile" class="nav-link">

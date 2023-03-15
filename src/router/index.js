@@ -7,6 +7,9 @@ import PropertyDetailsPage from '../views/propertyDetails.vue'
 import BookingPage from '../views/booking.vue'
 import PaymentPage from '../views/payment.vue'
 import ErrorPage from '../views/error.vue'
+import AddListingPage from "../views/addListing.vue"
+import ViewBookingPage from "../views/viewBooking.vue"
+import ViewMyPropertyPage from "../views/viewMyProperty.vue"
 
 const routes = [
     {
@@ -35,7 +38,7 @@ const routes = [
         component: PropertyDetailsPage
     },
     {
-        path: '/booking',
+        path: '/bookingnow',
         name: 'Booking',
         component: BookingPage
     },
@@ -48,6 +51,21 @@ const routes = [
         path: "/:pathMatch(.*)*",
         name: "Error",
         component: ErrorPage,
+    },
+    {
+        path: "/addlisting",
+        name: "AddListing",
+        component: AddListingPage,
+    },
+    {
+        path: "/viewbooking",
+        name: "ViewBooking",
+        component: ViewBookingPage,
+    },
+    {
+        path: "/myproperty",
+        name: "MyProperty",
+        component: ViewMyPropertyPage,
     },
 ]
 
