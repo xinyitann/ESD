@@ -81,9 +81,16 @@
             </li>
             <li class="my-2">
                 <router-link
-                to="/booking"
+                to="/booknow"
                 class="opacity-75 text-white text-decoration-none footer-link"
-                >Booking</router-link
+                >Book An Appointment</router-link
+                >
+            </li>
+            <li class="my-2">
+                <router-link
+                to="/viewbooking"
+                class="opacity-75 text-white text-decoration-none footer-link"
+                >My Bookings</router-link
                 >
             </li>
             </ul>

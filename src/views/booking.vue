@@ -2,7 +2,7 @@
     <div class="container-fluid">
         <div class = "row d-flex justify-content-center">
             <div class="col-10 col-md-8 col-lg-7 my-3">
-                <h2 class="text-center my-2">Book Appointment</h2>
+                <h2 class="text-center my-2">Book An Appointment</h2>
                 <form>
                     <div class="mb-3">
                         <label for="customerID" class="form-label">Customer ID</label>
@@ -41,7 +41,7 @@
                         <router-link to="/">
                             <button type="submit" class="btn" style="background-color: #6d8363; color: white;">Cancel</button>
                         </router-link>
-                        <button type="submit" class="btn" style="background-color: #447098; color: white;">Submit</button>
+                        <button type="submit" class="btn" style="background-color: #447098; color: white;">Book Now</button>
                     </div>
                 </form>
             </div>
