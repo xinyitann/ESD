@@ -1,4 +1,7 @@
 <template>
+    <div style="font-family: sans-serif;font-size: 40px;text-align: center;">
+        Booking
+     </div>
     <div id="bookingtemplate">
         <ul class="nav nav-tabs" id="myTab" role="tablist">
         <li class="nav-item" role="presentation">
