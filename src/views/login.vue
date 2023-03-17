@@ -71,23 +71,18 @@ name: 'LoginPage',
 <style>
     
    #login_main{
-        margin-top: 50px;
-        position: absolute;
-        bottom: 0;
-        top: 0;
-        width: 100%;
+        padding: 50px;
         background-image: url(../assets/loginbackground.jpg);
         background-size: cover;
     }
     #login{
-        margin-top: 70px;
+      
         margin-left: auto;
         margin-right: auto;
         width: 50%;
         font-family: sans-serif;
         color: white;
         border: solid white 3px;
-        padding: 20px;
         background-color:  rgba(36,63,90,255);
         opacity: 0.9;
     }
