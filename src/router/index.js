@@ -4,13 +4,13 @@ import LoginPage from '../views/login.vue'
 import ProfilePage from '../views/profile.vue'
 import PropertiesPage from '../views/properties.vue'
 import PropertyDetailsPage from '../views/propertyDetails.vue'
-import PropertyManagedPage from '../views/propertyManaged.vue'
 import BookingPage from '../views/booking.vue'
 import PaymentPage from '../views/payment.vue'
 import ErrorPage from '../views/error.vue'
 import AddListingPage from "../views/addListing.vue"
 import ViewBookingPage from "../views/viewBooking.vue"
 import ViewMyPropertyPage from "../views/viewMyProperty.vue"
+
 
 
 const routes = [
@@ -38,11 +38,6 @@ const routes = [
         path: '/propertydetails',
         name: 'PropertyDetails',
         component: PropertyDetailsPage
-    },
-    {
-        path: '/propertymanaged',
-        name: 'PropertyManaged',
-        component: PropertyManagedPage
     },
     {
         path: '/bookingnow',
@@ -73,7 +68,7 @@ const routes = [
         path: "/myproperty",
         name: "MyProperty",
         component: ViewMyPropertyPage,
-    },
+    }
 ]
 
 const router = createRouter({
