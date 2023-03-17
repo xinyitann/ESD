@@ -126,6 +126,10 @@ CREATE TABLE IF NOT EXISTS `error` (
   PRIMARY KEY (`error_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
+--
+-- Dumping data for table `error`
+INSERT INTO `error` (`error_message`)
+VALUES ('Error: Booking is no longer available');
 
 --
 -- Table structure for table `bidding`
@@ -144,6 +148,10 @@ CREATE TABLE IF NOT EXISTS `bidding` (
   
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
+--
+-- Dumping data for table `bidding`
+INSERT INTO `bidding` (`start_date`, `end_date`, `option_fee`, `highest_bid`, `customer_id`)
+VALUES ('2023-03-10 12:00:00', '2023-03-12 12:00:00', 50.00, 480000.00, 1);
 
 
 
