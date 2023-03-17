@@ -7,14 +7,14 @@
   <!-- Email input -->
   <div id="login-form">
   <div class="form-outline mb-4">
-    <input type="email" id="idinput" class="form-control" />
     <label class="form-label" for="form2Example1">ID</label>
+    <input type="email" id="idinput" class="form-control" />
   </div>
 
   <!-- Password input -->
   <div class="form-outline mb-4">
-    <input type="password" id="password_input" class="form-control" />
     <label class="form-label" for="form2Example2">Password</label>
+    <input type="password" id="password_input" class="form-control" />
   </div>
 
   <!-- 2 column grid layout for inline styling -->

@@ -72,10 +72,11 @@ name: 'UserProfile',
         width: 70%;
         text-align: center;
         font-family: sans-serif;
-        margin-top: 50px;
+        margin-top: 20px;
         border: rgba(36,63,90,255) solid 5px;
         padding-top: 20px;
         padding-bottom: 20px;
+        margin-bottom: 20px;
     }
     #text_box{
         border: black solid 1px;
