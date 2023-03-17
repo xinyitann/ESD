@@ -58,15 +58,7 @@
       <td>{{item.CustomerName}}</td>
       <td>{{item.Address}}</td>
       <td>
-        <div class="col">
-            <div class="row">
-                <button type="button" class="btn btn-success bookingbutton">accept</button>
-            </div>
-            <br>
-            <div class="row">
-                <button type="button" class="btn btn-danger bookingbutton">reject</button>
-            </div>
-        </div>
+        
         </td>
     </tr>
   </tbody>
@@ -87,15 +79,7 @@
       <td>{{item.CustomerName}}</td>
       <td>{{item.Address}}</td>
       <td>
-        <div class="col">
-            <div class="row">
-                <button type="button" class="btn btn-success bookingbutton">accept</button>
-            </div>
-            <br>
-            <div class="row">
-                <button type="button" class="btn btn-danger bookingbutton">reject</button>
-            </div>
-        </div>
+       
         </td>
     </tr>
   </tbody>
@@ -113,6 +97,7 @@ name: 'ViewBooking',
     },
     data(){
         return{
+            //update the array accordingly
             pending:  [{'Address':'123','CustomerName':'john'},{'Address':'456','CustomerName':'peter'}],
             accepted: [{'Address':'123','CustomerName':'ben'},{'Address':'456','CustomerName':'peter'}],
             rejected: [{'Address':'123','CustomerName':'ben'},{'Address':'456','CustomerName':'john'}],
@@ -135,12 +120,13 @@ name: 'ViewBooking',
 
 <style>
     #bookingtemplate{
-        border: rgba(36,63,90,255) 10px solid;
+        border: rgba(36,63,90,255) 5px solid;
         width: 80%;
         height: 100vh;
         margin: auto;
         padding: 20px;
         margin-top: 20px;
+        margin-bottom: 20px;
     }
     #pending-tab{
         background-color: aqua;
