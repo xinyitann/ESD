@@ -124,12 +124,12 @@ CREATE TABLE IF NOT EXISTS `error` (
   `error_id` int(11) NOT NULL AUTO_INCREMENT,
   `error_message` varchar(50) NOT NULL,
   PRIMARY KEY (`error_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+);
 
 --
 -- Dumping data for table `error`
-INSERT INTO `error` (`error_message`)
-VALUES ('Error: Booking is no longer available');
+INSERT INTO `error` (`error_id`,`error_message`)
+VALUES ('1', 'Error: Booking is no longer available');
 
 --
 -- Table structure for table `bidding`
@@ -138,20 +138,16 @@ VALUES ('Error: Booking is no longer available');
 DROP TABLE IF EXISTS `bidding`;
 CREATE TABLE IF NOT EXISTS `bidding` (
   `bidding_id` int(11) NOT NULL AUTO_INCREMENT,
+  `customer_id` int(11) NOT NULL,
   `start_date` timestamp NOT NULL,
   `end_date` timestamp NOT NULL,
   `option_fee` float(53) NOT NULL,
   `highest_bid` float(53) NOT NULL,
-  `customer_id` int(11) NOT NULL,
   PRIMARY KEY (`bidding_id`),
   constraint bidding_fk1 foreign key (customer_id) references customer(customer_id)
   
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+);
 
---
--- Dumping data for table `bidding`
-INSERT INTO `bidding` (`start_date`, `end_date`, `option_fee`, `highest_bid`, `customer_id`)
-VALUES ('2023-03-10 12:00:00', '2023-03-12 12:00:00', 50.00, 480000.00, 1);
-
-
+INSERT INTO `bidding` (`bidding_id`, `customer_id`, `start_date`, `end_date`, `option_fee`, `highest_bid`)
+VALUES ('1', '1', '2023-03-23 12:00:00', '2023-03-27 12:00:00', '50', '13150000');
 
