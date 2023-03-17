@@ -7,7 +7,7 @@ import os
 
 import amqp_setup
 
-monitorBindingKey='*.notification' #e.g booking.notification; bidding.notification
+monitorBindingKey='*.notification' #e.g listing.notificaton; booking.notification; bidding.notification
 
 def receiveNotification():
     amqp_setup.check_setup()
