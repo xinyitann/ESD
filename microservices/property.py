@@ -7,7 +7,8 @@ from os import environ
 app = Flask(__name__)
 
 # change the database name
-app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('dbURL') #prepare the code for containerisation 
+# app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('dbURL') #prepare the code for containerisation 
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/property_management'
 # suppress the warning messages
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
@@ -22,19 +23,19 @@ class Property(db.Model):
     __tablename__ = 'property'
 
     # mirror the database columns --> the data types might not correspond but its the same
-    property_id=db.column(db.Integer, nullable=False, primary_key=True)
-    agent_id=db.column(db.Integer(11), nullable=False)
-    customer_id=db.column(db.Integer(11), nullable=False)
+    property_id=db.Column(db.Integer, nullable=False, primary_key=True)
+    agent_id=db.Column(db.Integer, nullable=False)
+    customer_id=db.Column(db.Integer, nullable=False)
     name=db.Column(db.String(32),nullable=False)
     address=db.Column(db.String(45),nullable=False)
-    postalcode=db.Column(db.Integer(11),nullable=False)
+    postalcode=db.Column(db.Integer,nullable=False)
     property_type=db.Column(db.String(45),nullable=False)
-    square_feet=db.column(db.Integer(11), nullable=False)
-    room=db.column(db.Integer(11), nullable=False)
+    square_feet=db.Column(db.Integer, nullable=False)
+    room=db.Column(db.Integer, nullable=False)
     facing=db.Column(db.String(45),nullable=False)
-    build_year=db.column(db.Integer(11), nullable=False)
+    build_year=db.Column(db.Integer, nullable=False)
     estimated_cost=db.Column(db.Float(53), nullable=False)
-    image=db.Column(db.Varbinary(50), nullable=False)
+    image=db.Column(db.String(50), nullable=False)
 
 
     # constructor
