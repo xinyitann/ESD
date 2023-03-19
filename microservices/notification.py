@@ -2,12 +2,17 @@
 # The above shebang (#!) operator tells Unix-like environments
 # to run this file as a python3 script
 
+from twilio.rest import Client
 import json
 import os
 
 import amqp_setup
 
 monitorBindingKey='*.notification' #e.g booking.notification; bidding.notification
+
+sid =''
+authToken = ''
+client = Client(sid, authToken)
 
 def receiveNotification():
     amqp_setup.check_setup()
@@ -26,10 +31,27 @@ def callback(channel, method, properties, body): # required signature for the ca
 
 #change to processNoti which calls the email api to send the noti
 def processNotification(body):
+    print("in notification microservice")
+    # Parse the JSON message body
+    booking = json.loads(body)
+
+    # Extract the "number" and "booking_info" keys from the booking object
+    number = booking["number"]
+    booking_info = booking["booking_info"]
+
+    # Send the notification to the specified number using Twilio API
+    client = Client(sid, authToken)
+    message = client.messages.create(
+        body=booking_info,
+        from_='whatsapp:+14155238886',
+        to=f"whatsapp:+65{number}"
+    )
+
+    print(f"Sent notification to {number} via WhatsApp")
     return
 
 
-if __name__ == "__main__":  # execute this program only if it is run as a script (not by 'import')    
+if __name__ == "__main__":
     print("\nThis is " + os.path.basename(__file__), end='')
     print(": monitoring routing key '{}' in exchange '{}' ...".format(monitorBindingKey, amqp_setup.exchangename))
     receiveNotification()
