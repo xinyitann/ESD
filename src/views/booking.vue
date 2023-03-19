@@ -17,11 +17,11 @@
                         <input type="text" class="form-control" id="propertyID" disabled>
                     </div>
                     <div class="mb-3">
-                        <label for="bookingDate" class="form-label">Select a Date</label>
+                        <label for="bookingDate" class="form-label">Select a Date*</label>
                         <input type="date" class="form-control" id="bookingDate" v-model="bookingDate">
                     </div>
                     <div class="mb-3">
-                        <label for="bookingTime" class="form-label">Select a Time</label>
+                        <label for="bookingTime" class="form-label">Select a Time*</label>
                         <select class="form-select" id="bookingTime" v-model="bookingTime">
                             <option selected>hh:mm - hh:mm</option>
                             <option value="0900-1000">09:00 - 10:00</option>
