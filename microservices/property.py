@@ -1,46 +1,26 @@
-from flask import Flask, request, jsonify
-from flask_sqlalchemy import SQLAlchemy
-from flask_cors import CORS
-from os import environ
-
-
-app = Flask(__name__)
-
-# change the database name
-# app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('dbURL') #prepare the code for containerisation 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/property_management'
-# suppress the warning messages
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
-db = SQLAlchemy(app)
-CORS(app)
-
-# name it the same as your table name --> same for all your other microservices
-
+from app import app, db
+from customer import Customer
+from agent import Agent
+from flask import request, jsonify
 
 class Property(db.Model):
-    # database name --> what you created in your database
     __tablename__ = 'property'
 
-    # mirror the database columns --> the data types might not correspond but its the same
-    property_id=db.Column(db.Integer, nullable=False, primary_key=True)
-    agent_id=db.Column(db.Integer, nullable=False)
-    customer_id=db.Column(db.Integer, nullable=False)
-    name=db.Column(db.String(32),nullable=False)
-    address=db.Column(db.String(45),nullable=False)
-    postalcode=db.Column(db.Integer,nullable=False)
-    property_type=db.Column(db.String(45),nullable=False)
-    square_feet=db.Column(db.Integer, nullable=False)
-    room=db.Column(db.Integer, nullable=False)
-    facing=db.Column(db.String(45),nullable=False)
-    build_year=db.Column(db.Integer, nullable=False)
-    estimated_cost=db.Column(db.Float(53), nullable=False)
-    image=db.Column(db.String(50), nullable=False)
+    property_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    agent_id = db.Column(db.Integer, db.ForeignKey('agent.agent_id'), nullable=False)
+    customer_id = db.Column(db.Integer, db.ForeignKey('customer.customer_id'), nullable=False)
+    name = db.Column(db.String(32), nullable=False)
+    address = db.Column(db.String(45), nullable=False)
+    postalcode = db.Column(db.Integer, nullable=False)
+    property_type = db.Column(db.String(45), nullable=False)
+    square_feet = db.Column(db.Integer, nullable=False)
+    room = db.Column(db.Integer, nullable=False)
+    facing = db.Column(db.String(45), nullable=False)
+    build_year = db.Column(db.Integer, nullable=False)
+    estimated_cost = db.Column(db.Float, nullable=False)
+    image = db.Column(db.String, nullable=False)
 
-
-    # constructor
-    def __init__(self, property_id, agent_id, customer_id, name, address, postalcode, property_type, square_feet, room, facing, build_year, estimated_cost, image):
-        self.property_id = property_id
+    def __init__(self, agent_id, customer_id, name, address, postalcode, property_type, square_feet, room, facing, build_year, estimated_cost, image):
         self.agent_id = agent_id
         self.customer_id = customer_id
         self.name = name
@@ -54,12 +34,8 @@ class Property(db.Model):
         self.estimated_cost = estimated_cost
         self.image = image
 
-
-    # return the JSON representation of your property record
     def json(self):
-        return {"property_id": self.property_id, "agent_id": self.agent_id, "customer_id":
-                self.customer_id, "name": self.name, "address": self.address, "postalcode": self.postalcode, "property_type": self.property_type, "square_feet": self.square_feet, "room": self.room, "facing": self.facing, "build_year": self.build_year, "estimated_cost": self.estimated_cost, "image": self.image}
-
+        return {"property_id": self.property_id, "agent_id": self.agent_id, "customer_id": self.customer_id, "name": self.name, "address": self.address, "postalcode": self.postalcode, "property_type": self.property_type, "square_feet": self.square_feet, "room": self.room, "facing": self.facing, "build_year": self.build_year, "estimated_cost": self.estimated_cost, "image": self.image}
 
 @app.route("/property")
 def get_all():
@@ -105,51 +81,49 @@ def find_by_property_id(property_id):
 
 
 # by default it is GET (for other methods you need to specify)
-@app.route("/property/<string:property_id>", methods=['POST'])
-def create_property(property_id):
-    # check if the property exist
-    if (Property.query.filter_by(property_id=property_id).first()):
-        return jsonify(
-            {
-                "code": 400,
-                "data": {
-                    "property_id": property_id
-                },
-                "message": "Property already exists."
-            }
-        ), 400
-
-    # will get the body part of your request
+@app.route("/property", methods=['POST'])
+def create_property():
     data = request.get_json()
-    # it will create the property object (**data --> get the data from the body)
-    # your table must match or you must check
-    property = Property(property_id, **data)
+    
+    # Add print statements to check the data
+    # print("Data:", data)
+    # print("Agent ID:", data['agent_id'])
+    # print("Customer ID:", data['customer_id'])
+    
+    property = Property(
+        agent_id=data['agent_id'],
+        customer_id=data['customer_id'],
+        name=data['name'],
+        address=data['address'],
+        postalcode=data['postalcode'],
+        property_type=data['property_type'],
+        square_feet=data['square_feet'],
+        room=data['room'],
+        facing=data['facing'],
+        build_year=data['build_year'],
+        estimated_cost=data['estimated_cost'],
+        image=data['image']
+    )
 
-    # try to commit the property first
+
     try:
         db.session.add(property)
-        # same as your sql insert statement
         db.session.commit()
-
-    # if it does not work it will throw an error
-    except:
+    except Exception as e:
         return jsonify(
             {
                 "code": 500,
-                "data": {
-                    "property_id": property_id
-                },
-                "message": "An error occurred creating the property."
+                "message": "An error occurred creating the property. " + str(e)
             }
         ), 500
 
-    # else it will show that it created successfully
     return jsonify(
         {
             "code": 201,
             "data": property.json()
         }
     ), 201
+
 
 # create a put function
 
@@ -254,4 +228,4 @@ def delete_property(property_id):
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True) # so that it can be accessed from outside 
+    app.run(host='0.0.0.0', port=5001, debug=True) # so that it can be accessed from outside 

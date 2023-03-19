@@ -73,7 +73,7 @@ CREATE TABLE IF NOT EXISTS property (
   `facing` varchar(45)NOT NULL ,
   `build_year` int(11) NOT NULL,
   `estimated_cost` float(53) NOT NULL,
-  `image` varbinary(50) NOT NULL,
+  `image` varchar(255) NOT NULL, -- store the file path instead of varbinary data
   PRIMARY KEY (`property_id`),
   constraint property_fk1 foreign key (agent_id) references agent(agent_id),
   constraint property_fk2 foreign key (customer_id) references customer(customer_id)
@@ -83,7 +83,7 @@ CREATE TABLE IF NOT EXISTS property (
 --
 -- Dumping data for table `property`
 INSERT INTO `property` (`property_id`, `agent_id`,`customer_id`, `name`, `address`, `postalcode`,`property_type`, `square_feet`, `room`, `facing`,`build_year`, `estimated_cost`,`image`) VALUES
-('1','1','1', 'Waterfront condominium', 'waterfront street 17', '123456', 'Condominium','5929',  '4', 'north','2011', '13150000','');
+('1','1','1', 'Waterfront condominium', 'waterfront street 17', '123456', 'Condominium','5929',  '4', 'north','2011', '13150000','/images/myimage.jpg');
 
 
 DROP TABLE IF EXISTS property_images;

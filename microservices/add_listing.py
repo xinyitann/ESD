@@ -15,6 +15,14 @@ CORS(app)
 
 property_URL = "http://localhost:5001/property"
 
+def validate_property_input(property):
+    required_fields = ['agent_id', 'customer_id', 'name', 'address', 'postalcode', 'property_type', 'square_feet', 'room', 'facing', 'build_year', 'estimated_cost', 'image']
+
+    for field in required_fields:
+        if field not in property:
+            return False
+    return True
+
 @app.route("/add_listing", methods=['POST'])
 def add_listing():
     # Simple check of input format and data of the request are JSON
@@ -23,8 +31,14 @@ def add_listing():
             property = request.get_json()
             print("\nReceived a property listing in JSON:", property)
 
-            # do the actual work
-            # 1. Send property info {propety_listing}
+            # Validate property input
+            if not validate_property_input(property):
+                return jsonify({
+                    "code": 400,
+                    "message": "Invalid property input: missing or invalid required fields."
+                }), 400
+
+            # 1. Send property info {`agent_id`,`customer_id`, `name`, `address`, `postalcode`,`property_type`, `square_feet`, `room`, `facing`,`build_year`, `estimated_cost`,`image`}
             result = processAddListing(property)
             print('\n------------------------')
             print('\nresult: ', result)
@@ -50,14 +64,13 @@ def add_listing():
 
 
 def processAddListing(property):
-    # 2. Send the property info {}
     # Invoke the property microservice
     print('\n-----Invoking property microservice-----')
     property_result = invoke_http(property_URL, method='POST', json=property)
     print('property_result:', property_result)
   
 
-    # Check the property result; if a failure, send it to the error microservice. => listing or bidding information is incorrect (from google docs)
+    # Check the property result; if a failure, send it to the error microservice.
     code = property_result["code"]
     message = json.dumps(property_result)
 

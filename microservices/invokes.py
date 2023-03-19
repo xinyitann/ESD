@@ -24,6 +24,7 @@ def invoke_http(url, method='GET', json=None, **kwargs):
         code = 500
         result = {"code": code, "message": "invocation of service fails: " + url + ". " + str(e)}
     if code not in range(200,300):
+        # If property microservice stops before invoking add_listing with correct json input
         return result
 
     ## Check http call result
