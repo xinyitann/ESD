@@ -33,10 +33,22 @@ def add_listing():
 
             # Validate property input
             if not validate_property_input(property):
+                # Inform the error microservice
+                error_message = {
+                    "code": 400,
+                    "message": "Invalid property input: missing or invalid required fields."
+                }
+                print('\n\n-----Publishing the (property input error) message with routing_key=property.error-----')
+                amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="property.error",
+                                                 body=json.dumps(error_message),
+                                                 properties=pika.BasicProperties(delivery_mode=2))
+                print("\nInvalid property input published to the RabbitMQ Exchange.\n")
+
                 return jsonify({
                     "code": 400,
                     "message": "Invalid property input: missing or invalid required fields."
                 }), 400
+
 
             # 1. Send property info {`agent_id`,`customer_id`, `name`, `address`, `postalcode`,`property_type`, `square_feet`, `room`, `facing`,`build_year`, `estimated_cost`,`image`}
             result = processAddListing(property)
