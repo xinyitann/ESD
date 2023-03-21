@@ -2,16 +2,21 @@
 # The above shebang (#!) operator tells Unix-like environments
 # to run this file as a python3 script
 
+from flask import Flask
 from twilio.rest import Client
 import json
 import os
+import requests
 
 import amqp_setup
 
+app = Flask(__name__)
+app.config['TWILIO_ACCOUNT_SID'] = os.environ.get('TWILIO_ACCOUNT_SID')
+app.config['TWILIO_AUTH_TOKEN'] = os.environ.get('TWILIO_AUTH_TOKEN')
 monitorBindingKey='*.notification' #e.g booking.notification; bidding.notification; listing.notification
 
-sid ='ACf77ec830dc4ae4c0a6567159eed3896b'
-authToken = '0f3cabeedbba892ce4f8b822452ce5e6'
+sid = app.config['TWILIO_ACCOUNT_SID']
+authToken = app.config['TWILIO_AUTH_TOKEN']
 client = Client(sid, authToken)
 
 def receiveNotification():
@@ -34,26 +39,35 @@ def callback(channel, method, properties, body): # required signature for the ca
 def processNotification(routing_key, body):
     print("in notification microservice")
     notification = json.loads(body)
+    print(notification) 
 
     # Extract the "number" and "notification_info" keys from the notification object
-    number = notification["number"]
-    notification_info = notification["notification_info"]
+
+    customer_id = notification["customer_id"]
+    customer_URL = f"http://localhost:5000/customer/{customer_id}"
+    response = requests.get(customer_URL)
+    customer = response.json()
+    name = customer['data']['name']
+    number = customer['data']['phone']
 
     # Check the routing key to determine what type of notification to send
     if routing_key == "booking.notification":
-        # Send a notification to the specified number using Twilio API
-        client = Client(sid, authToken)
+        # Send a notification to the buyer that booking is confirmed
         message = client.messages.create(
-            body=notification_info,
-            from_='whatsapp:+14155238886',
-            to=f"whatsapp:+65{number}"
+            body=f"Dear {name}, your booking has been confirmed.",
+            from_='+15077055450',
+            to=f"+65{number}"
         )
-        print(f"Sent booking notification to {number} via WhatsApp")
+        print(f"Sent booking notification to {number} via SMS")
 
     elif routing_key == "listing.notification":
         # Send a notification to the seller that the listing has been uploaded successfully
-        # Here, you can replace the following print statement with your code to send the notification
-        print(f"Sent listing notification to {number} via WhatsApp")
+        message = client.messages.create(
+            body=f"Dear {name}, your property has been listed.",
+            from_='+15077055450',
+            to=f"+65{number}"
+        )
+        print(f"Sent booking notification to {number} via SMS")
 
     else:
         # bidding.notification
