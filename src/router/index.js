@@ -60,7 +60,7 @@ const routes = [
         component: AddListingPage,
     },
     {
-        path: "/viewbooking",
+        path: "/viewbooking/:id",
         name: "ViewBooking",
         component: ViewBookingPage,
     },
