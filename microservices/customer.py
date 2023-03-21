@@ -4,13 +4,13 @@ from flask import request, jsonify
 class Customer(db.Model):
     __tablename__ = 'customer'
 
-    customer_id = db.Column(db.String(11), primary_key=True)
+    customer_id = db.Column(db.Integer, db.Sequence('seq_reg_id', start=1, increment=1), primary_key=True)
     name = db.Column(db.String(32), nullable=False)
     phone = db.Column(db.String(8), nullable=False)
     email = db.Column(db.String(20), nullable=False)
 
-    def __init__(self, customer_id, name, phone, email):
-        self.customer_id = customer_id
+    def __init__(self, name, phone, email):
+        # self.customer_id = customer_id
         self.name = name
         self.phone = phone
         self.email = email
