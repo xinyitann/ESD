@@ -51,7 +51,8 @@ CREATE TABLE IF NOT EXISTS `customer` (
 --
 
 INSERT INTO `customer` (`customer_id`, `name`, `phone`, `email`) VALUES
-(1, 'Apple TAN', '87342053', 'appletan@gmail.com');
+(1, 'Apple TAN', '83848811', 'appletan@gmail.com');
+
 
 -- --------------------------------------------------------
 

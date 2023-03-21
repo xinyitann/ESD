@@ -80,7 +80,7 @@ def processAddListing(property):
     print('\n-----Invoking property microservice-----')
     property_result = invoke_http(property_URL, method='POST', json=property)
     print('property_result:', property_result)
-  
+    
 
     # Check the property result; if a failure, send it to the error microservice.
     code = property_result["code"]
@@ -96,16 +96,20 @@ def processAddListing(property):
         print("\nproperty status ({:d}) published to the RabbitMQ Exchange:".format(
             code), property_result)
 
-        # 7. Return error
+        print("\nproperty published to RabbitMQ Exchange.\n")\
+
         return {
             "code": 500,
             "data": {"property_result": property_result},
             "message": "property creation failure sent for error handling."
         }
-   
-    print("\nproperty published to RabbitMQ Exchange.\n")
-    # - reply from the invocation is not used;
-    # continue even if this invocation fails
+
+    # if reached here, no error & property is successfully created
+    else: 
+        print('\n\n-----Calling Notification with routing_key=listing.notification-----')
+
+        amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="listing.notification", 
+        body=json.dumps(property), properties=pika.BasicProperties(delivery_mode = 2)) 
 
     # 7. Return created property
     return {
