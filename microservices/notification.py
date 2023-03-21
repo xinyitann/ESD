@@ -8,10 +8,10 @@ import os
 
 import amqp_setup
 
-monitorBindingKey='*.notification' #e.g booking.notification; bidding.notification
+monitorBindingKey='*.notification' #e.g booking.notification; bidding.notification; listing.notification
 
-sid =''
-authToken = ''
+sid ='ACf77ec830dc4ae4c0a6567159eed3896b'
+authToken = '0f3cabeedbba892ce4f8b822452ce5e6'
 client = Client(sid, authToken)
 
 def receiveNotification():
@@ -26,28 +26,39 @@ def receiveNotification():
 
 def callback(channel, method, properties, body): # required signature for the callback; no return
     print("\nReceived a notification by " + __file__)
-    processNotification(body)
+    routing_key = method.routing_key
+    processNotification(routing_key, body)
     print() # print a new line feed
 
 #change to processNoti which calls the email api to send the noti
-def processNotification(body):
+def processNotification(routing_key, body):
     print("in notification microservice")
-    # Parse the JSON message body
-    booking = json.loads(body)
+    notification = json.loads(body)
 
-    # Extract the "number" and "booking_info" keys from the booking object
-    number = booking["number"]
-    booking_info = booking["booking_info"]
+    # Extract the "number" and "notification_info" keys from the notification object
+    number = notification["number"]
+    notification_info = notification["notification_info"]
 
-    # Send the notification to the specified number using Twilio API
-    client = Client(sid, authToken)
-    message = client.messages.create(
-        body=booking_info,
-        from_='whatsapp:+14155238886',
-        to=f"whatsapp:+65{number}"
-    )
+    # Check the routing key to determine what type of notification to send
+    if routing_key == "booking.notification":
+        # Send a notification to the specified number using Twilio API
+        client = Client(sid, authToken)
+        message = client.messages.create(
+            body=notification_info,
+            from_='whatsapp:+14155238886',
+            to=f"whatsapp:+65{number}"
+        )
+        print(f"Sent booking notification to {number} via WhatsApp")
 
-    print(f"Sent notification to {number} via WhatsApp")
+    elif routing_key == "listing.notification":
+        # Send a notification to the seller that the listing has been uploaded successfully
+        # Here, you can replace the following print statement with your code to send the notification
+        print(f"Sent listing notification to {number} via WhatsApp")
+
+    else:
+        # bidding.notification
+        print("Sent bidding notification to highest bidder")
+
     return
 
 
