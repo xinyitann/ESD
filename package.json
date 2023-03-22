@@ -9,9 +9,14 @@
   },
   "dependencies": {
     "@lottiefiles/vue-lottie-player": "^1.1.0",
+    "body-parser": "^1.20.2",
     "bootstrap": "^5.3.0-alpha1",
     "bootstrap-icons": "^1.10.3",
     "core-js": "^3.8.3",
+    "express": "^4.18.2",
+    "mysql2": "^3.2.0",
+    "sequelize": "^6.29.3",
+    "sqlite3": "^5.1.6",
     "vue": "^3.2.13",
     "vue-router": "^4.1.6"
   },
