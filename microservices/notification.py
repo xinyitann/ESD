@@ -4,6 +4,9 @@
 
 from flask import Flask
 from twilio.rest import Client
+from email.message import EmailMessage
+import ssl
+import smtplib
 import json
 import os
 import requests
@@ -11,13 +14,12 @@ import requests
 import amqp_setup
 
 app = Flask(__name__)
-app.config['TWILIO_ACCOUNT_SID'] = os.environ.get('TWILIO_ACCOUNT_SID')
-app.config['TWILIO_AUTH_TOKEN'] = os.environ.get('TWILIO_AUTH_TOKEN')
+email_sender = 'havenis213@gmail.com'
+email_password = os.environ.get('EMAIL_PASSWORD') 
+
+em = EmailMessage()
 monitorBindingKey='*.notification' #e.g booking.notification; bidding.notification; listing.notification
 
-sid = app.config['TWILIO_ACCOUNT_SID']
-authToken = app.config['TWILIO_AUTH_TOKEN']
-client = Client(sid, authToken)
 
 def receiveNotification():
     amqp_setup.check_setup()
@@ -48,30 +50,89 @@ def processNotification(routing_key, body):
     response = requests.get(customer_URL)
     customer = response.json()
     name = customer['data']['name']
-    number = customer['data']['phone']
+    email_receiver = customer['data']['email']
 
     # Check the routing key to determine what type of notification to send
     if routing_key == "booking.notification":
-        # Send a notification to the buyer that booking is confirmed
-        message = client.messages.create(
-            body=f"Dear {name}, your booking has been confirmed.",
-            from_='+15077055450',
-            to=f"+65{number}"
-        )
-        print(f"Sent booking notification to {number} via SMS")
+        # Send a notification to the buyer that schedule is confirmed successfully
+        content = f"""
+        Hey {name}, \n
+        I am writing to inform you that your schedule with our agent has been confirmed. Your agent will be contacting you shortly. \n
+        If you have any questions or concerns, please do not hesitate to contact us at havenis213@gmail.com. \n
+        Thank you for choosing Haven! \n
+
+        Best regards, \n
+        G2T4 Haven Team
+        """
+        em['From'] = email_sender
+        em['To'] = email_receiver
+        em['Subject'] = "Booking Confirmation"
+        em.set_content(content)
+
+        context = ssl.create_default_context()
+
+        with smtplib.SMTP_SSL('smtp.gmail.com', 465, context=context) as smtp:
+            smtp.login(email_sender, email_password)
+            smtp.sendmail(email_sender, email_receiver, em.as_string())
+
+        print(f"Sent booking confirmation to {email_receiver} via email")
 
     elif routing_key == "listing.notification":
         # Send a notification to the seller that the listing has been uploaded successfully
-        message = client.messages.create(
-            body=f"Dear {name}, your property has been listed.",
-            from_='+15077055450',
-            to=f"+65{number}"
-        )
-        print(f"Sent booking notification to {number} via SMS")
+        content = f"""
+        Hey {name}, \n
+        I am writing to inform you that your listing has been successfully uploaded to our platform. Your listing is now visible to our users and you can expect to receive inquiries and offers shortly. \n
+        If you have any questions or concerns, please do not hesitate to contact us at havenis213@gmail.com. \n
+        Thank you for choosing Haven! \n
+
+        Best regards, \n
+        G2T4 Haven Team
+        """
+        em['From'] = email_sender
+        em['To'] = email_receiver
+        em['Subject'] = "Property Listed"
+        em.set_content(content)
+
+        context = ssl.create_default_context()
+
+        with smtplib.SMTP_SSL('smtp.gmail.com', 465, context=context) as smtp:
+            smtp.login(email_sender, email_password)
+            smtp.sendmail(email_sender, email_receiver, em.as_string())
+        print(f"Sent listing confirmation to {email_receiver} via email")
 
     else:
         # bidding.notification
-        print("Sent bidding notification to highest bidder")
+        content = f"""
+        Hey {name}, \n
+        I am writing to inform you that you are the highest bidder for the property. Congratulations on winning the bid! \n
+
+        Here are the details of your bid: \n
+
+        Property Title: [insert property title here] \n
+        Bid Amount: [insert bid amount here] \n
+        Auction End Date: [insert auction end date here] \n
+
+        As the highest bidder, you are now required to proceed with the payment for the property within the next [insert payment duration here] days. You can make the payment by [insert payment method here]. \n
+
+        Please note that if you fail to make the payment within the specified time, we reserve the right to offer the property to the next highest bidder or relist it for auction. \n
+
+        If you have any questions or concerns, please do not hesitate to contact us at havenis213@gmail.com. \n
+        Thank you for choosing Haven! \n
+
+        Best regards, \n
+        G2T4 Haven Team
+        """
+        em['From'] = email_sender
+        em['To'] = email_receiver
+        em['Subject'] = "Congratulations! You are the highest bidder for the property"
+        em.set_content(content)
+
+        context = ssl.create_default_context()
+
+        with smtplib.SMTP_SSL('smtp.gmail.com', 465, context=context) as smtp:
+            smtp.login(email_sender, email_password)
+            smtp.sendmail(email_sender, email_receiver, em.as_string())
+        print(f"Sent bidding results to {email_receiver} via email")
 
     return
 
