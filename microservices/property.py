@@ -287,6 +287,26 @@ def delete_property(property_id):
             }
         ), 404
 
+@app.route("/property/auction/<string:property_id>",methods=['GET'])
+def get_auction(property_id):
+    property = Property.query.filter_by(property_id=property_id).first()
+    # print(property)
+    list = property.json()
+    
+    if property:
+        return jsonify(
+            {
+                "code": 200,
+                "data": list["auction_id"]
+                    
+            }
+        )
+    return jsonify(
+        {
+            "code": 404,
+            "message": "Auction not found."
+        }
+    ), 404
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5001, debug=True) # so that it can be accessed from outside 
