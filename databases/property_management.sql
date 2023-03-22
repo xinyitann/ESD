@@ -54,7 +54,13 @@ INSERT INTO `customer` (`customer_id`, `name`, `phone`, `email`) VALUES
 (1, 'Apple TAN', '87342053', 'appletan@gmail.com');
 
 -- --------------------------------------------------------
-
+DROP TABLE IF EXISTS property_images;
+CREATE TABLE property_images(
+    `propertyID_image` INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
+	`img` mediumBLOB,
+	`property_id` int(11) NOT NULL,
+    PRIMARY KEY(`propertyID_image`)
+);
 
 
 
@@ -83,7 +89,7 @@ CREATE TABLE IF NOT EXISTS property (
 --
 -- Dumping data for table `property`
 INSERT INTO `property` (`property_id`, `agent_id`,`customer_id`, `name`, `address`, `postalcode`,`property_type`, `square_feet`, `room`, `facing`,`build_year`, `estimated_cost`,`image`) VALUES
-('1','1','1', 'Waterfront condominium', 'waterfront street 17', '123456', 'Condominium','5929',  '4', 'north','2011', '13150000','/images/myimage.jpg');
+('1','1','1', 'Waterfront condominium', 'waterfront street 17', '123456', 'Condominium','5929',  '4', 'north','2011', '13150000','');
 
 
 DROP TABLE IF EXISTS property_images;
