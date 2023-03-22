@@ -75,8 +75,9 @@ class Property(db.Model):
     build_year = db.Column(db.Integer, nullable=False)
     estimated_cost = db.Column(db.Float, nullable=False)
     image = db.Column(db.String, nullable=False)
+    auction_id = db.Column(db.Integer, db.ForeignKey('auctions.auction_id'), nullable=False)
 
-    def __init__(self, agent_id, customer_id, name, address, postalcode, property_type, square_feet, room, facing, build_year, estimated_cost, image):
+    def __init__(self, agent_id, customer_id, name, address, postalcode, property_type, square_feet, room, facing, build_year, estimated_cost, image,auction_id):
         self.agent_id = agent_id
         self.customer_id = customer_id
         self.name = name
@@ -89,9 +90,10 @@ class Property(db.Model):
         self.build_year = build_year
         self.estimated_cost = estimated_cost
         self.image = image
+        self.auction_id = auction_id
 
     def json(self):
-        return {"property_id": self.property_id, "agent_id": self.agent_id, "customer_id": self.customer_id, "name": self.name, "address": self.address, "postalcode": self.postalcode, "property_type": self.property_type, "square_feet": self.square_feet, "room": self.room, "facing": self.facing, "build_year": self.build_year, "estimated_cost": self.estimated_cost, "image": self.image}
+        return {"property_id": self.property_id, "agent_id": self.agent_id, "customer_id": self.customer_id, "name": self.name, "address": self.address, "postalcode": self.postalcode, "property_type": self.property_type, "square_feet": self.square_feet, "room": self.room, "facing": self.facing, "build_year": self.build_year, "estimated_cost": self.estimated_cost, "image": self.image, "auction_id":auction_id}
 
 @app.route("/property")
 def get_all():
