@@ -9,54 +9,57 @@ import io
 
 
 
-mydb = mysql.connector.connect(
+
+ 
+# Create a cursor object
+def get_image(c_file):
+
+    mydb = mysql.connector.connect(
     host="localhost",
     user="root",
     password='',
     database="property_management"  # Name of the database
 )
- 
-# Create a cursor object
-cursor = mydb.cursor()
- 
-# Open a file in binary mode
-file = open('../src/assets/backgroundhome.jpg','rb').read()
- 
-# We must encode the file to get base64 string
-file = base64.b64encode(file)
- 
-# Sample data to be inserted
-args = ('',file,'1')
- 
-# Prepare a query
-query = 'INSERT INTO PROPERTY_IMAGES VALUES(%s,%s,%s)'
- 
-# Execute the query and commit the database.
-cursor.execute(query,args)
-mydb.commit()
+    cursor = mydb.cursor()
+    
+    # Open a file in binary mode
+    file = open(c_file,'rb').read()
+    
+    # We must encode the file to get base64 string
+    file = base64.b64encode(file)
+    
+    # Sample data to be inserted
+    args = ('',file,'1')
+    
+    # Prepare a query
+    query = 'INSERT INTO PROPERTY_IMAGES VALUES(%s,%s,%s)'
+    
+    # Execute the query and commit the database.
+    cursor.execute(query,args)
+    mydb.commit()
 
-# Create a cursor object
-cursor = mydb.cursor()
- 
-# Prepare the query
-query = 'SELECT IMG FROM PROPERTY_IMAGES WHERE propertyID_image=1'
- 
-# Execute the query to get the file
-cursor.execute(query)
- 
-data = cursor.fetchall()
- 
-# The returned data will be a list of list
-image = data[0][0]
- 
-# Decode the string
-binary_data = base64.b64decode(image)
- 
-# Convert the bytes into a PIL image
-image = Image.open(io.BytesIO(binary_data))
- 
-# Display the image
-image.show()
+    # Create a cursor object
+    cursor = mydb.cursor()
+    
+    # Prepare the query
+    query = 'SELECT IMG FROM PROPERTY_IMAGES WHERE propertyID_image=1'
+    
+    # Execute the query to get the file
+    cursor.execute(query)
+    
+    data = cursor.fetchall()
+    
+    # The returned data will be a list of list
+    image = data[0][0]
+    
+    # Decode the string
+    binary_data = base64.b64decode(image)
+    
+    # Convert the bytes into a PIL image
+    image = Image.open(io.BytesIO(binary_data))
+    
+    # Display the image
+    image.show()
 
 
 class Property(db.Model):
@@ -93,7 +96,7 @@ class Property(db.Model):
         self.auction_id = auction_id
 
     def json(self):
-        return {"property_id": self.property_id, "agent_id": self.agent_id, "customer_id": self.customer_id, "name": self.name, "address": self.address, "postalcode": self.postalcode, "property_type": self.property_type, "square_feet": self.square_feet, "room": self.room, "facing": self.facing, "build_year": self.build_year, "estimated_cost": self.estimated_cost, "image": self.image, "auction_id":auction_id}
+        return {"property_id": self.property_id, "agent_id": self.agent_id, "customer_id": self.customer_id, "name": self.name, "address": self.address, "postalcode": self.postalcode, "property_type": self.property_type, "square_feet": self.square_feet, "room": self.room, "facing": self.facing, "build_year": self.build_year, "estimated_cost": self.estimated_cost, "image": get_image(self.image), "auction_id":self.auction_id}
 
 @app.route("/property")
 def get_all():

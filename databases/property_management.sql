@@ -134,7 +134,7 @@ CREATE TABLE IF NOT EXISTS property (
 --
 -- Dumping data for table `property`
 INSERT INTO `property` (`property_id`, `auction_id`, `agent_id`,`customer_id`, `name`, `address`, `postalcode`,`property_type`, `square_feet`, `room`, `facing`,`build_year`, `estimated_cost`,`image`) VALUES
-('1','1','1','1', 'Waterfront condominium', 'waterfront street 17', '123456', 'Condominium','5929',  '4', 'north','2011', '13150000','');
+('1','1','1','1', 'Waterfront condominium', 'waterfront street 17', '123456', 'Condominium','5929',  '4', 'north','2011', '13150000','../src/assets/backgroundhome.jpg');
 
 
 DROP TABLE IF EXISTS property_images;
