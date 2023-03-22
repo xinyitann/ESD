@@ -97,8 +97,8 @@ CREATE TABLE IF NOT EXISTS `bids` (
   `auction_id` INT NOT NULL,
   `customer_id` INT NOT NULL,
   `bid_amount` FLOAT(53) NOT NULL,
-  `created_at` TIMESTAMP NOT NULL DEFAULT NOW(),
-  `updated_at` TIMESTAMP NOT NULL DEFAULT NOW(),
+  `created_at` DATETIME  NOT NULL DEFAULT NOW(),
+  `updated_at` DATETIME  NOT NULL DEFAULT NOW(),
   PRIMARY KEY (`bid_id`),
   constraint bids_fk1 foreign key (auction_id) references auctions(auction_id),
   constraint bids_fk2 foreign key (customer_id) references customer(customer_id)
