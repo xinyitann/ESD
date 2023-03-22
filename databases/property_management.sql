@@ -139,22 +139,48 @@ INSERT INTO `error` (`error_id`,`error_message`)
 VALUES ('1', 'Error: Booking is no longer available');
 
 --
--- Table structure for table `bidding`
---
+-- Table structure for table `auctions`
 
-DROP TABLE IF EXISTS `bidding`;
-CREATE TABLE IF NOT EXISTS `bidding` (
-  `bidding_id` int(11) NOT NULL AUTO_INCREMENT,
-  `customer_id` int(11) NOT NULL,
-  `start_date` timestamp NOT NULL,
-  `end_date` timestamp NOT NULL,
-  `option_fee` float(53) NOT NULL,
-  `highest_bid` float(53) NOT NULL,
-  PRIMARY KEY (`bidding_id`),
-  constraint bidding_fk1 foreign key (customer_id) references customer(customer_id)
+DROP TABLE IF EXISTS `auctions`;
+CREATE TABLE IF NOT EXISTS `auctions` (
+  `auction_id` int(11) NOT NULL AUTO_INCREMENT,
+  `property_id` int(11) NOT NULL,
+  `start_time` TIMESTAMP NOT NULL,
+  `end_time` TIMESTAMP NOT NULL,
+  `starting_price` FLOAT(53) NOT NULL,
+  `option_fee` FLOAT(53) NOT NULL,
+  `created_at` TIMESTAMP NOT NULL DEFAULT NOW(),
+  `updated_at` TIMESTAMP NOT NULL DEFAULT NOW(),
+  PRIMARY KEY (`auction_id`),
+  constraint auction_fk1 foreign key (property_id) references property(property_id)
+)ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+INSERT INTO `auctions` (`auction_id`, `property_id`, `start_time`, `end_time`, `starting_price`,`option_fee`, `created_at`, `updated_at`)VALUES 
+('1', '1', '2023-03-23 12:00:00', '2023-03-27 12:00:00', '13150000','1000','2023-03-20 12:00:00','2023-03-20 12:00:00');
+
+
+-- Table structure for table `bids`
+DROP TABLE IF EXISTS `bids`;
+CREATE TABLE IF NOT EXISTS `bids` (
+  `bid_id`int(11) NOT NULL AUTO_INCREMENT,
+  `auction_id` INT NOT NULL,
+  `customer_id` INT NOT NULL,
+  `bid_amount` FLOAT(53) NOT NULL,
+  `created_at` TIMESTAMP NOT NULL DEFAULT NOW(),
+  `updated_at` TIMESTAMP NOT NULL DEFAULT NOW(),
+  PRIMARY KEY (`bid_id`),
+  constraint bids_fk1 foreign key (auction_id) references auctions(auction_id),
+  constraint bids_fk2 foreign key (customer_id) references customer(customer_id)
+)ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+INSERT INTO `bids` (`bid_id`, `auction_id`, `customer_id`, `bid_amount`, `created_at`, `updated_at`)VALUES 
+('1', '1', '1', '22250000','2023-03-22 12:00:00','2023-03-22 12:00:00');
+
+DROP TABLE IF EXISTS `extra`;
+CREATE TABLE IF NOT EXISTS `extra` (
+  `extra_id` int(11) NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`extra_id`)
   
-);
-
-INSERT INTO `bidding` (`bidding_id`, `customer_id`, `start_date`, `end_date`, `option_fee`, `highest_bid`)
-VALUES ('1', '1', '2023-03-23 12:00:00', '2023-03-27 12:00:00', '50', '13150000');
-
+)ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+INSERT INTO `extra` (`extra_id`)VALUES 
+('1');
