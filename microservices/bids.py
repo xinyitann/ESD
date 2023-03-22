@@ -136,6 +136,7 @@ def get_highest_bid(auction_id):
     bids_list = Bids.query.filter_by(auction_id=auction_id)
     highest = 0
     for bids in bids_list:
+        customer_id = bids.customer_id
         if bids.bid_amount > highest:
             highest = bids.bid_amount
     
@@ -144,7 +145,8 @@ def get_highest_bid(auction_id):
             {
                 "code": 200,
                 "data": {
-                    "highest_bid": highest
+                    "highest_bid": highest,
+                    "customer_id" : customer_id
                 }
             }
         )
@@ -157,4 +159,4 @@ def get_highest_bid(auction_id):
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=5500, debug=True)
