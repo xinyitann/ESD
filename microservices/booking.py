@@ -34,44 +34,6 @@ class Booking(db.Model):
     def json(self):
         return {"booking_id": self.booking_id, "agent_id": self.agent_id, "customer_id": self.customer_id, "property_id": self.property_id, "datetime": self.datetime, "status": self.status}
 
-    
-class Property(db.Model):
-    __tablename__ = 'property'
-    property_id = db.Column(db.Integer, primary_key=True)
-    agent_id = db.Column(db.Integer, nullable=False)
-    customer_id = db.Column(db.Integer, nullable=False)
-    name = db.Column(db.String(32), nullable=False)
-    address = db.Column(db.String(45),nullable=False)
-    postalcode = db.Column(db.Integer,nullable=False)
-    property_type = db.Column(db.String(45),nullable=False)
-    square_feet = db.Column(db.Integer,nullable=False)
-    room = db.Column(db.Integer,nullable=False)
-    facing = db.Column(db.String(45),nullable=False)
-    build_year = db.Column(db.Integer,nullable=False)
-    estimated_cost = db.Column(db.Integer,nullable=False)
-    image = db.Column(db.Integer, nullable=False)
-    
-
-    def __init__(self, property_id, agent_id, customer_id, name, address, postalcode, property_type,square_feet,room,facing,build_year,estimated_cost,image):
-        self.property_id = property_id
-        self.agent_id = agent_id
-        self.customer_id = customer_id
-        self.name = name
-        self.address = address
-        self.postalcode = postalcode
-        self.property_type = property_type
-        self.square_feet = square_feet
-        self.room = room
-        self.facing = facing
-        self.build_year = build_year
-        self.estimated_cost = estimated_cost
-        self.image = image
-
-    def json(self):
-        return {"property_id": self.property_id, "agent_id": self.agent_id, "customer_id":
-                self.customer_id, "name": self.name, "address": self.address, "postalcode": self.postalcode, "property_type": self.property_type, "square_feet": self.square_feet, "room": self.room, "facing": self.facing, "build_year": self.build_year, "estimated_cost": self.estimated_cost, "image": self.image}
-
-
 # GET BOOKING
 @app.route("/booking/<booking_id>")
 def get_booking(booking_id):
@@ -91,19 +53,13 @@ def get_booking(booking_id):
     ), 404
 
 # GET ALL OPEN BOOKINGS
-@app.route("/booking/pending/<person_id>")
-def get_all_booking_pending(person_id):
-    person_id = int(person_id)
+@app.route("/booking/pending/")
+def get_all_booking_pending():
     booking_list = Booking.query.all()
-    property_list = Property.query.all()
     temp = []
     for booking in booking_list:
-        if booking.status == 'pending' and booking.agent_id == person_id: 
+        if booking.status == 'pending': 
             booking = booking.json()
-            for property in property_list:
-                if property.property_id == booking['property_id']:
-                    booking['customer_name'] = property.name 
-                    booking['address'] = property.address 
             temp.append(booking)
     if len(temp):
         return jsonify(
@@ -122,19 +78,13 @@ def get_all_booking_pending(person_id):
     ), 404
 
 # GET ALL ACCEPTED BOOKINGS
-@app.route("/booking/accepted/<person_id>",methods=['GET'])
-def get_all_booking_accepted(person_id):
-    person_id = int(person_id)
+@app.route("/booking/accepted/")
+def get_all_booking_accepted():
     booking_list = Booking.query.all()
-    property_list = Property.query.all()
     temp = []
     for booking in booking_list:
-        if booking.status == 'accepted' and booking.agent_id == person_id: 
+        if booking.status == 'accepted': 
             booking = booking.json()
-            for property in property_list:
-                if property.property_id == booking['property_id']:
-                    booking['customer_name'] = property.name 
-                    booking['address'] = property.address 
             temp.append(booking)
     if len(temp):
         return jsonify(
@@ -153,19 +103,13 @@ def get_all_booking_accepted(person_id):
     ), 404
 
 #GET ALL REJECTED BOOKINGS
-@app.route("/booking/rejected/<person_id>", methods=['GET'])
-def get_all_booking_rejected(person_id):
-    person_id = int(person_id)
+@app.route("/booking/rejected/")
+def get_all_booking_rejected():
     booking_list = Booking.query.all()
-    property_list = Property.query.all()
     temp = []
     for booking in booking_list:
-        if booking.status == 'rejected' and booking.agent_id == person_id: 
+        if booking.status == 'rejected': 
             booking = booking.json()
-            for property in property_list:
-                if property.property_id == booking['property_id']:
-                    booking['customer_name'] = property.name 
-                    booking['address'] = property.address 
             temp.append(booking)
     if len(temp):
         return jsonify(
@@ -183,11 +127,11 @@ def get_all_booking_rejected(person_id):
         }
     ), 404
 
-#Accept a booking
-@app.route("/booking/booking_action/<booking_id>/<status>", methods=['PUT'])
-def accept_booking(booking_id,status):
+#accept or reject a booking
+@app.route("/booking/<booking_id>/<status_to_change>", methods=['PUT'])
+def accept_booking(booking_id,status_to_change):
     booking_id = int(booking_id)
-    if status == 'accept':
+    if status_to_change == 'accepted':
         booking = Booking.query.filter_by(booking_id=booking_id).first()
         if booking:
             if booking.status != 'pending':
@@ -249,7 +193,8 @@ def accept_booking(booking_id,status):
 #delete booking
 @app.route("/booking/<booking_id>", methods=['DELETE'])
 def delete_booking(booking_id):
-    booking = Booking.query.filter_by(bookind_id=booking_id).first()
+    booking_id = int(booking_id)
+    booking = Booking.query.filter_by(booking_id=booking_id).first()
     if booking:
         db.session.delete(booking)
         db.session.commit()
@@ -298,4 +243,5 @@ def add_booking(booking_id):
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
+
 
