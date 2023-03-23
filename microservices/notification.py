@@ -46,7 +46,7 @@ def processNotification(routing_key, body):
     # Extract the "number" and "notification_info" keys from the notification object
 
     customer_id = notification["customer_id"]
-    customer_URL = f"http://localhost:5000/customer/{customer_id}"
+    customer_URL = f"http://localhost:5700/customer/{customer_id}"
     response = requests.get(customer_URL)
     customer = response.json()
     name = customer['data']['name']
