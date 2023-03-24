@@ -19,8 +19,9 @@ class Agent(db.Model):
         return {"agent_id": self.agent_id, "name": self.name, "phone": self.phone, "email": self.email}
 
 # GET ONE AGENT
-@app.route("/agent/<string:agent_id>")
+@app.route("/agent/<agent_id>")
 def find_agent(agent_id):
+    agent_id = int(agent_id)
     agent = Agent.query.filter_by(agent_id=agent_id).first()
     if agent:
         return jsonify(
