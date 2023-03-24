@@ -122,9 +122,10 @@ def get_all():
 
 
 # if you dont put string default it is string (so for other variable types you need to put)
-@app.route("/property/<string:property_id>")
+@app.route("/property/<property_id>")
 def find_by_property_id(property_id):
     # get the specific property (.first --> gets us the property if we dont have it we will get the list of property)
+    property_id = int(property_id)
     property = Property.query.filter_by(property_id=property_id).first()
     if property:
         return jsonify(
