@@ -19,15 +19,11 @@ class AuctionService(db.Model):
     updated_at = db.Column(db.TIMESTAMP, nullable=False,server_default=func.now())
 
 
-    def __init__(self, auction_id, start_time, end_time, starting_price,option_fee, highest_bid, created_at, updated_at):
-        self.auction_id = auction_id
+    def __init__(self, start_time, end_time, starting_price,option_fee):
         self.start_time = start_time
         self.end_time = end_time
         self.starting_price = starting_price
         self.option_fee = option_fee
-        self.highest_bid = highest_bid
-        self.created_at = created_at
-        self.updated_at = updated_at
         self.auctions = []
     
     def json(self):
@@ -58,23 +54,16 @@ def get_auctions():
 
 
 # Add new auction
-@app.route("/auctions/<string:auction_id>", methods=['POST'])
-def create_auction(auction_id):
+@app.route("/auctions", methods=['POST'])
+def create_auction():
     # create new auction record in database with given parameters
-    # return the ID of the newly created auction
-    if (AuctionService.query.filter_by(auction_id=auction_id).first()):
-        return jsonify(
-            {
-                "code": 400,
-                "data": {
-                    "auction_id": auction_id
-            },
-            "message": "Auction already exists."
-        }
-    ), 400
-        
     data = request.get_json()
-    auctions = AuctionService(**data)
+    auctions = AuctionService(
+        start_time = data['start_time'],
+        end_time = data['end_time'],
+        starting_price = data['starting_price'],
+        option_fee = data['option_fee']
+    )
         
     try:
         db.session.add(auctions)
@@ -84,9 +73,6 @@ def create_auction(auction_id):
         return jsonify(
             {
                 "code": 500,
-                "data": {
-                    "auction_id": auction_id
-                },
                 "message": "An error occurred creating the auction."
             }
         ), 500
@@ -96,9 +82,7 @@ def create_auction(auction_id):
             "code": 201,
             "data": auctions.json()
 
-        }
-                #"message": "Auction created successfully"
-        
+        }  
     ), 201
 
 @app.route("/auctions/<string:auction_id>", methods=['PUT'])

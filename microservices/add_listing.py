@@ -14,6 +14,7 @@ app = Flask(__name__)
 CORS(app)
 
 property_URL = "http://localhost:5001/property"
+auction_URL = "http://localhost:5002/auctions"
 
 def validate_property_input(property):
     required_fields = ['agent_id', 'customer_id', 'name', 'address', 'postalcode', 'property_type', 'square_feet', 'room', 'facing', 'build_year', 'estimated_cost', 'image']
@@ -111,13 +112,12 @@ def processAddListing(property):
         amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="listing.notification", 
         body=json.dumps(property), properties=pika.BasicProperties(delivery_mode = 2)) 
 
-    # 7. Return created property
-    return {
-        "code": 201,
-        "data": {
-            "property_result": property_result,
+        return {
+            "code": 201,
+            "data": {
+                "property_result": property_result,
+            }
         }
-    }
 
 
 # Execute this program if it is run as a main script (not by 'import')
