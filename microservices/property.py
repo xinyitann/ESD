@@ -1,6 +1,7 @@
 from app import app, db
 from customer import Customer
 from agent import Agent
+from auctionService import AuctionService
 from flask import request, jsonify
 import mysql.connector
 import base64
@@ -153,6 +154,7 @@ def create_property():
     # print("Customer ID:", data['customer_id'])
     
     property = Property(
+        auction_id=data['auction_id'],
         agent_id=data['agent_id'],
         customer_id=data['customer_id'],
         name=data['name'],
