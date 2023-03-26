@@ -47,7 +47,7 @@ def processNotification(routing_key, body):
     email_receiver = notification['email']
 
     # Check the routing key to determine what type of notification to send
-    if routing_key == "booking.notification":
+    if routing_key == "booking_accepted.notification":
         # Send a notification to the buyer that schedule is confirmed successfully
         content = f"""
         Hey {name}, \n
@@ -70,6 +70,29 @@ def processNotification(routing_key, body):
             smtp.sendmail(email_sender, email_receiver, em.as_string())
 
         print(f"Sent booking confirmation to {email_receiver} via email")
+
+    elif routing_key == "booking_rejected.notification":
+        # Send a notification to the buyer that schedule needs to be rebooked because agent rejected
+        content = f"""
+        Hey {name}, \n
+        I am writing to inform you that your schedule with our agent has been rejected. Please rebook your appointment with our agent. \n
+        If you have any questions or concerns, please do not hesitate to contact us at havenis213@gmail.com. \n
+        Thank you for choosing Haven! \n
+
+        Best regards, \n
+        G2T4 Haven Team
+        """
+        em['From'] = email_sender
+        em['To'] = email_receiver
+        em['Subject'] = "Booking Rejected"
+        em.set_content(content)
+
+        context = ssl.create_default_context()
+
+        with smtplib.SMTP_SSL('smtp.gmail.com', 465, context=context) as smtp:
+            smtp.login(email_sender, email_password)
+            smtp.sendmail(email_sender, email_receiver, em.as_string())
+        print(f"Sent listing confirmation to {email_receiver} via email")
 
     elif routing_key == "listing.notification":
         # Send a notification to the seller that the listing has been uploaded successfully
