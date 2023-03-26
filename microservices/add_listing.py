@@ -60,9 +60,8 @@ def add_listing():
             }
 
             auction_result = processAddAuction(auction_data)
-            print("before gg into ")
+            
             if auction_result['code'] == 201:
-                print("inside")
                 print(auction_result['data']['auction_result']['data']['auction_id'])
                 property_data = {
                     'auction_id': auction_result['data']['auction_result']['data']['auction_id'],
@@ -170,8 +169,17 @@ def processAddListing(property):
     else: 
         print('\n\n-----Calling Notification with routing_key=listing.notification-----')
 
+        customer_id = property["customer_id"]
+        customer_URL = f"http://localhost:5700/customer/{customer_id}"
+        customer_result = invoke_http(customer_URL, method='GET', json=None)
+
+        name_email = {
+            'name' : customer_result['data']['name'],
+            'email' : customer_result['data']['email']
+        }
+
         amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="listing.notification", 
-        body=json.dumps(property), properties=pika.BasicProperties(delivery_mode = 2)) 
+        body=json.dumps(name_email), properties=pika.BasicProperties(delivery_mode = 2)) 
 
         return {
             "code": 201,

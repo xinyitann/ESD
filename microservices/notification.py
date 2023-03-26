@@ -43,14 +43,8 @@ def processNotification(routing_key, body):
     notification = json.loads(body)
     print(notification) 
 
-    # Extract the "number" and "notification_info" keys from the notification object
-
-    customer_id = notification["customer_id"]
-    customer_URL = f"http://localhost:5700/customer/{customer_id}"
-    response = requests.get(customer_URL)
-    customer = response.json()
-    name = customer['data']['name']
-    email_receiver = customer['data']['email']
+    name = notification['name']
+    email_receiver = notification['email']
 
     # Check the routing key to determine what type of notification to send
     if routing_key == "booking.notification":
