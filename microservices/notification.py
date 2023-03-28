@@ -119,15 +119,15 @@ def processNotification(routing_key, body):
 
     else:
         # bidding.notification
+        property_name= notification['property_name']
         content = f"""
         Hey {name}, \n
         I am writing to inform you that you are the highest bidder for the property. Congratulations on winning the bid! \n
 
         Here are the details of your bid: \n
 
-        Property Title: [insert property title here] \n
+        Property Title: {property_name}  \n
         Bid Amount: [insert bid amount here] \n
-        Auction End Date: [insert auction end date here] \n
 
         As the highest bidder, you are now required to proceed with the payment for the property within the next [insert payment duration here] days. You can make the payment by [insert payment method here]. \n
 
