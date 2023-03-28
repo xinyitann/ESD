@@ -18,7 +18,7 @@ auction_URL = "http://localhost:5002/auctions"
 
 def validate_property_input(listing_details):
     # will have to get agent_id from agent profile somehow
-    required_fields = ['agent_id', 'customer_id', 'name', 'address', 'postalcode', 'property_type', 'square_feet', 'room', 'facing', 'build_year', 'estimated_cost', 'image', 'start_time', 'end_time', 'starting_price', 'option_fee']
+    required_fields = ['agent_id', 'customer_id', 'name', 'address', 'postalcode', 'property_type', 'square_feet', 'room', 'facing', 'build_year', 'estimated_cost', 'image', 'status', 'starting_price', 'option_fee']
 
     for field in required_fields:
         if field not in listing_details:
@@ -52,8 +52,7 @@ def add_listing():
                 }), 400
 
             auction_data = {
-                'start_time': listing_details['start_time'],
-                'end_time': listing_details['end_time'],
+                'status': listing_details['status'],
                 'starting_price': listing_details['starting_price'],
                 'option_fee': listing_details['option_fee'],
                 'auction_id': None
