@@ -1,6 +1,3 @@
-# left to do the rejected part 
-# link to the js file instead of the py one
-
 from datetime import timedelta
 import datetime
 from flask import Flask, request, jsonify
@@ -168,27 +165,13 @@ def add_google_calendar(gooogle_booking):
         }
 
     # if reached here, no error & booking in google calendar is successfully created
-    else: 
-        # print('\n\n-----Calling Notification with routing_key=listing.notification-----')
-
-        # customer_id = str(gooogle_booking["customer_id"])
-        # get_customer_URL = customer_URL + "/" + customer_id
-        # customer_result = invoke_http(get_customer_URL, method='GET', json=None)
-
-        # name_email = {
-        #     'name' : customer_result['data']['name'],
-        #     'email' : customer_result['data']['email']
-        # }
-
-        # amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="listing.notification", 
-        # body=json.dumps(name_email), properties=pika.BasicProperties(delivery_mode = 2)) 
-
-        return {
-            "code": 201,
-            "data": {
-                "google_booking_result": google_booking_result,
-            }
+ 
+    return {
+        "code": 201,
+        "data": {
+            "google_booking_result": google_booking_result,
         }
+    }
 
 
 def send_customer_notification(customer_id, status):
