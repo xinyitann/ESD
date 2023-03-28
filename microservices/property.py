@@ -98,6 +98,9 @@ class Property(db.Model):
 
     def json(self):
         return {"property_id": self.property_id, "agent_id": self.agent_id, "customer_id": self.customer_id, "name": self.name, "address": self.address, "postalcode": self.postalcode, "property_type": self.property_type, "square_feet": self.square_feet, "room": self.room, "facing": self.facing, "build_year": self.build_year, "estimated_cost": self.estimated_cost, "image": get_image(self.image), "auction_id":self.auction_id}
+    
+    def json_without_image(self):
+        return {"property_id": self.property_id, "agent_id": self.agent_id, "customer_id": self.customer_id, "name": self.name, "address": self.address, "postalcode": self.postalcode, "property_type": self.property_type, "square_feet": self.square_feet, "room": self.room, "facing": self.facing, "build_year": self.build_year, "estimated_cost": self.estimated_cost, "image": self.image, "auction_id":self.auction_id}
 
 @app.route("/property")
 def get_all():
@@ -121,6 +124,25 @@ def get_all():
         }
     ), 404  # the HTTP status code (by default its 200)
 
+
+# def get_property_by_neighbourhood(neighbourhood):
+#     prop_list = Property.query.filter_by(neighbourhood=neighbourhood)
+    
+
+#     return jsonify(
+#         {
+#             "code": 200,
+#             "data": {
+#                 property.json()
+#             }
+#         }
+#     )
+#     return jsonify(
+#         {
+#             "code": 404,
+#             "message": "No properties available"
+#         }
+#     ), 404
 
 # if you dont put string default it is string (so for other variable types you need to put)
 @app.route("/property/<property_id>")
@@ -294,7 +316,7 @@ def delete_property(property_id):
 def get_auction(property_id):
     property = Property.query.filter_by(property_id=property_id).first()
     # print(property)
-    list = property.json()
+    list = property.json_without_image()
     
     if property:
         return jsonify(
