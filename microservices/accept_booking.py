@@ -46,7 +46,7 @@ def accept_booking():
                     "message": "Invalid accept booking input: missing or invalid required fields."
                 }
                 print('\n\n-----Publishing the (booking input error) message with routing_key=booking.error-----')
-                amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="booking.notification", 
+                amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="booking.error", 
                         body=json.dumps(error_message), properties=pika.BasicProperties(delivery_mode = 2)) 
                 print("\nInvalid booking input published to the RabbitMQ Exchange.\n")
 
@@ -116,7 +116,7 @@ def processAcceptBooking(booking):
         # Inform the error microservice
         print('\n\n-----Publishing the (booking error) message with routing_key=booking.error-----')
 
-        amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="booking.notification", 
+        amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="booking.error", 
             body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
         print("\nbooking status ({:d}) published to the RabbitMQ Exchange:".format(
             code), booking_result)
@@ -154,7 +154,7 @@ def add_google_calendar(gooogle_booking):
         print('\n\n-----Publishing the (booking error) message with routing_key=property.error-----')
 
 
-        amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="booking.notification", 
+        amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="booking.error", 
             body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
         print("booking status ({:d}) published to the RabbitMQ Exchange:".format(
             code), google_booking_result)
