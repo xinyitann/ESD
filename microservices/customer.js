@@ -4,8 +4,8 @@ const app = express();
 
 // Define your routes and database connections here
 app.use(bodyParser.json()); // to parse JSON bodies
-app.listen(5000, function() {
-    console.log('Server listening on port 5000');
+app.listen(5700, function() {
+    console.log('Server listening on port 5700');
 });
 
 var mysql = require('mysql2');
