@@ -6,6 +6,7 @@ import os
 
 # to convert postal code given by user to coordinates
 def convert_postal_code_to_coordinates(postalCode):
+
     # Google Map API key
     apiKey = os.getenv('GOOGLE_MAPS_API_KEY')
 
@@ -44,8 +45,7 @@ def convert_coordinates_to_SVY21(lat, long):
 # Get a list of HDBs from a postal code input
 def list_from_postal_code_input(searchInput):
 
-    # Access token for One Map API (expires every 3 days)
-    # Instructions to generate a new access token is in the README.md
+    # OneMap API, regenerate access token and change it in .env file
     accessToken = os.getenv('ONE_MAP_API_KEY')
 
     # Convert searched postal code to lat and long
