@@ -133,7 +133,7 @@ def make_payment():
 
 
 def get_auction_id(property_id):
-    print('\n-----Invoking property microservice-----')
+    print('\n-----Invoking auction microservice-----')
     auction_id_URL = property_URL + "/auction/" + str(property_id)
     auction_result = invoke_http(auction_id_URL, method='GET', json=None)
     print('auction_result from property microservice:', auction_result)
@@ -145,14 +145,14 @@ def get_auction_id(property_id):
 
     if code not in range(200, 300):
         # Inform the error microservice
-        print('\n\n-----Publishing the (booking error) message with routing_key=booking.error-----')
+        print('\n\n-----Publishing the message with routing_key=bidding.error-----')
 
-        amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="bidding.notification", 
+        amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="bidding.error", 
             body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
-        print("\nbooking status ({:d}) published to the RabbitMQ Exchange:".format(
+        print("\nbidding status ({:d}) published to the RabbitMQ Exchange:".format(
             code), auction_result)
 
-        print("\nbooking published to RabbitMQ Exchange.\n")\
+        print("\bidding published to RabbitMQ Exchange.\n")\
 
 
         return {
@@ -246,7 +246,7 @@ def processUpdateBidding(bidding_details):
 
     if code not in range(200, 300):
         # Inform the error microservice
-        print('\n\n-----Publishing the (property error) message with routing_key=property.error-----')
+        print('\n\n-----Publishing the (property error) message with routing_key=bidding.error-----')
 
         amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="bidding.error", 
             body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
@@ -270,7 +270,7 @@ def processUpdateBidding(bidding_details):
 
         if code not in range(200, 300):
             # Inform the error microservice
-            print('\n\n-----Publishing the (property error) message with routing_key=property.error-----')
+            print('\n\n-----Publishing the (property error) message with routing_key=bidding.error-----')
 
             amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="bidding.error", 
                 body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
@@ -304,5 +304,5 @@ def processUpdateHighestBidder(highest_bidder):
 
 # Execute this program if it is run as a main script (not by 'import')
 if __name__ == "__main__":
-    print("This is flask " + os.path.basename(__file__) + " for adding a property...")
+    print("This is flask " + os.path.basename(__file__) + " for adding making bid...")
     app.run(host="0.0.0.0", port=5900, debug=True)
