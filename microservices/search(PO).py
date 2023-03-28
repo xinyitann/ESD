@@ -43,7 +43,7 @@ def list_from_postal_code_input(searchInput):
 
     # Access token for One Map API (expires every 3 days)
     # Instructions to generate a new access token is in the README.md
-    accessToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOjEwMTAxLCJ1c2VyX2lkIjoxMDEwMSwiZW1haWwiOiJjaHVsaW50aWFuQGdtYWlsLmNvbSIsImZvcmV2ZXIiOmZhbHNlLCJpc3MiOiJodHRwOlwvXC9vbTIuZGZlLm9uZW1hcC5zZ1wvYXBpXC92MlwvdXNlclwvc2Vzc2lvbiIsImlhdCI6MTY3OTg5MDY3MywiZXhwIjoxNjgwMzIyNjczLCJuYmYiOjE2Nzk4OTA2NzMsImp0aSI6ImU4ZDQzNTU2Yzk0ZDk0NWQyZTA2YTg3ZjM1NTFhZDQ1In0._1LweNdlw9EY_utqcNYPqReFYjK1dHe-38KI1hRWE8U"
+    accessToken = ""
 
     # Convert searched postal code to lat and long
     lat, long = convert_postal_code_to_coordinates(searchInput)
