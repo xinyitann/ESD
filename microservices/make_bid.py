@@ -28,7 +28,7 @@ def validate_bid_input(bid_details):
     return True
 
 @app.route("/make_bid", methods=['POST'])
-def add_listing():
+def make_bidding():
     # Simple check of input format and data of the request are JSON
     if request.is_json:
         try:
@@ -63,39 +63,67 @@ def add_listing():
 
                 print("bid_details ", bid_details)
 
-                if "bid_id" in bid_details:
-                    # if bid id is found in bid details means that the bid needs to be updated
-                    bidding_details = {
-                        "bid_id" : bid_details["bid_id"],
-                        "customer_id": bid_details["customer_id"],
-                        "auction_id": str(auction_id),
-                        "bid_amount": bid_details["bid_amount"]
-                    }
 
-                    highest_bidder= processUpdateBidding(bidding_details) # would get back the highest bid and the customer_id
-                    print('\nbidding_details: ', highest_bidder)
-                
+                # check if the bid amount is more than the starting price
+
+                starting_price_result = get_starting_price(auction_id)
+
+                starting_price = starting_price_result['data']["starting_price_result"]["data"]
+
+                if bid_details["bid_amount"] > starting_price:
+                    if "bid_id" in bid_details:
+                        # if bid id is found in bid details means that the bid needs to be updated
+                        bidding_details = {
+                            "bid_id" : bid_details["bid_id"],
+                            "customer_id": bid_details["customer_id"],
+                            "auction_id": str(auction_id),
+                            "bid_amount": bid_details["bid_amount"]
+                        }
+
+                        highest_bidder= processUpdateBidding(bidding_details) # would get back the highest bid and the customer_id
+                        print('\nbidding_details: ', highest_bidder)
+                    
+                    else:
+                        # if there is no bid id then the bid needs to be created
+                        bidding_details = {
+                            "customer_id": bid_details["customer_id"],
+                            "auction_id": auction_id,
+                            "bid_amount": bid_details["bid_amount"]
+                        }
+
+                        print("bidding_details ", bidding_details)
+                        highest_bidder = processAddBidding(bidding_details) # would get back the highest bid and the customer_id
+                        print('\nbidding_details: ', highest_bidder)
+                    
+
+                    # update the highest bid in the auction microservice and return the highest bid details back to the UI
+                    highest_bid = {
+                            "highest_bid" : highest_bidder["data"]["highest_bidder"]["data"]["highest_bid"],
+                            "customer_id": highest_bidder["data"]["highest_bidder"]["data"]["customer_id"],
+                            "auction_id": str(auction_id),
+                        }
+                    highest_bidder_auction = processUpdateHighestBidder(highest_bid)
+
+                    print('\n------------------------')
+                    print('\nauction_result: ', auction_result)
+                    print('\nhighest_bidder_auction: ', highest_bidder_auction)
+                    return jsonify(highest_bidder_auction), highest_bidder_auction["code"]
+
                 else:
-                    # if there is no bid id then the bid needs to be created
-                    bidding_details = {
-                        "customer_id": bid_details["customer_id"],
-                        "auction_id": auction_id,
-                        "bid_amount": bid_details["bid_amount"]
+                    error_message = {
+                    "code": 400,
+                    "message": "Bid amount is lesser than the starting price."
                     }
+                    print('\n\n-----Publishing the (listing input error) message with routing_key=bidding.error-----')
+                    amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="bidding.error",
+                                                    body=json.dumps(error_message),
+                                                    properties=pika.BasicProperties(delivery_mode=2))
+                    print("\nInvalid listing input published to the RabbitMQ Exchange.\n")
 
-                    print("bidding_details ", bidding_details)
-                    highest_bidder = processAddBidding(bidding_details) # would get back the highest bid and the customer_id
-                    print('\nbidding_details: ', highest_bidder)
-                
-
-                # update the highest bid in the auction microservice and return the highest bid details back to the UI
-                highest_bidder_auction = processUpdateHighestBidder(highest_bidder)
-
-                print('\n------------------------')
-                print('\nauction_result: ', auction_result)
-                print('\nhighest_bidder_auction: ', highest_bidder_auction)
-                return jsonify(highest_bidder_auction), highest_bidder_auction["code"]
-
+                    return jsonify({
+                        "code": 400,
+                        "message": "Bid amount is lesser than the starting price."
+                    }), 400
 
         except Exception as e:
             # Unexpected error in code
@@ -131,7 +159,6 @@ def make_payment():
     # call the external service provider when customer want to make payment 
 
 
-
 def get_auction_id(property_id):
     print('\n-----Invoking property microservice-----')
     auction_id_URL = property_URL + "/auction/" + str(property_id)
@@ -165,6 +192,43 @@ def get_auction_id(property_id):
     "code": 201,
     "data": {
         "auction_result": auction_result,
+    }
+}
+
+
+def get_starting_price(auction_id):
+    print('\n-----Invoking property microservice-----')
+    starting_price_URL = auction_URL + "/starting_price/" + str(auction_id)
+    starting_price_result = invoke_http(starting_price_URL, method='GET', json=None)
+    print('starting_price_result from property microservice:', starting_price_result)
+
+
+    code = starting_price_result["code"]
+    message = json.dumps(starting_price_result)
+
+
+    if code not in range(200, 300):
+        # Inform the error microservice
+        print('\n\n-----Publishing the (booking error) message with routing_key=bidding.error-----')
+
+        amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="bidding.error", 
+            body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
+        print("\nbidding status ({:d}) published to the RabbitMQ Exchange:".format(
+            code), starting_price_result)
+
+        print("\nbidding published to RabbitMQ Exchange.\n")\
+
+
+        return {
+            "code": 500,
+            "data": {"starting_price_result": starting_price_result},
+            "message": "getting auction starting price failure sent for error handling."
+        }
+
+    return {
+    "code": 201,
+    "data": {
+        "starting_price_result": starting_price_result,
     }
 }
 
@@ -299,6 +363,41 @@ def processUpdateBidding(bidding_details):
 
 def processUpdateHighestBidder(highest_bidder):
     print("update the highest bidder details in auction microservice")
+
+    print('\n-----Invoking auction microservice-----')
+    auction_id = str(highest_bidder["auction_id"])
+    update_auction_URL = auction_URL + "/highest_bid/" + auction_id
+    update_highest_bid = invoke_http(update_auction_URL, method='PUT', json=highest_bidder)
+    print('update_highest_bid from auction microservice:', update_highest_bid)
+
+    code = update_highest_bid["code"]
+    message = json.dumps(update_highest_bid)
+
+    if code not in range(200, 300):
+        # Inform the error microservice
+        print('\n\n-----Publishing the (bidding error) message with routing_key=bidding.error-----')
+
+        amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="bidding.error", 
+            body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
+     
+        print("\nauction status ({:d}) published to the RabbitMQ Exchange:".format(
+            code), update_highest_bid)
+
+        print("\nauction published to RabbitMQ Exchange.\n")\
+
+        return {
+            "code": 500,
+            "data": {"bidding_details": update_highest_bid},
+            "message": "auction creation failure sent for error handling."
+        }
+
+
+    return {
+    "code": 201,
+    "data": {
+        "highest_bidder": highest_bidder,
+    }
+}
 
 
 

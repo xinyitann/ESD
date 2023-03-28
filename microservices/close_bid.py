@@ -1,0 +1,177 @@
+from datetime import timedelta
+import datetime
+from flask import Flask, request, jsonify
+from flask_cors import CORS
+
+import os, sys
+
+import requests
+from invokes import invoke_http
+
+import amqp_setup
+import pika
+import json
+
+app = Flask(__name__)
+CORS(app)
+
+auction_URL = "http://localhost:5002/auctions"
+customer_URL = "http://localhost:5700/customer"
+
+def validate_close_bid_input(booking_details):
+    # will have to get agent_id from agent profile somehow
+    required_fields = ['auction_id', 'status']
+
+    for field in required_fields:
+        if field not in booking_details:
+            return False
+    return True
+
+@app.route("/close_bid", methods=['PUT'])
+def close_bid():
+    # Simple check of input format and data of the request are JSON
+    if request.is_json:
+        try:
+            close_bid_details = request.get_json()
+            print("\nReceived a close bid request in JSON:", close_bid_details)
+
+            # Validate accept booking input
+            if not validate_close_bid_input(close_bid_details):
+                # Inform the error microservice
+                error_message = {
+                    "code": 400,
+                    "message": "Invalid close bid input: missing or invalid required fields."
+                }
+                print('\n\n-----Publishing the (bidding input error) message with routing_key=bidding.error-----')
+                amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="bidding.error", 
+                        body=json.dumps(error_message), properties=pika.BasicProperties(delivery_mode = 2)) 
+                print("\nInvalid booking input published to the RabbitMQ Exchange.\n")
+
+                return jsonify({
+                    "code": 400,
+                    "message": "Invalid accept booking input: missing or invalid required fields."
+                }), 400
+
+            # will close the bidding
+            close_bid_result = processCloseBid(close_bid_details)
+            
+            print("close_bid_result outside " , close_bid_result)
+            
+            if close_bid_result['code'] == 201:
+                # get highest bidder customer id
+                highest_bid_result = get_highest_bid(close_bid_details)
+
+                print('\n------------------------')
+                print('\nhighest_bid_result: ', highest_bid_result)
+                return jsonify(highest_bid_result), highest_bid_result["code"]
+                            
+
+        except Exception as e:
+            # Unexpected error in code
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+            ex_str = str(e) + " at " + str(exc_type) + ": " + fname + ": line " + str(exc_tb.tb_lineno)
+            print(ex_str)
+
+            return jsonify({
+                "code": 500,
+                "message": "accept_booking.py internal error: " + ex_str
+            }), 500
+
+    # if reached here, not a JSON request.
+    return jsonify({
+        "code": 400,
+        "message": "Invalid JSON input: " + str(request.get_data())
+    }), 400
+
+def get_highest_bid(close_bid):
+    print('\n-----Invoking auction microservice-----')
+    highest_URL = auction_URL + "/" + str(close_bid["auction_id"])
+    higest_bid_result = invoke_http(highest_URL, method='GET', json=None)
+    print('higest_bid_result from auction microservice:', higest_bid_result)
+
+    code = higest_bid_result["code"]
+    message = json.dumps(higest_bid_result)
+
+    if code not in range(200, 300):
+        # Inform the error microservice
+        print('\n\n-----Publishing the (booking error) message with routing_key=booking.error-----')
+
+        amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="bidding.error", 
+            body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
+        print("\nbooking status ({:d}) published to the RabbitMQ Exchange:".format(
+            code), higest_bid_result)
+
+        print("\nbooking published to RabbitMQ Exchange.\n")\
+
+
+        return {
+            "code": 500,
+            "data": {"higest_bid_result": higest_bid_result},
+            "message": "booking creation failure sent for error handling."
+        }
+    else:
+        print('\n\n-----Calling Notification with routing_key=listing.notification-----')
+
+        customer_id = higest_bid_result["data"]
+        get_customer_URL = customer_URL + "/" + str(customer_id)
+        customer_result = invoke_http(get_customer_URL, method='GET', json=None)
+
+        name_email = {
+            'name' : customer_result['data']['name'],
+            'email' : customer_result['data']['email']
+        }
+
+        amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="bidding.notification", 
+        body=json.dumps(name_email), properties=pika.BasicProperties(delivery_mode = 2)) 
+
+        return {
+            "code": 201,
+            "data": {
+                "higest_bid_result": higest_bid_result,
+            }
+        }
+
+    
+
+def processCloseBid(close_bid_details):
+    # Invoke the google calendar microservice in booking microservice
+    print('\n-----Invoking auction microservice-----')
+    close_URL = auction_URL +  "/" + str(close_bid_details["auction_id"]) + "/close"
+    close_auction_result = invoke_http(close_URL, method='PUT', json=close_bid_details)
+    print('close_auction_result:', close_auction_result)
+    
+
+    # Check the google booking result result; if a failure, send it to the error microservice.
+    code = close_auction_result["code"]
+    message = json.dumps(close_auction_result)
+
+    if code not in range(200, 300):
+        # Inform the error microservice
+        print('\n\n-----Publishing the (booking error) message with routing_key=bidding.error-----')
+
+
+        amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="bidding.error", 
+            body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
+        print("booking status ({:d}) published to the RabbitMQ Exchange:".format(
+            code), close_auction_result)
+
+        print("booking published to RabbitMQ Exchange.\n")\
+
+        return {
+            "code": 500,
+            "data": {"close_auction_result": close_auction_result},
+            "message": "booking creation failure sent for error handling."
+        }
+
+    return {
+        "code": 201,
+        "data": {
+            "close_auction_result": close_auction_result,
+        }
+    }
+
+# Execute this program if it is run as a main script (not by 'import')
+if __name__ == "__main__":
+    print("This is flask " + os.path.basename(__file__) + " for accepting booking...")
+    app.run(host="0.0.0.0", port=5801, debug=True)
