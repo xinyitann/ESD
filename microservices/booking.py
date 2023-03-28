@@ -126,7 +126,7 @@ def get_all_booking_rejected():
     ), 404
 
 #accept or reject a booking
-@app.route("/booking/<booking_id>/", methods=['PUT'])
+@app.route("/booking/<string:booking_id>/", methods=['PUT'])
 def accept_booking(booking_id):
     data = request.get_json()
     status_to_change = data['status']
@@ -295,10 +295,22 @@ def create_calendar_event():
         },
         }
         event = service.events().insert(calendarId='primary', body=event).execute()
-        return ('Event created: %s' % (event.get('htmlLink')))
+        print(event.get('htmlLink'))
+        return jsonify(
+            {
+                "code": 200,
+                "data": "Event created" + event.get('htmlLink')
+            }
+        )
+        # return ('Event created: %s' % (event.get('htmlLink')))
 
     except HttpError as error:
-        return('An error occurred: %s' % error)
+        return jsonify({
+                "code": 500,
+                "message": "An error occurred: " + error
+            }), 500
+
+        # return('An error occurred: %s' % error)
     
 
 if __name__ == '__main__':
