@@ -3,6 +3,7 @@ from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import func
 import datetime
+import customer
 from os import environ
 
 
@@ -10,24 +11,24 @@ class AuctionService(db.Model):
     __tablename__ = 'auctions'
         
     auction_id = db.Column(db.Integer, primary_key=True)
-    start_time = db.Column(db.TIMESTAMP, nullable=False, server_default=func.now())
-    end_time = db.Column(db.TIMESTAMP, nullable=False)
+    customer_id = db.Column(db.Integer, db.ForeignKey('customer.customer_id'), nullable=False)
     starting_price = db.Column(db.Float)
     option_fee = db.Column(db.Float)
     highest_bid = db.Column(db.Float)
     created_at = db.Column(db.TIMESTAMP, nullable=False,server_default=func.now())
     updated_at = db.Column(db.TIMESTAMP, nullable=False,server_default=func.now())
+    status = db.Column(db.String(20), nullable=False)
 
 
-    def __init__(self, start_time, end_time, starting_price,option_fee):
-        self.start_time = start_time
-        self.end_time = end_time
+    def __init__(self, starting_price,option_fee, customer_id, status):
         self.starting_price = starting_price
         self.option_fee = option_fee
         self.auctions = []
+        self.customer_id = customer_id
+        self.status = status
     
     def json(self):
-        return {"auction_id": self.auction_id, "start_time": self.start_time ,"end_time": self.end_time, "starting_price": self.starting_price,"option_fee": self.option_fee, "highest_bid": self.highest_bid, "created_at": self.created_at, "updated_at": self.updated_at}
+        return {"auction_id": self.auction_id, "starting_price": self.starting_price,"option_fee": self.option_fee, "highest_bid": self.highest_bid, "created_at": self.created_at, "updated_at": self.updated_at, "customer_id": self.customer_id, "status": self.status}
 
 
 
@@ -59,8 +60,7 @@ def create_auction():
     # create new auction record in database with given parameters
     data = request.get_json()
     auctions = AuctionService(
-        start_time = data['start_time'],
-        end_time = data['end_time'],
+        status = data['status'],
         starting_price = data['starting_price'],
         option_fee = data['option_fee']
     )
@@ -131,52 +131,156 @@ def update_auction(auction_id):
         }
     ), 404
 
-@app.route('/auctions/<string:auction_id>/close', methods=['POST'])
+@app.route('/auctions/<string:auction_id>/close', methods=['PUT'])
 def close_auction(auction_id):
+    print("heree")
     auction = AuctionService.query.filter_by(auction_id=auction_id).first()
-    current_time = datetime.datetime.utcnow()
-    if auction is None:
-        return jsonify({'error': 'Auction not found'}), 404
-    if current_time < auction.start_time:
-        return jsonify({'error': 'Auction have not started'}), 400
-    if current_time < auction.end_time :
-        return jsonify({'message': 'Auction still ongoing'}), 200
-    if current_time > auction.end_time:
-        return jsonify({'error': 'Auction has ended'}), 400
-    auction.end_time = current_time
-    db.session.commit()
-    return jsonify({'message': 'Auction closed successfully'})
+
+    print("auction", auction)
+    if auction:
+        data = request.get_json()
+        print("data ", data)
+        if data['status']:
+            auction.status = "close"
+        db.session.commit()
+
+        return jsonify(
+            {
+                "code": 200,
+                "data": auction.json()
+            }
+        )
+    return jsonify(
+        {
+            "code": 404,
+            "data": {
+                "auction_id": auction_id
+            },
+            "message": "auction not found."
+        }
+    ), 404
+
+    # current_time = datetime.datetime.utcnow()
+    # if auction is None:
+    #     return jsonify({'error': 'Auction not found'}), 404
+    # if current_time < auction.start_time:
+    #     return jsonify({'error': 'Auction have not started'}), 400
+    # if current_time < auction.end_time :
+    #     return jsonify({'message': 'Auction still ongoing'}), 200
+    # if current_time > auction.end_time:
+    #     return jsonify({'error': 'Auction has ended'}), 400
+    # auction.end_time = current_time
+    # db.session.commit()
+    # return jsonify({'message': 'Auction closed successfully'})
 
 
-@app.route('/auctions/<string:auction_id>', methods=['PUT'])
+highest_bid = 0
+@app.route('/auctions/highest_bid/<string:auction_id>', methods=['PUT'])
 def update_highest_bid(auction_id):
-     # retrieve the highest bid from the bid microservice
-    bid_service_url = "http://127.0.0.1:5500/bids/highest_bid/"  # replace with your bid microservice URL
-    response = requests.get(f"{bid_service_url}/bids/highest_bid/{auction_id,customer_id}")
-    if response.status_code != 200:
-        return jsonify({"code": 404, "message": "Error retrieving highest bid"}), 404
+    global highest_bid
 
-    # extract the highest bid data from the response
-    highest_bid_data = response.json()["data"]
-    highest_bid = highest_bid_data["highest_bid"]
-    customer_id = highest_bid_data["customer_id"]
+    print("inside auction highest bid")
+    auction = AuctionService.query.filter_by(auction_id = auction_id).first()
+    
+    # Extract the new bid amount from the request body
+    
+    print("auction ", auction)
 
-    # continue with your auction logic using the highest bid data
-    ...
-    bid_amount = request.json.get('bid_amount')
+    if auction:
+        data = request.get_json()
 
-    if not isinstance(bid_amount, (int, float)):
-        return jsonify({'message': 'Invalid bid amount'}), 400
+        if data["highest_bid"]:
+            auction.highest_bid = data["highest_bid"]
+        
+        if  data["customer_id"]:
+            auction.customer_id = data["customer_id"]
+        
+        db.session.commit()
+        return jsonify(
+            {
+                "code": 200,
+                "data": auction.json()
+            }
+        )
+    return jsonify(
+        {
+            "code": 404,
+            "data": {
+                "auction_id": auction_id
+            },
+            "message": "auction not found."
+        }
+    ), 404
+    # bid_amount = request.json.get('bid_amount')
 
-    # Update the highest_bid if the new bid is higher
-    if bid_amount > highest_bid:
-        highest_bid = bid_amount
-        customer_id = highest_bid_data["customer_id"]
-        response = {'message': 'Highest bid updated successfully'}
+    # # Update the highest_bid if the new bid is higher
+    # if bid_amount > highest_bid:
+    #     highest_bid = bid_amount
+    #     response = {'message': 'Highest bid updated successfully'}
+    # else:
+    #     response = {'message': 'New bid is not higher than current highest bid'}
+
+    # return jsonify(response)
+
+
+#Get the auction starting price
+@app.route("/auctions/starting_price/<string:auction_id>", methods=['GET'])
+def get_starting_price(auction_id):
+    auction = AuctionService.query.filter_by(auction_id=auction_id).first()
+
+    list = auction.json()
+    
+    if property:
+        return jsonify(
+            {
+                "code": 200,
+                "data": list["starting_price"]
+                    
+            }
+        )
+    return jsonify(
+        {
+            "code": 404,
+            "message": "Auction not found."
+        }
+    ), 404
+
+
+# get highest bidder customer id
+@app.route("/auctions/<string:auction_id>")
+def get_one_auction(auction_id):
+    print("over heree")
+    auction = AuctionService.query.filter_by(auction_id=auction_id).first()
+    list = auction.json()
+
+    if auction:
+        return jsonify(
+            {
+                "code": 200,
+                "data": list["customer_id"]
+            }
+        )
+    return jsonify(
+        {
+            "code": 404,
+            "message": "auction not found."
+        }
+    ), 404
+
+
+# check if customer has bid before
+@app.route("/auctions/<string:auction_id>/<string:customer_id>")
+def check_user_bided(auction_id, customer_id):
+    print("over heree")
+    auction = AuctionService.query.filter_by(auction_id=auction_id, customer_id=customer_id).first()
+
+    if auction:
+        print("true")
+        return True
     else:
-        response = {'message': 'New bid is not higher than current highest bid'}
+        print("false")
+        return False
 
-    return jsonify(response)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0',port=5002, debug=True)
