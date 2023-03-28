@@ -148,17 +148,30 @@ def close_auction(auction_id):
     return jsonify({'message': 'Auction closed successfully'})
 
 
-highest_bid = 0
 @app.route('/auctions/<string:auction_id>', methods=['PUT'])
-def update_highest_bid():
-    global highest_bid
-    
-    # Extract the new bid amount from the request body
+def update_highest_bid(auction_id):
+     # retrieve the highest bid from the bid microservice
+    bid_service_url = "http://127.0.0.1:5500/bids/highest_bid/"  # replace with your bid microservice URL
+    response = requests.get(f"{bid_service_url}/bids/highest_bid/{auction_id,customer_id}")
+    if response.status_code != 200:
+        return jsonify({"code": 404, "message": "Error retrieving highest bid"}), 404
+
+    # extract the highest bid data from the response
+    highest_bid_data = response.json()["data"]
+    highest_bid = highest_bid_data["highest_bid"]
+    customer_id = highest_bid_data["customer_id"]
+
+    # continue with your auction logic using the highest bid data
+    ...
     bid_amount = request.json.get('bid_amount')
+
+    if not isinstance(bid_amount, (int, float)):
+        return jsonify({'message': 'Invalid bid amount'}), 400
 
     # Update the highest_bid if the new bid is higher
     if bid_amount > highest_bid:
         highest_bid = bid_amount
+        customer_id = highest_bid_data["customer_id"]
         response = {'message': 'Highest bid updated successfully'}
     else:
         response = {'message': 'New bid is not higher than current highest bid'}
