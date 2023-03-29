@@ -24,7 +24,7 @@ agent_URL="http://localhost:5003/agent"
 # validate seach input
 def validate_search_input(search_details):
     # will have to get agent_id from agent profile somehow
-    if any(not c.isalnum() for c in search_details):
+    if any( c.isalnum() for c in search_details):
         return True
     
     else:
@@ -56,48 +56,18 @@ def process_search():
                 }), 400
 
             #check if postal code or neighbourhood
-            if len(search_details)==6 and search_details.isdigit():
+            if len(search_details['postalcode'])==6:
                 #if postal code
               print('here is property by postal code')
-              return convert_postal_code_to_coordinates(search_details)
+              print(search_details)
+              return get_properties_from_postalcodes(search_details['postalcode'])
               
 
             else:
                 #if neighbourhood
                 print('here is property by neighbourhood')
-
+                print(search_details)
                 return get_properties_by_neighbourhood(search_details)
-                print('here is property by neighbourhood')
-
-            # search_result = processAcceptsearch(search_details)
-            # print("search_result outside " , search_result)
-            # print("customer_id ", search_result["data"]['search_result']["data"]["customer_id"])
-            # customer_id = search_result["data"]['search_result']["data"]["customer_id"]
-            
-            # status = search_result["data"]['search_result']["data"]["status"]
-
-            # if search_result['code'] == 201 and status == "accepted":
-                
-
-            #     start_time = search_result["data"]['search_result']["data"]["datetime"]
-            #     start_time = datetime.datetime.strptime(start_time,'%a, %d %b %Y %H:%M:%S GMT')
-            #     end_time =start_time + timedelta(hours=1)
-
-            #     google_search = {
-            #         "customer_id" : customer_id,
-            #         "start": start_time.strftime("%Y-%m-%dT%H:%M:%S"), 
-            #         "end": end_time.strftime("%Y-%m-%dT%H:%M:%S")
-            #     } 
-
-            #     google_result = add_google_calendar(google_search)
-            #     print('\n------------------------')
-            #     print('\ngoogle_result: ', google_result)
-                
-            
-            # send_customer_notification(customer_id, status)
-            # print('\nsearch_result: ', search_result) 
-            # return jsonify(search_result), search_result["code"]
-
         except Exception as e:
             # Unexpected error in code
             exc_type, exc_obj, exc_tb = sys.exc_info()
@@ -107,7 +77,7 @@ def process_search():
 
             return jsonify({
                 "code": 500,
-                "message": "accept_search.py internal error: " + ex_str
+                "message": "search.py internal error: " + ex_str
             }), 500
 
     # if reached here, not a JSON request.
@@ -117,9 +87,9 @@ def process_search():
     }), 400
 
 def get_properties_by_neighbourhood(search_details):
-    print('\n-----Invoking property microservice-----')
+    print('\n-----Invoking property microservice for neighbourhood-----')
     # neighbourhood = "Holland"
-    updated_property_URL=property_URL+'/'+ search_details
+    updated_property_URL=property_URL+'/neighbourhood/'+ search_details["neighbourhood"]
     property_result = invoke_http(updated_property_URL,method='GET',json=None)
     print('property_result from property microservice:', property_result)
 
@@ -150,6 +120,52 @@ def get_properties_by_neighbourhood(search_details):
         "property_result": property_result,
     }
 }
+
+#Get properties from list of postal codes 
+def get_properties_from_postalcodes(postalcode):
+    print("hi")
+    print(postalcode)
+    print(type(postalcode))
+    postalcode_list=list_from_postal_code_input(postalcode)
+    print(postalcode_list)
+
+    if  postalcode_list:
+        for postalcode in postalcode_list:
+      
+          print('\n-----Invoking property microservice for postalcode-----')
+          updated_property_URL=property_URL+'/postalcode/'+ postalcode["postalcode"]
+          property_result = invoke_http(updated_property_URL,method='GET',json=None)
+          print('property_result from property microservice:', property_result)
+
+          code = property_result["code"]
+          message = json.dumps(property_result)
+
+          if code not in range(200, 300):
+              # Inform the error microservice
+              print('\n\n-----Publishing the (search error) message with routing_key=search.error-----')
+
+              amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="search.error", 
+                  body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
+              print("\nsearch status ({:d}) published to the RabbitMQ Exchange:".format(
+                  code), property_result)
+
+              print("\nsearch published to RabbitMQ Exchange.\n")\
+
+
+              return {
+                  "code": 500,
+                  "data": {"property_result": property_result},
+                  "message": "search creation failure sent for error handling."
+              }
+
+          return {
+          "code": 201,
+          "data": {
+              "property_result": property_result,
+          }
+      }
+    else:
+        print("line 233")
 
 
 # to convert postal code given by user to coordinates
@@ -219,6 +235,7 @@ def list_from_postal_code_input(searchInput):
     return postalCodes
 
 # print(list_from_postal_code_input(searchInput))
+
 
 # Execute this program if it is run as a main script (not by 'import')
 if __name__ == "__main__":

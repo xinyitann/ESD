@@ -127,9 +127,30 @@ def get_all():
     ), 404  # the HTTP status code (by default its 200)
 
 #function works
-@app.route("/property/<string:neighbourhood>",methods=['GET'])
+@app.route("/property/neighbourhood/<string:neighbourhood>",methods=['GET'])
 def get_property_by_neighbourhood(neighbourhood):
     prop_list = Property.query.filter_by(neighbourhood=neighbourhood)
+    
+    if prop_list:
+        return jsonify(
+                    {
+                        "code": 200,
+                        "data": {
+                            "properties": [property.json() for property in prop_list]
+                        }
+                    }
+                )
+    return jsonify(
+    {
+        "code": 404,
+        "message": "Property not found."
+    }
+), 404
+
+#function working
+@app.route("/property/postal_code/<string:postalcode>",methods=['GET'])
+def get_property_by_postalcode(postalcode):
+    prop_list = Property.query.filter_by(postalcode=postalcode)
     
     if prop_list:
         return jsonify(
