@@ -19,7 +19,6 @@ auction_URL = "http://localhost:5002/auctions"
 customer_URL = "http://localhost:5700/customer"
 
 def validate_close_bid_input(closing_details):
-    # will have to get agent_id from agent profile somehow
     required_fields = ['auction_id', 'status']
 
     for field in required_fields:
@@ -58,7 +57,7 @@ def close_bid():
             print("close_bid_result outside " , close_bid_result)
             
             if close_bid_result['code'] == 201:
-                # get highest bidder customer id
+                # get highest bidder customer id and send them a notification
                 highest_bid_result = get_highest_bid(close_bid_details)
 
                 print('\n------------------------')
@@ -87,6 +86,7 @@ def close_bid():
 def get_highest_bid(close_bid):
     print('\n-----Invoking auction microservice-----')
     highest_URL = auction_URL + "/" + str(close_bid["auction_id"])
+    # get the customer id of the highest bidder
     higest_bid_result = invoke_http(highest_URL, method='GET', json=None)
     print('higest_bid_result from auction microservice:', higest_bid_result)
 
@@ -145,9 +145,10 @@ def get_highest_bid(close_bid):
     
 
 def processCloseBid(close_bid_details):
-    # Invoke the google calendar microservice in booking microservice
+    # Invoke the auction microservice
     print('\n-----Invoking auction microservice-----')
     close_URL = auction_URL +  "/" + str(close_bid_details["auction_id"]) + "/close"
+    # change the status of the auction to close
     close_auction_result = invoke_http(close_URL, method='PUT', json=close_bid_details)
     print('close_auction_result:', close_auction_result)
     
@@ -174,6 +175,7 @@ def processCloseBid(close_bid_details):
             "message": "booking creation failure sent for error handling."
         }
 
+    # else return the close auction details
     return {
         "code": 201,
         "data": {

@@ -65,7 +65,6 @@ def make_bidding():
 
 
                 # check if the bid amount is more than the starting price
-
                 starting_price_result = get_starting_price(auction_id)
 
                 starting_price = starting_price_result['data']["starting_price_result"]["data"]
@@ -144,24 +143,10 @@ def make_bidding():
     }), 400
 
 
-@app.route("/close_bidding", methods=['POST'])
-def close_bidding_period():
-    print("closing the bid step 10 onwards in the microservice interaction diagram")
-    # update the auction microservice to close the bidding period
-    # return the highest bidder customer_id
-    # call the customer microservice to get the customer name and email
-    # call the notification.py to send the notification to the wining customer 
-
-
-@app.route("/make_payment", methods=['POST'])
-def make_payment():
-    print("user will make payment here")
-    # call the external service provider when customer want to make payment 
-
-
 def get_auction_id(property_id):
     print('\n-----Invoking property microservice-----')
     auction_id_URL = property_URL + "/auction/" + str(property_id)
+    # call the property microservice to get the auction id
     auction_result = invoke_http(auction_id_URL, method='GET', json=None)
     print('auction_result from property microservice:', auction_result)
 
@@ -199,6 +184,7 @@ def get_auction_id(property_id):
 def get_starting_price(auction_id):
     print('\n-----Invoking property microservice-----')
     starting_price_URL = auction_URL + "/starting_price/" + str(auction_id)
+    # call the auction microservice to get the starting price of the bid
     starting_price_result = invoke_http(starting_price_URL, method='GET', json=None)
     print('starting_price_result from property microservice:', starting_price_result)
 
@@ -239,6 +225,7 @@ def processAddBidding(bidding_details):
     print('\n-----Invoking bid microservice-----')
     auction_id = str(bidding_details["auction_id"])
     add_bidding_URL = bid_URL + "/" + auction_id + "/" + str(bidding_details["customer_id"])
+    # call the bid microservice to add the bid into the database
     bidding_details = invoke_http(add_bidding_URL, method='POST', json=bidding_details)
     print('bidding_details from bid microservice:', bidding_details)
 
@@ -264,10 +251,10 @@ def processAddBidding(bidding_details):
         }
     
     else:
-        # get the highest bid after adding the bid details 
+        # if the addition is successful we would get the highest bid after adding the bid details 
         print('\n-----Invoking bid microservice for highest bid-----')
         get_highest_bid_URL = bid_URL + "/highest_bid/" +  auction_id
-        print("get_highest_bid_URL " , get_highest_bid_URL)
+        # get the highest bid amount and the highest bidder customer id from the bid microservice
         highest_bidder = invoke_http(get_highest_bid_URL, method='GET', json=None)
         print('highest_bidder from bid microservice:', highest_bidder)
 
@@ -289,7 +276,7 @@ def processAddBidding(bidding_details):
                 "message": "auction creation failure sent for error handling."
             }
 
-
+    # return the highest bidder customer id and amount
     return {
     "code": 201,
     "data": {
@@ -302,6 +289,7 @@ def processUpdateBidding(bidding_details):
     print('\n-----Invoking bid microservice-----')
     auction_id = str(bidding_details["auction_id"])
     add_bidding_URL = bid_URL + "/" + str(bidding_details["bid_id"]) + "/" + str(bidding_details["customer_id"]) + "/" + auction_id
+    # call the bid microservice to update the bid amount of an existing bid
     bidding_details = invoke_http(add_bidding_URL, method='PUT', json=bidding_details)
     print('auction_result from bid microservice:', bidding_details)
 
@@ -329,6 +317,7 @@ def processUpdateBidding(bidding_details):
         # get the highest bid after updating the bid details 
         print('\n-----Invoking bid microservice-----')
         get_highest_bid_URL = bid_URL + "/highest_bid/" + auction_id
+        # get the highest bid amount and the customer id from the bid microservice
         highest_bidder = invoke_http(get_highest_bid_URL, method='GET', json=None)
         print('auction_result from bid microservice:', highest_bidder)
 
@@ -350,7 +339,7 @@ def processUpdateBidding(bidding_details):
                 "message": "auction creation failure sent for error handling."
             }
 
-
+    # return the customer id and the highest bid amount 
     return {
     "code": 201,
     "data": {
@@ -362,11 +351,10 @@ def processUpdateBidding(bidding_details):
 
 
 def processUpdateHighestBidder(highest_bidder):
-    print("update the highest bidder details in auction microservice")
-
     print('\n-----Invoking auction microservice-----')
     auction_id = str(highest_bidder["auction_id"])
     update_auction_URL = auction_URL + "/highest_bid/" + auction_id
+    # update the auction microservice with the highest bidders customer id and the highest bid amount
     update_highest_bid = invoke_http(update_auction_URL, method='PUT', json=highest_bidder)
     print('update_highest_bid from auction microservice:', update_highest_bid)
 

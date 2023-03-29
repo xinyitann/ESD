@@ -53,16 +53,21 @@ def accept_booking():
                 }), 400
 
 
+            # accept a booking 
             booking_result = processAcceptBooking(booking_details)
             print("booking_result outside " , booking_result)
             print("customer_id ", booking_result["data"]['booking_result']["data"]["customer_id"])
+
+            # get the customer id
             customer_id = booking_result["data"]['booking_result']["data"]["customer_id"]
             
+            # check what is the status of the ticket
             status = booking_result["data"]['booking_result']["data"]["status"]
 
+            # if the status is accepted
             if booking_result['code'] == 201 and status == "accepted":
                 
-
+                # get the start and end data of the booking
                 start_time = booking_result["data"]['booking_result']["data"]["datetime"]
                 start_time = datetime.datetime.strptime(start_time,'%a, %d %b %Y %H:%M:%S GMT')
                 end_time =start_time + timedelta(hours=1)
@@ -73,11 +78,13 @@ def accept_booking():
                     "end": end_time.strftime("%Y-%m-%dT%H:%M:%S")
                 } 
 
+                # add the booking into google calendar
                 google_result = add_google_calendar(google_booking)
                 print('\n------------------------')
                 print('\ngoogle_result: ', google_result)
                 
             
+            # send the customer notification
             send_customer_notification(customer_id, status)
             print('\nbooking_result: ', booking_result) 
             return jsonify(booking_result), booking_result["code"]
@@ -103,6 +110,7 @@ def accept_booking():
 def processAcceptBooking(booking):
     print('\n-----Invoking booking microservice-----')
     update_booking_url = booking_URL + "/" + str(booking["booking_id"])
+    # update the booking status to "accepted" or "rejected"
     booking_result = invoke_http(update_booking_url, method='PUT', json=booking)
     print('booking_result from booking microservice:', booking_result)
 
@@ -138,6 +146,7 @@ def add_google_calendar(gooogle_booking):
     # Invoke the google calendar microservice in booking microservice
     print('\n-----Invoking google calendar microservice in booking-----')
     google_URL = booking_URL + "/create_event"
+    # if the booking is accepted add the booking into the google calendar
     google_booking_result = invoke_http(google_URL, method='POST', json=gooogle_booking)
     print('google_booking_result:', google_booking_result)
     
@@ -165,7 +174,6 @@ def add_google_calendar(gooogle_booking):
         }
 
     # if reached here, no error & booking in google calendar is successfully created
- 
     return {
         "code": 201,
         "data": {
@@ -177,6 +185,7 @@ def add_google_calendar(gooogle_booking):
 def send_customer_notification(customer_id, status):
         customer_id = str(customer_id)
         get_customer_URL = customer_URL + "/" + customer_id
+        # get the customer email
         customer_result = invoke_http(get_customer_URL, method='GET', json=None)
 
         name_email = {
@@ -184,11 +193,13 @@ def send_customer_notification(customer_id, status):
             'email' : customer_result['data']['email']
         }
 
+        # if the status is accepted send the customer the accepted notification
         if status == "accepted":
             print('\n\n-----Calling Notification with routing_key=booking_accepted.notification-----')
             amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="booking_accepted.notification", 
             body=json.dumps(name_email), properties=pika.BasicProperties(delivery_mode = 2)) 
         
+        # if the status is rejected send the customer the rejected notification
         elif status == "rejected":
             print('\n\n-----Calling Notification with routing_key=booking_rejected.notification-----')
             amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="booking_rejected.notification", 
