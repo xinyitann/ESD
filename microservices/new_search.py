@@ -131,15 +131,15 @@ def get_properties_from_postalcodes(postalcode):
 
     if  postalcode_list:
         for postalcode in postalcode_list:
-      
+          print(postalcode)
           print('\n-----Invoking property microservice for postalcode-----')
-          updated_property_URL=property_URL+'/postalcode/'+ postalcode["postalcode"]
+          updated_property_URL=property_URL+'/postal_code/'+ postalcode
           property_result = invoke_http(updated_property_URL,method='GET',json=None)
           print('property_result from property microservice:', property_result)
 
           code = property_result["code"]
           message = json.dumps(property_result)
-
+          print(message)
           if code not in range(200, 300):
               # Inform the error microservice
               print('\n\n-----Publishing the (search error) message with routing_key=search.error-----')
@@ -191,7 +191,7 @@ def convert_postal_code_to_coordinates(postalCode):
 
 # To convert coordinates to SVY21 format
 def convert_coordinates_to_SVY21(lat, long):
-
+    
     apiEndpoint= f"https://developers.onemap.sg/commonapi/convert/4326to3414?latitude={lat}&longitude={long}"
 
     # Send a GET request to the API endpoint
@@ -204,8 +204,6 @@ def convert_coordinates_to_SVY21(lat, long):
     # Organise data in required format
     return str(jsonObj["X"]) + "," + str(jsonObj["Y"])
 
-
-
 # Get a list of HDBs from a postal code input
 def list_from_postal_code_input(searchInput):
 
@@ -214,6 +212,7 @@ def list_from_postal_code_input(searchInput):
 
     # Convert searched postal code to lat and long
     lat, long = convert_postal_code_to_coordinates(searchInput)
+    print(lat)
 
     # Convert lat and long to required SVY21 format
     location = convert_coordinates_to_SVY21(lat, long)
@@ -231,11 +230,10 @@ def list_from_postal_code_input(searchInput):
     postalCodes = []
     for building in responseObj["GeocodeInfo"]:
         postalCodes.append(building["POSTALCODE"])
-
     return postalCodes
 
+# searchInput = '530324'
 # print(list_from_postal_code_input(searchInput))
-
 
 # Execute this program if it is run as a main script (not by 'import')
 if __name__ == "__main__":
