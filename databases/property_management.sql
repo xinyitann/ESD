@@ -155,7 +155,8 @@ CREATE TABLE IF NOT EXISTS booking (
   `agent_id` int(11) NOT NULL,
   `customer_id` int(11) NOT NULL,
   `property_id` int(11) NOT NULL,
-  `datetime` timestamp NOT NULL,
+  `datetimestart` timestamp NOT NULL,
+  `datetimeend` timestamp NOT NULL,
   `status` varchar(45) NOT NULL,
   PRIMARY KEY (`booking_id`),
   constraint booking_fk1 foreign key (agent_id) references agent(agent_id),
@@ -188,3 +189,4 @@ CREATE TABLE IF NOT EXISTS `extra` (
 )ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 INSERT INTO `extra` (`extra_id`)VALUES 
 ('1');
+
