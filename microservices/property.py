@@ -126,19 +126,26 @@ def get_all():
         }
     ), 404  # the HTTP status code (by default its 200)
 
+#function works
 @app.route("/property/<string:neighbourhood>",methods=['GET'])
 def get_property_by_neighbourhood(neighbourhood):
-    prop_list = Property.query.filter_by(neighbourhood=neighbourhood).first()
+    prop_list = Property.query.filter_by(neighbourhood=neighbourhood)
     
-
-    return jsonify(
-                {
-                    "code": 200,
-                    "data": {
-                        "properties": [property.json() for property in prop_list]
+    if prop_list:
+        return jsonify(
+                    {
+                        "code": 200,
+                        "data": {
+                            "properties": [property.json() for property in prop_list]
+                        }
                     }
-                }
-            )
+                )
+    return jsonify(
+    {
+        "code": 404,
+        "message": "Property not found."
+    }
+), 404
 
 
 # if you dont put string default it is string (so for other variable types you need to put)
