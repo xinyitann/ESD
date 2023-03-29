@@ -2,7 +2,7 @@
     <div class="container-fluid">
         <div class = "row d-flex justify-content-center">
             <div class="col-10 col-md-8 col-lg-7 my-3">
-                <h2 class="text-center my-2">Book An Appointment</h2>
+                <h2 class="text-center my-5">Book An Appointment</h2>
                 <form>
                     <div class="mb-3">
                         <label for="customerID" class="form-label">Customer ID</label>
@@ -21,20 +21,37 @@
                         <input type="date" class="form-control" id="bookingDate" v-model="bookingDate">
                     </div>
                     <div class="mb-3">
-                        <label for="bookingTime" class="form-label">Select a Time*</label>
-                        <select class="form-select" id="bookingTime" v-model="bookingTime">
-                            <option selected>hh:mm - hh:mm</option>
-                            <option value="0900-1000">09:00 - 10:00</option>
-                            <option value="1000-1100">10:00 - 11:00</option>
-                            <option value="1100- 1200">11:00 - 12:00</option>
-                            <option value="1200-1300">12:00 - 13:00</option>
-                            <option value="1300-1400">13:00 - 14:00</option>
-                            <option value="1400- 1500">14:00 - 15:00</option>
-                            <option value="1500-1600">15:00 - 16:00</option>
-                            <option value="1600-1700">16:00 - 17:00</option>
-                            <option value="1700- 1800">17:00 - 18:00</option>
-                            <option value="1800-1900">18:00 - 19:00</option>
-                            <option value="1900-2000">19:00 - 20:00</option>
+                        <label for="bookingStartTime" class="form-label">Select Start Time*</label>
+                        <select class="form-select" id="bookingStartTime" v-model="bookingStartTime">
+                            <option selected>hh:mm</option>
+                            <option value="0900">09:00</option>
+                            <option value="1000">10:00</option>
+                            <option value="1100">11:00</option>
+                            <option value="1200">12:00</option>
+                            <option value="1300">13:00</option>
+                            <option value="1400">14:00</option>
+                            <option value="1500">15:00</option>
+                            <option value="1600">16:00</option>
+                            <option value="1700">17:00</option>
+                            <option value="1800">18:00</option>
+                            <option value="1900">19:00</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="bookingEndTime" class="form-label">Select End Time*</label>
+                        <select class="form-select" id="bookingEndTime" v-model="bookingEndTime">
+                            <option selected>hh:mm</option>
+                            <option value="1000">10:00</option>
+                            <option value="1100">11:00</option>
+                            <option value="1200">12:00</option>
+                            <option value="1300">13:00</option>
+                            <option value="1400">14:00</option>
+                            <option value="1500">15:00</option>
+                            <option value="1600">16:00</option>
+                            <option value="1700">17:00</option>
+                            <option value="1800">18:00</option>
+                            <option value="1900">19:00</option>
+                            <option value="2000">20:00</option>
                         </select>
                     </div>
                     <div class="d-flex justify-content-around">
@@ -62,7 +79,7 @@ name: 'BookingPage',
             agentID: "456",
             propertyID: "789",
             bookingDate:"",
-            bookingTime:"",
+            bookingStartTime:"",
         }
     }
 }

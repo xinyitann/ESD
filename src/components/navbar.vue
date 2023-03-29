@@ -16,12 +16,10 @@
             <router-link to="/bookingnow" class="nav-link">Book an Appointment</router-link>
           </li>
           <li class="nav-item mx-2">
-            <router-link to="/viewbooking" class="nav-link">My Bookings</router-link>
+            <router-link to="/mybooking" class="nav-link">My Bookings</router-link>
           </li>
           <li class="nav-item mx-2">
-            <router-link to="/profile" class="nav-link">
-              <i class="bi bi-person-circle" style="font-size: 19px;"></i>
-            </router-link>
+            <router-link to="/login" class="nav-link">Log In</router-link>
           </li>
         </ul>
       </div>

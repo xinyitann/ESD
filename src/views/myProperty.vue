@@ -2,17 +2,10 @@
     <div>
         <h2 class="text-center my-5">All Properties</h2>
 
-
-        <!-- search bar-->
-        <div class="row mb-4 w-100">
-            <div class="col-10 col-sm-8 col-md-6 mx-auto">
-                <div class="input-group mb-3" style="height:45px;">
-                    <input type="text" class="form-control" placeholder="Search by neighbourhood or postal code" aria-label="Search by neighbourhood or postal code" aria-describedby="button-addon">
-                    <button class="btn btn-outline-secondary" type="button" id="button-addon">
-                        <i class="bi bi-search"></i>
-                    </button>
-                </div>
-            </div>
+        <div class="d-flex justify-content-end">
+            <router-link to="/editlisting">
+                <button class="btn mx-5" style="background-color: #447098; color: white;">Add Listing</button>
+            </router-link>
         </div>
         
         <div class="container-fluid row">
@@ -26,14 +19,14 @@
             <PropertyCard :carouselNum="1"></PropertyCard>
             <PropertyCard :carouselNum="2"></PropertyCard>
         </div>
-    </div>
+    </div>  
 </template>
 
 <script>
 import PropertyCard from '@/components/propertyCard.vue';
 
 export default {
-name: 'PropertiesPage',
+name: 'MyPropertyPage',
     components: {
         PropertyCard
     },

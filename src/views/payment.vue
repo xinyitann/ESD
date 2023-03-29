@@ -2,7 +2,7 @@
     <div class="container-fluid">
         <div class = "row d-flex justify-content-center">
             <div class="col-10 col-md-8 col-lg-7 my-3">
-                <h2 class="text-center my-2">Make Payment</h2>
+                <h2 class="text-center my-4">Make Payment</h2>
                 <h5 class="my-4">Payment Details</h5>
                 <button type="button" class="btn btn-outline-secondary border-secondary-subtle border-1 w-100 p-3">
                     <img src="../assets/paypal.png" style="height:25px;">
@@ -10,7 +10,7 @@
 
                 <p class="my-4 fw-bold">or checkout using a credit card</p>
 
-                <form class="border rounded-2 border-1 border-secondary-subtle p-4">
+                <form class="border rounded-2 border-1 border-secondary-subtle p-4 w-100 ms-0 mb-5">
                     <div class="mb-3">
                         <label for="cardholderName" class="form-label">Cardholder Name</label>
                         <input type="text" class="form-control" id="cardholderName" v-model="cardholderName">
