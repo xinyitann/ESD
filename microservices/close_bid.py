@@ -14,7 +14,8 @@ import json
 
 app = Flask(__name__)
 CORS(app)
-engine = create_engine('mysql+mysqlconnector://root@localhost:3306/property_management')
+
+property_URL = "http://localhost:5001/property"
 auction_URL = "http://localhost:5002/auctions"
 customer_URL = "http://localhost:5700/customer"
 
@@ -115,10 +116,8 @@ def get_highest_bid(close_bid):
 
         # Retrieve the property name associated with the auction ID
         auction_id = close_bid["auction_id"]
-        query = f"SELECT name FROM property WHERE auction_id={auction_id}"
-        with engine.connect() as conn:
-            result = conn.execute(query)
-            property_name = result.fetchone()[0]
+        get_property_name_URL = property_URL + "/name/" + auction_id
+        property_name_result = invoke_http(get_property_name_URL, method='GET', json=None)
 
         # Retrieve the customer details associated with the highest bid
         customer_id = higest_bid_result["data"]
@@ -129,7 +128,7 @@ def get_highest_bid(close_bid):
         name_email_property = {
             'name' : customer_result['data']['name'],
             'email' : customer_result['data']['email'],
-            'property_name' : property_name
+            'property_name' : property_name_result['data']['property_name']
         }
 
         amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="bidding.notification", 

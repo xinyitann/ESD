@@ -3,7 +3,6 @@
 # to run this file as a python3 script
 
 from flask import Flask
-from twilio.rest import Client
 from email.message import EmailMessage
 import ssl
 import smtplib
