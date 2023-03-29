@@ -29,7 +29,7 @@ def make_booking():
 
             return jsonify({
                 "code": 500,
-                "message": "place_order.py internal error: " + ex_str
+                "message": "makebooking.py internal error: " + ex_str
             }), 500
     # if reached here, not a JSON request.
     return jsonify({
@@ -41,6 +41,7 @@ def processMakeBooking(data):
     agent_URL = "http://localhost:5003/agent/"
     property_URL =  "http://localhost:5001/property/"
     booking_URL = "http://localhost:5005/booking"
+    get_all_booking_URL = "http://localhost:5005/booking/pending/"
     #invoke agent microservice
     agent_URL = agent_URL + str(data['agent_id'])
     agent_result = invoke_http(agent_URL, method='GET', json=data)
@@ -62,13 +63,13 @@ def processMakeBooking(data):
 
     
     combine = {}
-    for item in agent_result:
+    for item in agent_result['data']:
         if item not in combine:
-            combine[item] = agent_result[item]
-    for item in property_result:
+            combine[item] = agent_result['data'][item]
+    for item in property_result['data']:
         if item not in combine:
-            combine[item] = property_result[item]
-    
+            combine[item] = property_result['data'][item]
+    combine['code'] = 200
     return combine
 
 
