@@ -123,49 +123,49 @@ def get_properties_by_neighbourhood(search_details):
 
 #Get properties from list of postal codes 
 def get_properties_from_postalcodes(postalcode):
-    print("hi")
-    print(postalcode)
-    print(type(postalcode))
+
     postalcode_list=list_from_postal_code_input(postalcode)
-    print(postalcode_list)
+    postalcode_str=str(postalcode_list)
+    print(postalcode_str)
+    # print(postalcode_list) #['530321', '530323', '530325', '530320', '530324', '530322', '530322', '530326', '530333', '530332']
 
-    if  postalcode_list:
-        for postalcode in postalcode_list:
-          print(postalcode)
-          print('\n-----Invoking property microservice for postalcode-----')
-          updated_property_URL=property_URL+'/postal_code/'+ postalcode
-          property_result = invoke_http(updated_property_URL,method='GET',json=None)
-          print('property_result from property microservice:', property_result)
+    # if  postalcode_list:
+    #     for postalcode in postalcode_list:
+    #       print(postalcode)
+    print('\n-----Invoking property microservice for postalcode-----')
+    updated_property_URL=property_URL+'/postal_code/'+ postalcode_str
+    property_result = invoke_http(updated_property_URL,method='GET',json=None)
+    print('property_result from property microservice:', property_result)
 
-          code = property_result["code"]
-          message = json.dumps(property_result)
-          print(message)
-          if code not in range(200, 300):
-              # Inform the error microservice
-              print('\n\n-----Publishing the (search error) message with routing_key=search.error-----')
+    code = property_result["code"]
+    message = json.dumps(property_result)
+    print(message)
+    if code not in range(200, 300):
+        # Inform the error microservice
+        print('\n\n-----Publishing the (search error) message with routing_key=search.error-----')
 
-              amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="search.error", 
-                  body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
-              print("\nsearch status ({:d}) published to the RabbitMQ Exchange:".format(
-                  code), property_result)
+        amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="search.error", 
+            body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
+        print("\nsearch status ({:d}) published to the RabbitMQ Exchange:".format(
+            code), property_result)
 
-              print("\nsearch published to RabbitMQ Exchange.\n")\
+        print("\nsearch published to RabbitMQ Exchange.\n")\
 
 
-              return {
-                  "code": 500,
-                  "data": {"property_result": property_result},
-                  "message": "search creation failure sent for error handling."
-              }
+        return {
+            "code": 500,
+            "data": {"property_result": property_result},
+            "message": "search creation failure sent for error handling."
+        }
 
-          return {
-          "code": 201,
-          "data": {
-              "property_result": property_result,
-          }
-      }
-    else:
-        print("line 233")
+    return {
+    "code": 201,
+    "data": {
+        "property_result": property_result,
+    }
+}
+    # else:
+    #     print("line 166")
 
 
 # to convert postal code given by user to coordinates

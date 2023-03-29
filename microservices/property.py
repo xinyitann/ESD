@@ -130,6 +130,9 @@ def get_all():
 @app.route("/property/neighbourhood/<string:neighbourhood>",methods=['GET'])
 def get_property_by_neighbourhood(neighbourhood):
     prop_list = Property.query.filter_by(neighbourhood=neighbourhood)
+    print(prop_list)
+    # for property in prop_list:
+        # print (type(property))
     
     if prop_list:
         return jsonify(
@@ -148,16 +151,39 @@ def get_property_by_neighbourhood(neighbourhood):
 ), 404
 
 #function working
-@app.route("/property/postal_code/<string:postalcode>",methods=['GET'])
-def get_property_by_postalcode(postalcode):
-    prop_list = Property.query.filter_by(postalcode=postalcode)
-    
-    if prop_list:
+@app.route("/property/postal_code/<string:postalcode_str>",methods=['GET'])
+def get_property_by_postalcode(postalcode_str):
+
+    print(postalcode_str)
+    print(type(postalcode_str)) #string
+
+    #convert string to list 
+    postalcode_list=eval(postalcode_str)
+    print(postalcode_list)
+    print(type(postalcode_list)) #list
+
+    postal_list=[]
+    for postalcode in postalcode_list:  
+        # print(postalcode)
+        prop_list = Property.query.filter_by(postalcode=postalcode)
+        # print(prop_list)
+        if prop_list:
+            postal_list.append(prop_list)
+        else:
+            print("stupid")
+    # for query in postal_list:
+    #     print(str(query))
+
+    # print(postal_list)
+    if postal_list:
+        print("hello")
         return jsonify(
                     {
                         "code": 200,
                         "data": {
-                            "properties": [property.json() for property in prop_list]
+                            "properties": [property.json() for query in postal_list for property in query]
+                            #[word for sentence in text for word in sentence]
+
                         }
                     }
                 )
