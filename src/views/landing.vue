@@ -15,34 +15,34 @@
                 </div>
             </div>
         </div>
-        <div class="py-5">
+        <div class="py-5" style="height: 100vh;">
             <div class="my-5 mx-3">
                 <h2 class="text-center">We make it easy for u</h2>
-                <h5 class="text-center text-body-secondary">Follow these three simple steps to get your dream home</h5>
+                <h5 class="text-center text-body-secondary mb-5">Follow these three simple steps to get your dream home</h5>
             </div>
-            <div class="row w-100">
-                <div class="col">
-                    <div class="d-flex justify-content-center" style="min-height:130px;">
+            <div class="row w-100 pt-4">
+                <div class="col-12 col-md-4">
+                    <div class="d-flex justify-content-center" >
                         <img src="../assets/searchImg.png" class="w-25" >
                     </div>
                     <h5 class="text-center my-3">
-                        Find your perfect property
+                        Search for your ideal property
                     </h5>
                 </div>
-                <div class="col">
-                    <div class="d-flex justify-content-center" style="min-height:130px;">
+                <div class="col-12 col-md-4">
+                    <div class="d-flex justify-content-center" >
                         <img src="../assets/bookImg.png" class="w-25" >
                     </div>
                     <h5 class="text-center my-3">
-                        Find your perfect property
+                        Schedule a viewing appointment
                     </h5>
                 </div>
-                <div class="col">
-                    <div class="d-flex justify-content-center" style="min-height:130px;">
-                        <img src="../assets/bidImg.png" class="w-25" style="height:auto;">
+                <div class="col-12 col-md-4">
+                    <div class="d-flex justify-content-center">
+                        <img src="../assets/bidImg.png" class="w-25">
                     </div>
                     <h5 class="text-center my-3">
-                        Find your perfect property
+                        Place a bid to secure your dream home
                     </h5>
                 </div>
             </div>

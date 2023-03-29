@@ -10,13 +10,13 @@
       <div class="collapse navbar-collapse justify-content-end" id="navbarText">
         <ul class="navbar-nav me-2">
           <li class="nav-item mx-2">
-            <router-link to="/properties" class="nav-link">All Properties</router-link>
+            <router-link to="/properties" class="nav-link">Discover</router-link>
           </li>
           <li class="nav-item mx-2">
             <router-link to="/bookingnow" class="nav-link">Book an Appointment</router-link>
           </li>
           <li class="nav-item mx-2">
-            <router-link to="/mybooking" class="nav-link">My Bookings</router-link>
+            <router-link to="/mybooking" class="nav-link">My Booking</router-link>
           </li>
           <li class="nav-item mx-2">
             <router-link to="/login" class="nav-link">Log In</router-link>
@@ -34,7 +34,6 @@ export default {
   },
   data(){ // or could put it in props
     return{
-
     }
   }
 }

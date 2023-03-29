@@ -31,7 +31,7 @@
             </ol>
         </div>
 
-        <div class="p-5 row">
+        <div class="p-5 row w-100">
             <div class="col-12 col-md-7 p-2">
                 <h3 class="mb-3">Property Name</h3>
                 <p class="fs-5">$47294423</p>

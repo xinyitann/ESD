@@ -1,7 +1,7 @@
 <template>
     <div class="container-fluid">
         <div class = "row d-flex justify-content-center">
-                <h2 class="text-center my-4">Add Listing</h2>
+                <h2 class="text-center my-5">Add Listing</h2>
                 <form>
                     <div class="row">
                         <div class="col-12 col-md-6 px-5">
@@ -58,7 +58,7 @@
                         </div>
                     </div>
                     <div class="d-flex justify-content-center my-5">
-                        <router-link to="/">
+                        <router-link to="/myproperty">
                             <button type="submit" class="btn mx-4" style="background-color: #6d8363; color: white;">Cancel</button>
                         </router-link>
                         <button type="submit" class="btn mx-4" style="background-color: #447098; color: white;">Add Listing</button>

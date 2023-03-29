@@ -1,24 +1,24 @@
 <template>
     <div style="min-height:100vh;">
-        <h2 class="text-center my-4">
-            Booking
+        <h2 class="text-center my-5">
+            My Bookings
         </h2>
         <div class="row justify-content-center d-flex">
             <div class="col-11 col-sm-10 col-md-9">
                 <ul class="nav nav-tabs mb-5 mt-2" id="myTab" role="tablist">
                     <li class="nav-item" role="presentation">
-                        <button :class="{ active: isActive, 'nav-link':true }" @click="isActive = !isActive" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">Pending Confirmation</button>
+                        <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true" style="color:black">Pending Confirmation</button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link" :class="{ active: isActive, 'nav-link':true }" @click="isActive = !isActive" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">Accepted Bookings</button>
+                        <button class="nav-link" :class="{ active: isActive, 'nav-link':true }" @click="isActive = !isActive" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false" style="color:black">Accepted Bookings</button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link" :class="{ active: isActive, 'nav-link':true }" @click="isActive = !isActive" data-bs-toggle="tab" data-bs-target="#contact" type="button" role="tab" aria-controls="contact" aria-selected="false">Rejected Bookings</button>
+                        <button class="nav-link" :class="{ active: isActive, 'nav-link':true }" @click="isActive = !isActive" data-bs-toggle="tab" data-bs-target="#contact" type="button" role="tab" aria-controls="contact" aria-selected="false" style="color:black">Rejected Bookings</button>
                     </li>
                 </ul>
                 <div class="tab-content" id="myTabContent">
                     <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-                        <table class="table text-center">
+                        <table class="table">
                             <thead>
                                 <tr>
                                     <th scope="col">Customer Name</th>
@@ -48,7 +48,7 @@
                         </table>
                     </div>
                     <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                        <table class="table text-center">
+                        <table class="table">
                             <thead>
                                 <tr>
                                 
@@ -68,7 +68,7 @@
                         </table>
                     </div>
                     <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
-                        <table class="table text-center">
+                        <table class="table">
                             <thead>
                                 <tr>
                                     <th scope="col">Customer Name</th>
@@ -216,11 +216,12 @@ name: 'MyBookingPage',
 
 </script>
 
-<style>
-.nav-link {
-    color: black
+<style scoped>
+.nav-link.active{
+    background-color: #447098;
+    font-weight: bold;
+    color: white !important;
 }
-
 .table-style{
     background-color: antiquewhite;
 }

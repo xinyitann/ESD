@@ -3,7 +3,7 @@
         <h2 class="text-center my-5">All Properties</h2>
 
         <div class="d-flex justify-content-end">
-            <router-link to="/editlisting">
+            <router-link to="/addlisting">
                 <button class="btn mx-5" style="background-color: #447098; color: white;">Add Listing</button>
             </router-link>
         </div>

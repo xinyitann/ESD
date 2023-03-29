@@ -2,7 +2,7 @@
     <div class="container-fluid">
         <div class = "row d-flex justify-content-center">
             <div class="col-10 col-md-8 col-lg-7 my-3">
-                <h2 class="text-center my-5">Book An Appointment</h2>
+                <h2 class="text-center my-4">Book An Appointment</h2>
                 <form>
                     <div class="mb-3">
                         <label for="customerID" class="form-label">Customer ID</label>
