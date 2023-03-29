@@ -76,18 +76,19 @@ CREATE TABLE property_images(
 DROP TABLE IF EXISTS `auctions`;
 CREATE TABLE IF NOT EXISTS `auctions` (
   `auction_id` int(11) NOT NULL AUTO_INCREMENT,
-  `start_time` TIMESTAMP NOT NULL,
-  `end_time` TIMESTAMP NOT NULL,
+  `customer_id` INT NOT NULL,
   `starting_price` FLOAT(53) NOT NULL,
   `option_fee` FLOAT(53) NOT NULL,
   `highest_bid` FLOAT(2),
   `created_at` TIMESTAMP NOT NULL DEFAULT NOW(),
   `updated_at` TIMESTAMP NOT NULL DEFAULT NOW(),
-  PRIMARY KEY (`auction_id`)
+  `status` varchar(20) NOT NULL,
+  PRIMARY KEY (`auction_id`),
+  constraint auctions_fk1 foreign key (customer_id) references customer(customer_id)
 )ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
-INSERT INTO `auctions` (`auction_id`, `start_time`, `end_time`, `starting_price`,`option_fee`, `highest_bid`, `created_at`, `updated_at`)VALUES 
-('1', '2023-03-23 12:00:00', '2023-03-27 12:00:00', '13150000','1000', '20000', '2023-03-20 12:00:00','2023-03-20 12:00:00');
+INSERT INTO `auctions` (`auction_id`, `customer_id`, `starting_price`,`option_fee`, `highest_bid`, `created_at`, `updated_at`, `status`)VALUES 
+('1', '1', '13150000','1000', '20000', '2023-03-20 12:00:00','2023-03-20 12:00:00', 'open');
 
 
 -- Table structure for table `bids`
@@ -164,9 +165,8 @@ CREATE TABLE IF NOT EXISTS booking (
 
 --
 -- Dumping data for table `property`
-INSERT INTO `booking` (`booking_id`,`agent_id`,`customer_id`, `property_id`,`datetime`, `status`) VALUES
-('1','1','1','1','2023-03-11 14:00:00','accepted' );
-
+INSERT INTO `property` (`property_id`, `auction_id`, `agent_id`,`customer_id`, `name`, `address`, `postalcode`,`property_type`, `square_feet`, `room`, `facing`,`build_year`, `estimated_cost`,`neighbourhood`,`image`) VALUES
+('1','1','1','1', 'Waterfront condominium', 'waterfront street 17', '123456', 'Condominium','5929',  '4', 'north','2011', '13150000','Bishan','../src/assets/backgroundhome.jpg');
 --
 -- Table structure for table `error`
 --
