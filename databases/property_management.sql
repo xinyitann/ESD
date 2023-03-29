@@ -155,7 +155,8 @@ CREATE TABLE IF NOT EXISTS booking (
   `agent_id` int(11) NOT NULL,
   `customer_id` int(11) NOT NULL,
   `property_id` int(11) NOT NULL,
-  `datetime` timestamp NOT NULL,
+  `datetimestart` timestamp NOT NULL,
+  `datetimeend` timestamp NOT NULL,
   `status` varchar(45) NOT NULL,
   PRIMARY KEY (`booking_id`),
   constraint booking_fk1 foreign key (agent_id) references agent(agent_id),
@@ -163,10 +164,6 @@ CREATE TABLE IF NOT EXISTS booking (
   constraint booking_fk3 foreign key (property_id) references property(property_id)
 );
 
---
--- Dumping data for table `property`
-INSERT INTO `property` (`property_id`, `auction_id`, `agent_id`,`customer_id`, `name`, `address`, `postalcode`,`property_type`, `square_feet`, `room`, `facing`,`build_year`, `estimated_cost`,`neighbourhood`,`image`) VALUES
-('1','1','1','1', 'Waterfront condominium', 'waterfront street 17', '123456', 'Condominium','5929',  '4', 'north','2011', '13150000','Bishan','../src/assets/backgroundhome.jpg');
 --
 -- Table structure for table `error`
 --
@@ -192,3 +189,4 @@ CREATE TABLE IF NOT EXISTS `extra` (
 )ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 INSERT INTO `extra` (`extra_id`)VALUES 
 ('1');
+

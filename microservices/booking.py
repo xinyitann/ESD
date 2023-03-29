@@ -18,19 +18,21 @@ class Booking(db.Model):
     agent_id = db.Column(db.Integer, nullable=False)
     customer_id = db.Column(db.Integer, nullable=False)
     property_id = db.Column(db.Integer, nullable=False)
-    datetime = db.Column(db.DateTime,nullable=False)
+    datetimestart = db.Column(db.DateTime,nullable=False)
+    datetimeend = db.Column(db.DateTime,nullable=False)
     status = db.Column(db.String(45),nullable=False)
 
-    def __init__(self, booking_id, agent_id, customer_id, property_id, datetime, status):
+    def __init__(self, booking_id, agent_id, customer_id, property_id, datetimestart, datetimeend, status):
         self.booking_id = booking_id
         self.agent_id = agent_id
         self.customer_id = customer_id
         self.property_id = property_id
-        self.datetime = datetime
+        self.datetimestart = datetimestart
+        self.datetimeend = datetimeend
         self.status = status
 
     def json(self):
-        return {"booking_id": self.booking_id, "agent_id": self.agent_id, "customer_id": self.customer_id, "property_id": self.property_id, "datetime": self.datetime, "status": self.status}
+        return {"booking_id": self.booking_id, "agent_id": self.agent_id, "customer_id": self.customer_id, "property_id": self.property_id, "datetimestart": self.datetimestart,"datetimeend":self.datetimeend, "status": self.status}
 
 # GET BOOKING
 @app.route("/booking/<booking_id>")
@@ -315,6 +317,5 @@ def create_calendar_event():
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5005, debug=True)
-
 
 
