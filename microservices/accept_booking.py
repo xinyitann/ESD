@@ -4,6 +4,7 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 
 import os, sys
+from os import environ
 
 import requests
 from invokes import invoke_http
@@ -15,8 +16,8 @@ import json
 app = Flask(__name__)
 CORS(app)
 
-booking_URL = "http://127.0.0.1:5005/booking"
-customer_URL = "http://localhost:5700/customer"
+booking_URL = environ.get('booking_URL') or "http://localhost:5005/booking"
+customer_URL = environ.get('customer_URL') or "http://localhost:5700/customer"
 
 def validate_booking_input(booking_details):
     # will have to get agent_id from agent profile somehow
