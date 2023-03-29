@@ -257,7 +257,8 @@ def create_property():
         facing=data['facing'],
         build_year=data['build_year'],
         estimated_cost=data['estimated_cost'],
-        image=data['image']
+        image=data['image'],
+        neighbourhood=data['neighbourhood']
     )
 
 
@@ -306,6 +307,7 @@ def update_property(property_id):
         property.build_year = data['build_year']
         property.estimated_cost = data['estimated_cost']
         property.image = data['image']
+        property.neighbourhood = data['neighbourhood']
 
         try:
             # update the property record
