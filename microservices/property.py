@@ -78,10 +78,11 @@ class Property(db.Model):
     facing = db.Column(db.String(45), nullable=False)
     build_year = db.Column(db.Integer, nullable=False)
     estimated_cost = db.Column(db.Float, nullable=False)
+    neighbourhood = db.Column(db.String(45), nullable=False)
     image = db.Column(db.String, nullable=False)
     auction_id = db.Column(db.Integer, db.ForeignKey('auctions.auction_id'), nullable=False)
 
-    def __init__(self, agent_id, customer_id, name, address, postalcode, property_type, square_feet, room, facing, build_year, estimated_cost, image,auction_id):
+    def __init__(self, agent_id, customer_id, name, address, postalcode, property_type, square_feet, room, facing, build_year, estimated_cost, neighbourhood,image,auction_id):
         self.agent_id = agent_id
         self.customer_id = customer_id
         self.name = name
@@ -93,14 +94,15 @@ class Property(db.Model):
         self.facing = facing
         self.build_year = build_year
         self.estimated_cost = estimated_cost
+        self.neighbourhood = neighbourhood
         self.image = image
         self.auction_id = auction_id
 
     def json(self):
-        return {"property_id": self.property_id, "agent_id": self.agent_id, "customer_id": self.customer_id, "name": self.name, "address": self.address, "postalcode": self.postalcode, "property_type": self.property_type, "square_feet": self.square_feet, "room": self.room, "facing": self.facing, "build_year": self.build_year, "estimated_cost": self.estimated_cost, "image": get_image(self.image), "auction_id":self.auction_id}
+        return {"property_id": self.property_id, "agent_id": self.agent_id, "customer_id": self.customer_id, "name": self.name, "address": self.address, "postalcode": self.postalcode, "property_type": self.property_type, "square_feet": self.square_feet, "room": self.room, "facing": self.facing, "build_year": self.build_year, "estimated_cost": self.estimated_cost, "neighbourhood":self.neighbourhood,"image": get_image(self.image), "auction_id":self.auction_id}
     
     def json_without_image(self):
-        return {"property_id": self.property_id, "agent_id": self.agent_id, "customer_id": self.customer_id, "name": self.name, "address": self.address, "postalcode": self.postalcode, "property_type": self.property_type, "square_feet": self.square_feet, "room": self.room, "facing": self.facing, "build_year": self.build_year, "estimated_cost": self.estimated_cost, "image": self.image, "auction_id":self.auction_id}
+        return {"property_id": self.property_id, "agent_id": self.agent_id, "customer_id": self.customer_id, "name": self.name, "address": self.address, "postalcode": self.postalcode, "property_type": self.property_type, "square_feet": self.square_feet, "room": self.room, "facing": self.facing, "build_year": self.build_year, "estimated_cost": self.estimated_cost, "neighbourhood":self.neighbourhood,"image": self.image, "auction_id":self.auction_id}
 
 @app.route("/property")
 def get_all():
@@ -124,25 +126,20 @@ def get_all():
         }
     ), 404  # the HTTP status code (by default its 200)
 
-
+@app.route("/property/<string:neighbourhood>",methods=['GET'])
 def get_property_by_neighbourhood(neighbourhood):
-    prop_list = Property.query.filter_by(neighbourhood=neighbourhood)
+    prop_list = Property.query.filter_by(neighbourhood=neighbourhood).first()
     
 
     return jsonify(
-        {
-            "code": 200,
-            "data": {
-                property.json()
-            }
-        }
-    )
-    return jsonify(
-        {
-            "code": 404,
-            "message": "No properties available"
-        }
-    ), 404
+                {
+                    "code": 200,
+                    "data": {
+                        "properties": [property.json() for property in prop_list]
+                    }
+                }
+            )
+
 
 # if you dont put string default it is string (so for other variable types you need to put)
 @app.route("/property/<property_id>")
