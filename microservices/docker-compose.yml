@@ -13,7 +13,7 @@ services:
     build:
       context: ./
       dockerfile: agent.Dockerfile
-    image: balveen/agent:esd
+    image: faithanggg/agent:esd
     restart: always
     environment:
       dbURL: mysql+mysqlconnector://is213@host.docker.internal:3306/property_management
@@ -41,7 +41,7 @@ services:
     build:
       context: ./
       dockerfile: auctionService.Dockerfile
-    image: balveen/activity_log:esd
+    image: faithanggg/auctionservice:esd
     restart: always
     environment:
       dbURL: mysql+mysqlconnector://is213@host.docker.internal:3306/property_management
@@ -56,7 +56,7 @@ services:
     build:
       context: ./
       dockerfile: error.Dockerfile
-    image: balveen/error:esd
+    image: faithanggg/error:esd
     restart: always
     depends_on:
       - rabbitmq
@@ -72,7 +72,7 @@ services:
     build:
       context: ./
       dockerfile: bids.Dockerfile
-    image: balveen/property_management:esd
+    image: faithanggg/bids:esd
     restart: always
     environment:
       dbURL: mysql+mysqlconnector://is213@host.docker.internal:3306/property_management
@@ -88,7 +88,7 @@ services:
     build:
       context: ./
       dockerfile: booking.Dockerfile
-    image: balveen/property_management:esd
+    image: faithanggg/booking:esd
     restart: always
     environment:
       dbURL: mysql+mysqlconnector://is213@host.docker.internal:3306/property_management
@@ -104,7 +104,7 @@ services:
     build:
       context: ./
       dockerfile: customer.Dockerfile
-    image: balveen/property_management:esd
+    image: faithanggg/customer:esd
     restart: always
     environment:
       dbURL: mysql+mysqlconnector://is213@host.docker.internal:3306/property_management
@@ -114,27 +114,13 @@ services:
 
 
   ##################################
-  # Invokes: The Invokes microservice
-  ##################################
-  invokes:
-    build:
-      context: ./
-      dockerfile: invokes.Dockerfile
-    image: balveen/property_management:esd
-    restart: always
-    environment:
-      dbURL: mysql+mysqlconnector://is213@host.docker.internal:3306/property_management
-      PYTHONUNBUFFERED: 1
-
-
-  ##################################
   # Notification: The Notications microservice
   ##################################
   notification:
     build:
       context: ./
       dockerfile: notification.Dockerfile
-    image: balveen/notification:esd
+    image: faithanggg/notification:esd
     restart: always
     depends_on:
       - rabbitmq
@@ -150,7 +136,7 @@ services:
     build:
       context: ./
       dockerfile: property.Dockerfile
-    image: balveen/property_management:esd
+    image: faithanggg/property:esd
     restart: always
     environment:
       dbURL: mysql+mysqlconnector://is213@host.docker.internal:3306/property_management
@@ -165,7 +151,7 @@ services:
     build:
       context: ./
       dockerfile: accept_booking.Dockerfile
-    image: balveen/place_order:esd
+    image: faithanggg/accept_booking:esd
     restart: always
     depends_on:
       - booking
@@ -176,11 +162,11 @@ services:
     environment:
       rabbit_host: rabbitmq
       rabbit_port: 5672
-      booking_URL: http://127.0.0.1:5005/booking
-      customer_URL: http://localhost:5700/customer
+      # booking_URL: http://127.0.0.1:5005/booking
+      # customer_URL: http://localhost:5700/customer
       PYTHONUNBUFFERED: 1
     ports:
-      - "5101:510!"
+      - "5101:5101"
 
 
   ###############################################
@@ -190,7 +176,7 @@ services:
     build:
       context: ./
       dockerfile: add_listing.Dockerfile
-    image: balveen/place_order:esd
+    image: faithanggg/add_listing:esd
     restart: always
     depends_on:
       - property
@@ -202,8 +188,6 @@ services:
     environment:
       rabbit_host: rabbitmq
       rabbit_port: 5672
-      order_URL: http://order:5001/order
-      shipping_record_URL: http://shipping_record:5002/shipping_record 
       PYTHONUNBUFFERED: 1
     ports:
       - "5100:5100"
@@ -215,7 +199,7 @@ services:
     build:
       context: ./
       dockerfile: closebid.Dockerfile
-    image: balveen/place_order:esd
+    image: faithanggg/close_bids:esd
     restart: always
     depends_on:
       - auction
@@ -227,11 +211,11 @@ services:
     environment:
       rabbit_host: rabbitmq
       rabbit_port: 5672
-      order_URL: http://order:5001/order
-      shipping_record_URL: http://shipping_record:5002/shipping_record 
+      # order_URL: http://order:5001/order
+      # shipping_record_URL: http://shipping_record:5002/shipping_record 
       PYTHONUNBUFFERED: 1
     ports:
-      - "5100:5100"
+      - "5801:5801"
 
 
 
@@ -242,7 +226,7 @@ services:
     build:
       context: ./
       dockerfile: make_bid.Dockerfile
-    image: balveen/place_order:esd
+    image: faithanggg/make_bid:esd
     restart: always
     depends_on:
       - auction
@@ -255,11 +239,11 @@ services:
     environment:
       rabbit_host: rabbitmq
       rabbit_port: 5672
-      order_URL: http://order:5001/order
-      shipping_record_URL: http://shipping_record:5002/shipping_record 
+      # order_URL: http://order:5001/order
+      # shipping_record_URL: http://shipping_record:5002/shipping_record 
       PYTHONUNBUFFERED: 1
     ports:
-      - "5100:5100"
+      - "5900:5900"
 
 
   ###############################################
@@ -269,7 +253,7 @@ services:
     build:
       context: ./
       dockerfile: makebooking.Dockerfile
-    image: balveen/place_order:esd
+    image: faithanggg/make_booking:esd
     restart: always
     depends_on:
       - booking
@@ -282,8 +266,8 @@ services:
     environment:
       rabbit_host: rabbitmq
       rabbit_port: 5672
-      order_URL: http://order:5001/order
-      shipping_record_URL: http://shipping_record:5002/shipping_record 
+      # order_URL: http://order:5001/order
+      # shipping_record_URL: http://shipping_record:5002/shipping_record 
       PYTHONUNBUFFERED: 1
     ports:
       - "5100:5100"
@@ -296,7 +280,7 @@ services:
     build:
       context: ./
       dockerfile: search.Dockerfile
-    image: balveen/place_order:esd
+    image: balveen/search:esd
     restart: always
     depends_on:
       - property
@@ -306,10 +290,10 @@ services:
     environment:
       rabbit_host: rabbitmq
       rabbit_port: 5672
-      order_URL: http://order:5001/order
-      shipping_record_URL: http://shipping_record:5002/shipping_record 
+      # order_URL: http://order:5001/order
+      # shipping_record_URL: http://shipping_record:5002/shipping_record 
       PYTHONUNBUFFERED: 1
     ports:
-      - "5100:5100"
+      - "5106:5106"
 
 
