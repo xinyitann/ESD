@@ -58,7 +58,7 @@
                         <router-link to="/">
                             <button type="submit" class="btn" style="background-color: #6d8363; color: white;">Cancel</button>
                         </router-link>
-                        <button type="submit" class="btn" style="background-color: #447098; color: white;">Book Now</button>
+                        <button @click="call_makebooking()" type="button" class="btn" style="background-color: #447098; color: white;">Book Now</button>
                     </div>
                 </form>
             </div>
@@ -75,13 +75,78 @@ name: 'BookingPage',
     
     data(){
         return{
-            customerID:"123",
-            agentID: "456",
-            propertyID: "789",
+            customerID:"55",
+            agentID: "86",
+            propertyID: "55",
             bookingDate:"",
             bookingStartTime:"",
+            bookingEndTime:"",
+
+            name: "",
+            email: "",
+            contact: "",
+            propertyAddress: "",
+            check: [],
+
         }
-    }
+    },
+    computed: {
+        date_time_start(){
+            let final = this.bookingDate
+            let timing = this.bookingStartTime.slice(0,2)
+            timing = timing + ':' + '00'+':'+'00'
+            final = final + ' ' + timing
+            return final
+        },
+        date_time_end(){
+            let final = this.bookingDate
+            let timing = this.bookingEndTime.slice(0,2)
+            timing = timing + ':' + '00'+':'+'00'
+            final = final + ' ' + timing
+            return final
+        }
+    },
+    methods: {
+            async call_makebooking(){
+            //let dateTimeStart = this.date_time_end
+            //let dateTimeEnd = this.date_time_end
+            
+
+            var myHeaders = new Headers();
+            myHeaders.append("Content-Type", "application/json");
+
+            var raw = JSON.stringify({
+            "booking_id": this.customerID,
+            "agent_id": this.agentID,
+            "customer_id": this.customerID,
+            "property_id": this.propertyID,
+            "datetimestart": this.date_time_start,
+            "datetimeend": this.date_time_end,
+            "status": "pending"
+            });
+            console.log(raw)
+            var requestOptions = {
+            method: 'POST',
+            headers: myHeaders,
+            body: raw,
+            redirect: 'follow'
+            };
+
+            const data_fetch = await fetch("http://127.0.0.1:5100/make_booking", requestOptions)
+            this.check = await data_fetch.json()
+            console.log(data_fetch)
+            if (data_fetch['status'] == 200){
+                alert('booking has been created')
+            } 
+            else{
+                alert('booking creation failed')
+            }
+                    },
+            
+            
+       
+            
+    },
 }
 
 </script>
