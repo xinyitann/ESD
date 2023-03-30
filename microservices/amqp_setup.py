@@ -13,7 +13,7 @@ channel = connection.channel()
 
 # Set up the exchange if the exchange doesn't exist
 # - use a 'topic' exchange to enable interaction
-exchangename="add_listing_topic"
+exchangename="property_management"
 exchangetype="topic"
 channel.exchange_declare(exchange=exchangename, exchange_type=exchangetype, durable=True)
 
