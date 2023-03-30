@@ -254,6 +254,9 @@ def create_calendar_event():
     #} 24 march 9 to 10 am
     start = data['start']
     end = data['end']
+    property_name = data["property_name"]
+    customer_name = data["customer_name"]
+
     SCOPES = ['https://www.googleapis.com/auth/calendar']
     """Shows basic usage of the Google Calendar API.
     Prints the start and name of the next 10 events on the user's calendar.
@@ -284,9 +287,12 @@ def create_calendar_event():
         events_result = service.events().list(calendarId='primary', timeMin=now,
                                               maxResults=10, singleEvents=True,
                                               orderBy='startTime').execute()
+
+        summary = "Booking with " + customer_name + " for " + property_name
+
         event = {
-        'summary': 'appointment booking',
-        'description': 'appointment booking',
+        'summary': summary,
+        'description': summary,
         'start': {
             'dateTime': start,
             'timeZone': 'Singapore',
