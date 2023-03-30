@@ -22,74 +22,57 @@ property_URL = "http://localhost:5001/property"
 agent_URL="http://localhost:5003/agent"
 
 # validate seach input
-def validate_search_input(search_details):
+def validate_search_input(search):
     # will have to get agent_id from agent profile somehow
-    if any( c.isalnum() for c in search_details):
+    if any( c.isalnum() for c in search):
         return True
     
     else:
         return False
 
-@app.route("/search_list", methods=['GET'])
-def process_search():
+@app.route("/search_list/<string:search>", methods=['GET'])
+def process_search(search):
     # Simple check of input format and data of the request are JSON
-    if request.is_json:
-        try:
-            search_details = request.get_json()
-            print("\nReceived a search in JSON:", search_details)
+    # if request.is_json:
+    #     try:
+            # search_details = request.get_json()
+            # print("\nReceived a search in JSON:", search_details)
 
             # Validate accept search input
-            if not validate_search_input(search_details):
-                # Inform the error microservice
-                error_message = {
-                    "code": 400,
-                    "message": "Invalid accept search input: missing or invalid required fields."
-                }
-                print('\n\n-----Publishing the (search input error) message with routing_key=search.error-----')
-                amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="search.error", 
-                        body=json.dumps(error_message), properties=pika.BasicProperties(delivery_mode = 2)) 
-                print("\nInvalid search input published to the RabbitMQ Exchange.\n")
+    if not validate_search_input(search):
+        # Inform the error microservice
+        error_message = {
+            "code": 400,
+            "message": "Invalid accept search input: missing or invalid required fields."
+        }
+        print('\n\n-----Publishing the (search input error) message with routing_key=search.error-----')
+        amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="search.error", 
+                body=json.dumps(error_message), properties=pika.BasicProperties(delivery_mode = 2)) 
+        print("\nInvalid search input published to the RabbitMQ Exchange.\n")
 
-                return jsonify({
-                    "code": 400,
-                    "message": "Invalid accept search input: missing or invalid required fields."
-                }), 400
+        return jsonify({
+            "code": 400,
+            "message": "Invalid accept search input: missing or invalid required fields."
+        }), 400
 
-            #check if postal code or neighbourhood
-            if search_details["search"].isnumeric() and len(search_details["search"])==6:
-                #if postal code
-              print('here is property by postal code')
-              print(search_details)
-              return get_properties_from_postalcodes(search_details['search'])
-              
+    #check if postal code or neighbourhood
+    if search.isnumeric() and len(search)==6:
+        #if postal code
+        print('here is property by postal code')
+        print(search)
+        return get_properties_from_postalcodes(search)
+        
 
-            else:
-                #if neighbourhood
-                print('here is property by neighbourhood')
-                print(search_details)
-                return get_properties_by_neighbourhood(search_details)
-        except Exception as e:
-            # Unexpected error in code
-            exc_type, exc_obj, exc_tb = sys.exc_info()
-            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-            ex_str = str(e) + " at " + str(exc_type) + ": " + fname + ": line " + str(exc_tb.tb_lineno)
-            print(ex_str)
+    else:
+        #if neighbourhood
+        print('here is property by neighbourhood')
+        print(search)
+        return get_properties_by_neighbourhood(search)
 
-            return jsonify({
-                "code": 500,
-                "message": "search.py internal error: " + ex_str
-            }), 500
-
-    # if reached here, not a JSON request.
-    return jsonify({
-        "code": 400,
-        "message": "Invalid JSON input: " + str(request.get_data())
-    }), 400
-
-def get_properties_by_neighbourhood(search_details):
+def get_properties_by_neighbourhood(search):
     print('\n-----Invoking property microservice for neighbourhood-----')
     # neighbourhood = "Holland"
-    updated_property_URL=property_URL+'/neighbourhood/'+ search_details["search"]
+    updated_property_URL=property_URL+'/neighbourhood/'+ search
     property_result = invoke_http(updated_property_URL,method='GET',json=None)
     print('property_result from property microservice:', property_result)
 
