@@ -56,11 +56,11 @@ def process_search():
                 }), 400
 
             #check if postal code or neighbourhood
-            if "postalcode" in search_details:
+            if search_details["search"].isnumeric() and len(search_details["search"])==6:
                 #if postal code
               print('here is property by postal code')
               print(search_details)
-              return get_properties_from_postalcodes(search_details['postalcode'])
+              return get_properties_from_postalcodes(search_details['search'])
               
 
             else:
@@ -89,7 +89,7 @@ def process_search():
 def get_properties_by_neighbourhood(search_details):
     print('\n-----Invoking property microservice for neighbourhood-----')
     # neighbourhood = "Holland"
-    updated_property_URL=property_URL+'/neighbourhood/'+ search_details["neighbourhood"]
+    updated_property_URL=property_URL+'/neighbourhood/'+ search_details["search"]
     property_result = invoke_http(updated_property_URL,method='GET',json=None)
     print('property_result from property microservice:', property_result)
 
