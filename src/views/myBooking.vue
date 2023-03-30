@@ -10,10 +10,10 @@
                         <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true" style="color:black">Pending Confirmation</button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link" :class="{ active: isActive, 'nav-link':true }" @click="isActive = !isActive" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false" style="color:black">Accepted Bookings</button>
+                        <button class="nav-link" :class="{ active: isActive, 'nav-link':true }" @click="isActive = !isActive" data-bs-toggle="tab" data-bs-target="#profile" role="tab" aria-controls="profile" aria-selected="false" style="color:black">Accepted Bookings</button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link" :class="{ active: isActive, 'nav-link':true }" @click="isActive = !isActive" data-bs-toggle="tab" data-bs-target="#contact" type="button" role="tab" aria-controls="contact" aria-selected="false" style="color:black">Rejected Bookings</button>
+                        <button class="nav-link" :class="{ active: isActive, 'nav-link':true }" @click="isActive = !isActive" data-bs-toggle="tab" data-bs-target="#contact" role="tab" aria-controls="contact" aria-selected="false" style="color:black">Rejected Bookings</button>
                     </li>
                 </ul>
                 <div class="tab-content" id="myTabContent">
@@ -31,7 +31,7 @@
                                 <tr v-for="item in pending" :key="item" class="table-style">
                                     <td>{{item.customer_name}}</td>
                                     <td>{{item.address}}</td>
-                                    <td width="20%">{{item.datetime }}</td>
+                                    <td width="20%">{{item.booking_time }}</td>
                                     <td>
                                         <div class="col" style="width:auto">
                                             <div class="row">
@@ -62,7 +62,7 @@
                             
                                     <td>{{item.customer_name}}</td>
                                 <td>{{item.address}}</td>
-                                <td width="20%">{{item.datetime }}</td>
+                                <td width="20%">{{item.booking_time }}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -81,7 +81,7 @@
 
                                     <td>{{item.customer_name}}</td>
                                 <td>{{item.address}}</td>
-                                <td width="20%">{{item.datetime }}</td>
+                                <td width="20%">{{item.booking_time }}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -109,107 +109,115 @@ name: 'MyBookingPage',
     },
     methods: {
         async accept(booking_id){
-            let id = this.$route.params.id
-            var myHeaders = new Headers();
-            myHeaders.append("Content-Type", "application/json");
+            for(let item of this.pending){
+                if(booking_id == item['booking_id']){
+                    item['status'] = 'accepted'
+                    let to_add = {}
+               
+                    for(let add in item){
+                        to_add[add] = item[add]
+                    }
+                    var myHeaders = new Headers();
+                    myHeaders.append("Content-Type", "application/json");
+                    console.log(to_add)
+                    var raw = JSON.stringify({
+                        to_add
+                    });
+                 
+                    raw = raw.slice(10)
+                    raw = raw.slice(0,raw.length -1 )
+                    console.log(raw)
+                    var requestOptions = {
+                    method: 'PUT',
+                    headers: myHeaders,
+                    body: raw,
+                    redirect: 'follow'
+                    };
+                    await fetch("http://127.0.0.1:5101/accept_booking", requestOptions)
 
-            var raw = JSON.stringify({});
-
-            var requestOptions = {
-            method: 'PUT',
-            headers: myHeaders,
-            body: raw,
-            redirect: 'follow'
-            };
-
-            await fetch(`http://127.0.0.1:5000/booking/booking_action/${booking_id}/accept`, requestOptions)
-
-            const response1 = await fetch(`http://127.0.0.1:5000/booking/pending/${id}`);
-            const data1 = await response1.json(); 
-            console.log(data1)
-            if (data1.code != 404) {
-                this.pending =  data1.data.books
+                    let indexOf = this.pending.indexOf(item)
+                    this.pending.splice(indexOf,1)
+                    this.accepted.push(item)
+                    break
+                }
             }
-            else{
-                this.pending = []
-            }
-            
-            const response2 = await fetch(`http://127.0.0.1:5000/booking/accepted/${id}`);
-            const data2 = await response2.json();
-            console.log(data2)
-            this.accepted =  data2.data.books
-        },
-
+        },   
         async reject(booking_id){
-            let id = this.$route.params.id
-            var myHeaders = new Headers();
-            myHeaders.append("Content-Type", "application/json");
+            for(let item of this.pending){
+                if(booking_id == item['booking_id']){
+                    item['status'] = 'rejected'
+                    let to_add = {}
+               
+                    for(let add in item){
+                        to_add[add] = item[add]
+                    }
+                    var myHeaders = new Headers();
+                    myHeaders.append("Content-Type", "application/json");
+                    console.log(to_add)
+                    var raw = JSON.stringify({
+                        to_add
+                    });
+                 
+                    raw = raw.slice(10)
+                    raw = raw.slice(0,raw.length -1 )
+                    console.log(raw)
+                    var requestOptions = {
+                    method: 'PUT',
+                    headers: myHeaders,
+                    body: raw,
+                    redirect: 'follow'
+                    };
+                    await fetch("http://127.0.0.1:5101/accept_booking", requestOptions)
 
-            var raw = JSON.stringify({});
-
-            var requestOptions = {
-            method: 'PUT',
-            headers: myHeaders,
-            body: raw,
-            redirect: 'follow'
-            };
-
-            await fetch(`http://127.0.0.1:5000/booking/booking_action/${booking_id}/reject`, requestOptions)
-
-            const response1 = await fetch(`http://127.0.0.1:5000/booking/pending/${id}`);
-            const data1 = await response1.json(); 
-            console.log(data1)
-            if (data1.code != 404) {
-                this.pending =  data1.data.books
+                    let indexOf = this.pending.indexOf(item)
+                    this.pending.splice(indexOf,1)
+                    this.rejected.push(item)
+                    break
+                }
             }
-            else{
-                this.pending = []
-            }
-            
-            const response3 = await fetch(`http://127.0.0.1:5000/booking/rejected/${id}`);
-            const data3 = await response3.json();
-            if (data3.code != 404) {
-                this.rejected =  data3.data.books
-            }
-            else{
-                this.rejected = []
-            }
-        },       
+        } 
         },
 
     async created() {
         let id = this.$route.params.id
-        const response1 = await fetch(`http://127.0.0.1:5000/booking/pending/${id}`);
-        const data1 = await response1.json(); 
-        if (data1.code != 404  ) {
-            this.pending =  data1.data.books
-        }
-        else {
-            this.pending = []
-        }
-        
-        
+        const response1 = await fetch(`http://127.0.0.1:5101/accept_booking/page_start/86`);
+        const data = await response1.json(); 
+        let pending_data = data['pending']
+        let accepted_data = data['accepted']
+        let rejected_data = data['rejected']
+    
+        let all_list = pending_data.concat(accepted_data)
+        all_list = all_list.concat(rejected_data)
 
-        const response2 = await fetch(`http://127.0.0.1:5000/booking/accepted/${id}`);
-        const data2 = await response2.json();
-        this.accepted =  data2.data.books
-        if(data2.code != 404){
-            this.accepted = data2.data.books
+        for(let item of all_list){
+            let start_time = item['datetimestart'].split(' ')
+            start_time = start_time.slice(0,5)
+            start_time = start_time.join(' ')
+            let end_time = item['datetimeend'].split(' ')[4]
+            let final_time = start_time + ' - ' + end_time
+            item['booking_time'] = final_time
         }
-        else{
-            this.accepted = []
-        }
-        
 
-        const response3 = await fetch(`http://127.0.0.1:5000/booking/rejected/${id}`);
-        const data3 = await response3.json();
-        this.rejected =  data3.data.books
-        if(data2.code != 404){
-            this.rejected = data3.data.books
+        for(let item of all_list){
+            let property_id = item['property_id']
+            const response2 = await fetch(`http://127.0.0.1:5101/accept_booking/get_extra_info/${property_id}`)
+            const data2 = await response2.json();  
+            item['address'] = data2['address']
+            item['customer_name'] = data2['customer_name']
         }
-        else{
-            this.rejected = []
+     
+        for(let item of all_list){
+            if(item.status == 'pending'){
+                this.pending.push(item)
+            }
+            else if(item.status == 'accepted'){
+                this.accepted.push(item)
+            }
+            else{
+                this.rejected.push(item)
+            }
         }
+        console.log(all_list)
     }
 }
 
