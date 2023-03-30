@@ -3,12 +3,7 @@
         <div class = "row d-flex justify-content-center">
             <div class="col-10 col-md-8 col-lg-7 my-3">
                 <h2 class="text-center my-4">Make Payment</h2>
-                <h5 class="my-4">Payment Details</h5>
-                <button type="button" class="btn btn-outline-secondary border-secondary-subtle border-1 w-100 p-3">
-                    <img src="../assets/paypal.png" style="height:25px;">
-                </button>
-
-                <p class="my-4 fw-bold">or checkout using a credit card</p>
+                <h5 class="my-4">Checkout using a credit card</h5>
 
                 <form class="border rounded-2 border-1 border-secondary-subtle p-4 w-100 ms-0 mb-5">
                     <div class="mb-3">
@@ -38,17 +33,7 @@
                         <input type="text" class="form-control" id="postalCode" placeholder="Postal or ZIP Code" v-model="postalCode">
                     </div>
                 </form>
-
-                <hr class="my-4">
-
-                <div class="row mb-3">
-                    <div class="col-6 fw-bold">
-                        Total Bill
-                    </div>
-                    <div class="col-6 d-flex justify-content-end fw-bold">
-                        ${{ totalBill }}
-                    </div>
-                </div>
+                
 
                 <div class="d-flex justify-content-around my-5">
                     <router-link to="/"> <!--depends on where was the user-->
@@ -56,32 +41,81 @@
                     </router-link>
                     <button type="submit" class="btn" style="background-color: #447098; color: white;">Pay Now</button>
                 </div>
+
+                <div style="position: relative; width: 100%;">
+                  <hr class="my-4" style="border-top: 1px solid #ccc;">
+                  <div style="position: absolute; top: -10px; left: 50%; transform: translateX(-50%); background-color: white; padding: 0 10px;">OR</div>
+                </div>
+                <div style="text-align: center;">
+                  <div ref="paypal"></div>
+                </div>
                 
             </div>
         </div>
     </div>
 </template>
 
+
 <script>
 
 export default {
-name: 'PaymentPage',
-    components: {
-    },
-
-    data(){
-        return{
-            totalBill:0,
-            cardholderName:"",
-            cardNumber:"",
-            expiration:"",
-            cvv: "",
-            postalCode:"",
-        }
+  name: 'PaymentPage',
+  components: {},
+  data() {
+    return {
+        
+        totalBill: 0,
+        cardholderName: "",
+        cardNumber: "",
+        expiration: "",
+        cvv: "",
+        postalCode: "",
+        product: {
+            price: 1000,
+            description: "Option fee for Auction ID"
+      }
+    };
+  },
+  mounted: function() {
+    const script = document.createElement("script");
+    script.src =
+      "https://www.paypal.com/sdk/js?client-id=AQcmhSr1a1eAmYSjZRnIOsmpeZxCnGW6KYXFDMHcDlLvNcEgyY8ObbplmIJPeeLPWTKefUuROD9jF6bQ";
+    script.addEventListener("load", this.setLoaded);
+    document.body.appendChild(script);
+  },
+  methods: {
+    setLoaded: function() {
+      this.loaded = true;
+      window.paypal
+        .Buttons({
+          createOrder: (data, actions) => {
+            return actions.order.create({
+              purchase_units: [
+                {
+                  description: this.product.description,
+                  amount: {
+                    currency_code: "USD",
+                    value: this.product.price
+                  }
+                }
+              ]
+            });
+          },
+          onApprove: async (data, actions) => {
+            const order = await actions.order.capture();
+            this.paidFor = true;
+            console.log(order);
+          },
+          onError: err => {
+            console.log(err);
+          }
+        })
+        .render(this.$refs.paypal);
     }
-}
-
+  }
+};
 </script>
+
 
 <style>
 
