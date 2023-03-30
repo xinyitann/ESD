@@ -44,13 +44,16 @@ def processNotification(routing_key, body):
 
     name = notification['name']
     email_receiver = notification['email']
+    booking_date = notification["start_time"]
+    property_name = notification["property_name"]
+    agent_name = notification["agent_name"]
 
     # Check the routing key to determine what type of notification to send
     if routing_key == "booking_accepted.notification":
         # Send a notification to the buyer that schedule is confirmed successfully
         content = f"""
         Hey {name}, \n
-        I am writing to inform you that your schedule with our agent has been confirmed. Your agent will be contacting you shortly. \n
+        I am writing to inform you that your schedule  on {booking_date} regarding the property {property_name} with our agent {agent_name}has been confirmed. Your agent will be contacting you shortly. \n
         If you have any questions or concerns, please do not hesitate to contact us at havenis213@gmail.com. \n
         Thank you for choosing Haven! \n
 
@@ -74,7 +77,7 @@ def processNotification(routing_key, body):
         # Send a notification to the buyer that schedule needs to be rebooked because agent rejected
         content = f"""
         Hey {name}, \n
-        I am writing to inform you that your schedule with our agent has been rejected. Please rebook your appointment with our agent. \n
+        I am writing to inform you that your schedule on {booking_date} regarding the property {property_name} with our agent {agent_name} has been rejected. Please rebook your appointment with our agent. \n
         If you have any questions or concerns, please do not hesitate to contact us at havenis213@gmail.com. \n
         Thank you for choosing Haven! \n
 
