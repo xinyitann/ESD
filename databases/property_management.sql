@@ -164,6 +164,10 @@ CREATE TABLE IF NOT EXISTS booking (
   constraint booking_fk3 foreign key (property_id) references property(property_id)
 );
 
+-- Dumping data for table `booking`
+INSERT INTO `booking` (`booking_id`,`agent_id`,`customer_id`, `property_id`,`datetimestart`, `datetimeend`, `status`) VALUES
+('1','1','1','1','2023-03-11 14:00:00', '2023-03-11 15:00:00','pending' );
+
 --
 -- Table structure for table `error`
 --
