@@ -13,16 +13,16 @@ property_url = "http://localhost:5001/property"
 agent_url = "http://localhost:5003/agent"
 auction_url = "http://localhost:5002/auctions"
 
-@app.route("/get_property_details", methods=['GET'])
-def get_property_details():    
+@app.route("/get_property_details/<string:property_id>/<string:customer_id>", methods=['GET'])
+def get_property_details(property_id,customer_id):    
     
-    if request.is_json:
+    # if request.is_json:
         try:
-            property_id_json = request.get_json()
-            print("\nReceived a property ID in JSON:", property_id_json)
+            # property_id = request.get_json()
+            print("\nReceived a property ID in JSON:", property_id)
 
             # do the actual work
-            result = process_get_property_details(property_id_json)
+            result = process_get_property_details(property_id,customer_id)
             return jsonify(result), result["code"]
 
             
@@ -38,16 +38,16 @@ def get_property_details():
                 "message": "get_property_details.py internal error: " + ex_str
             }), 500
 
-    # if reached here, not a JSON request.
-    return jsonify({
-        "code": 400,
-        "message": "Invalid JSON input: " + str(request.get_data())
-    }), 400
+    # # if reached here, not a JSON request.
+    # return jsonify({
+    #     "code": 400,
+    #     "message": "Invalid JSON input: " + str(request.get_data())
+    # }), 400
 
-def process_get_property_details(json_str):
+def process_get_property_details(property_id,customer_id):
 
-    property_id = json_str["property_id"]
-    customer_id = json_str["customer_id"]
+    # property_id = json_str["property_id"]
+    # customer_id = json_str["customer_id"]
 
     # call property microservice to get the property details
     print('\n-----Invoking property microservice-----')
