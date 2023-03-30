@@ -25,9 +25,9 @@
                     </ol>
                 </div>
                 <div class="card-body p-4">
-                    <h5 class="card-title my-3">Property Name</h5>
-                    <p class="card-text">Address</p>
-                    <p class="card-text">Estimated Cost</p>
+                    <h5 class="card-title my-3">{{ property_name }}</h5>
+                    <p class="card-text">{{property_add}}</p>
+                    <p class="card-text">{{estimated_cost}}</p>
                     <router-link to="/propertyDetails">
                         <a class="btn btn-light float-end" type="button" style="background-color: #447098; color: white;">
                             View Details
@@ -51,6 +51,9 @@ export default {
     name: 'PropertyCard',
     props: {
         carouselNum: Number,
+        property_name: String,
+        property_add: String,
+        estimated_cost: Number
     },
     data(){ // or could put it in props
         return{
