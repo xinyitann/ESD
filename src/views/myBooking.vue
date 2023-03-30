@@ -180,7 +180,7 @@ name: 'MyBookingPage',
 
     async created() {
        
-        const response1 = await fetch(`http://127.0.0.1:5101/accept_booking/page_start/86`);
+        const response1 = await fetch(`http://127.0.0.1:5102/get_booking/86`);
         const data = await response1.json(); 
         let pending_data = data['pending']
         let accepted_data = data['accepted']
@@ -200,7 +200,7 @@ name: 'MyBookingPage',
 
         for(let item of all_list){
             let property_id = item['property_id']
-            const response2 = await fetch(`http://127.0.0.1:5101/accept_booking/get_extra_info/${property_id}`)
+            const response2 = await fetch(`http://127.0.0.1:5102/get_booking_extra_info/${property_id}`)
             const data2 = await response2.json();  
             item['address'] = data2['address']
             item['customer_name'] = data2['customer_name']
@@ -237,4 +237,5 @@ name: 'MyBookingPage',
     width: 30%;
 }
 </style>
+
 
