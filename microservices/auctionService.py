@@ -276,10 +276,21 @@ def check_user_bided(auction_id, customer_id):
 
     if auction:
         print("true")
-        return True
+        return jsonify(
+            {
+                "code": 200,
+                "data": True
+            }
+        )
     else:
         print("false")
-        return False
+        return jsonify(
+            {
+                "code": 200,
+                "data": False
+            }
+        )
+
 
 
 if __name__ == '__main__':
