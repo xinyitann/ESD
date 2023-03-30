@@ -426,8 +426,23 @@ def get_property_name(auction_id):
         }
     ), 404
 
-
-
+# get property info using customer id
+@app.route("/property/details/customer/<string:customer_id>")
+def find_property_info_using_customerid(customer_id):
+    property = Property.query.filter_by(customer_id=customer_id).first()
+    if property:
+        return jsonify(
+            {
+                "code": 200,
+                "data": property.json_without_image()
+            }
+        )
+    return jsonify(
+        {
+            "code": 404,
+            "message": "Property not found."
+        }
+    ), 404
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5001, debug=True) # so that it can be accessed from outside 
