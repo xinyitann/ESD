@@ -179,7 +179,7 @@ name: 'MyBookingPage',
         },
 
     async created() {
-        let id = this.$route.params.id
+       
         const response1 = await fetch(`http://127.0.0.1:5101/accept_booking/page_start/86`);
         const data = await response1.json(); 
         let pending_data = data['pending']
