@@ -6,7 +6,7 @@
                     <img src="../assets/profile_image.jpg" style="border-radius:50%; height:100px; width: 100px;">
                 </div>
                 <div class="col d-flex justify-content-start align-items-center">
-                    <h5>Full Name</h5>
+                    <h5>{{information.name}}</h5>
                 </div>
             </div>
             <div class="d-flex justify-content-center align-items-center">
@@ -17,10 +17,10 @@
                                 Phone number
                             </th>
                             <td v-if="editing==false" class="col-7">
-                                +65 91234567
+                                {{ information.phone }}
                             </td>
                             <td v-else class="col-7">
-                                <input type="text" placeholder="CurrentPhoneNum" class="form-control">
+                                <input v-model="newPhone" type="text" placeholder="New phone number" class="form-control">
                             </td>
                         </tr>
                         <tr class="row">
@@ -28,10 +28,10 @@
                                 Email Address
                             </th>
                             <td v-if="editing==false" class="col-7">
-                                agentOrCustomer@gmail.com
+                                {{information.email}}
                             </td>
                             <td v-else class="col-7 py-2">
-                                <input type="email" placeholder="CurrentEmail" class="form-control">
+                                <input v-model="newEmail" type="email" placeholder="Input new email" class="form-control">
                             </td>
                         </tr>
                     </table>
@@ -40,7 +40,7 @@
                     </div>
                     <div v-else class="d-flex justify-content-between">
                         <button class="btn mt-3" style="background-color: #6d8363; color: white;" @click="cancelEdit">Cancel</button>
-                        <button  class="btn mt-3" style="background-color: #447098; color: white;" @click="editDetails">Confirm Change</button>
+                        <button  class="btn mt-3" style="background-color: #447098; color: white;" @click="updateDetails">Confirm Change</button>
                     </div>
                 </div>
             </div>
@@ -97,6 +97,9 @@ export default {
     data(){
         return{
             editing: false,
+            information: [],
+            newPhone: '',
+            newEmail: '',
         }
     },
     components: {
@@ -110,7 +113,100 @@ export default {
         },
         cancelEdit(){
             this.editing=false
+        },
+        async updateDetails(){
+            this.editing = false
+            if(this.newPhone.length != 7){
+                alert('invalid phone number')
+            }
+            if (this.newEmail.includes('email.com') || this.newEmail.includes('gmail.com') || this.newEmail.includes('yahoo.com')){
+                if(this.user_type=='user'){
+                    var myHeaders = new Headers();
+                    myHeaders.append("Content-Type", "application/json");
+
+                    var raw = JSON.stringify({
+                    "email": this.newEmail,
+                    "name": this.information.name,
+                    "phone": this.newPhone
+                    });
+                    console.log(raw)
+
+                    var requestOptions = {
+                    method: 'PUT',
+                    headers: myHeaders,
+                    body: raw,
+                    redirect: 'follow'
+                    };
+                    var URLL = "http://localhost:5003/agent/"+String(this.agent_id_prop)
+                    await fetch(URLL, requestOptions)
+
+                    this.information.phone = this.newPhone
+                    this.newPhone = ''
+                    this.information.email = this.newEmail
+                    this.newEmail = ''
+                 
+                }
+                else{
+                    myHeaders = new Headers();
+                    myHeaders.append("Content-Type", "application/json");
+
+                    raw = JSON.stringify({
+                    "email": this.newEmail,
+                    "name": this.information.name,
+                    "phone": this.newPhone
+                    });
+
+                    requestOptions = {
+                    method: 'PUT',
+                    headers: myHeaders,
+                    body: raw,
+                    redirect: 'follow'
+                    };
+                    URLL = "http://localhost:5700/customer/"+String(this.customer_id_prop)
+                    await fetch(URLL, requestOptions)
+                  
+                    this.information.phone = this.newPhone
+                    this.newPhone = ''
+                    this.information.email = this.newEmail
+                    this.newEmail = ''
+                }
+                
+            }
+            else{
+                alert('invalid email')
+            }
         }
+    },
+    props: [
+        'customer_id_prop',
+        'agent_id_prop',
+        'user_type',
+    ],
+    async created() {
+        console.log(this.customer_id_prop)
+        console.log(this.agent_id_prop)
+        console.log(this.user_type)
+        if(this.user_type=='user'){
+            var URLL = "http://127.0.0.1:5123/profile_page/" + String(this.agent_id_prop) + "/agent"
+            var response1 = await fetch(URLL);
+            var data = await response1.json(); 
+        }
+        else{
+            URLL = "http://127.0.0.1:5123/profile_page/" + String(this.customer_id_prop) + "/user"
+            response1 =await fetch(URLL) ;
+            data = await response1.json(); 
+        }
+        data = data['data']
+        console.log(data)
+        if('agent_id' in data){
+            data['user_id'] = data['agent_id']
+            delete data['agent_id']
+        }
+        else{
+            data['user_id'] = data['customer_id']
+            delete data['customer_id']
+        }
+        this.information = data
     }
 }
 
