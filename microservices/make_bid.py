@@ -20,7 +20,7 @@ customer_URL = "http://localhost:5700/customer"
 
 def validate_bid_input(bid_details):
     # NEED TO CHANGE 
-    required_fields = ['auction_id', 'customer_id', 'bid_amount', 'property_id']
+    required_fields = ['customer_id', 'bid_amount', 'property_id']
 
     for field in required_fields:
         if field not in bid_details:
@@ -182,7 +182,7 @@ def get_auction_id(property_id):
 
 
 def get_starting_price(auction_id):
-    print('\n-----Invoking property microservice-----')
+    print('\n-----Invoking auction microservice-----')
     starting_price_URL = auction_URL + "/starting_price/" + str(auction_id)
     # call the auction microservice to get the starting price of the bid
     starting_price_result = invoke_http(starting_price_URL, method='GET', json=None)
