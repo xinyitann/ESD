@@ -2,7 +2,6 @@
   <NavBar></NavBar>
   <router-view @passdata="GetData($event)" @agent_id="GetAgent($event)" :customer_id_prop='customer_id' :agent_id_prop='agent_id' :user_type="user_type"></router-view>
   <FooterComponent></FooterComponent>
-  <button @click="check_id()"></button> 
 </template>
 
 <script>
