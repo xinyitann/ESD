@@ -42,7 +42,25 @@ def find_bids():
     return jsonify(
         {
             "code": 404,
-            "message": "bids not found."
+            "message": "There are no bids."
+        }
+    ), 404
+
+# get one bid
+@app.route("/bids/<string:bid_id>")
+def get_one_bid(bid_id):
+    bids = Bids.query.filter_by(bid_id=bid_id).first()
+    if bids:
+        return jsonify(
+            {
+                "code": 200,
+                "data": bids.json()
+            }
+        )
+    return jsonify(
+        {
+            "code": 404,
+            "message": "bid not found."
         }
     ), 404
 
