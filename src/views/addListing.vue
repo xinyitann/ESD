@@ -100,7 +100,6 @@ name: 'AddListingPage',
             build_year: '',
             estimated_cost: '',
             image: '',
-            status: '',
             starting_price: '',
             option_fee: '',
             neighbourhood: '',
@@ -130,7 +129,6 @@ name: 'AddListingPage',
             "starting_price": this.starting_price,
             "option_fee": this.option_fee,
             "neighbourhood": this.neighbourhood,
-            "status": 'open'
 
             });
             console.log(raw)
@@ -142,7 +140,7 @@ name: 'AddListingPage',
             };
 
             const data_fetch = await fetch("http://127.0.0.1:5100/make_booking", requestOptions)
-            if(code==201){
+            if(data_fetch['code']==201){
                 alert("listing has been created")
             }
         }
@@ -157,4 +155,5 @@ name: 'AddListingPage',
 <style>
 
 </style>
-</style>
+
+
