@@ -36,13 +36,13 @@
                 <h3 class="mb-3">Property Name</h3>
                 <p class="fs-5">$47294423</p>
                 <hr>
-                <table class="table table-borderless">
+                <table v-for="p_result in property_result" :key="p_result" class="table table-borderless">
                     <tr>
                         <th>
                             Address
                         </th>
                         <td>
-                            Block 345 Halloween Avenue 6 #06-249
+                            <!-- {{p_result.address}} -->
                         </td>
                     </tr>
                     <tr>
@@ -50,7 +50,7 @@
                             Postal Code
                         </th>
                         <td>
-                            349345
+                            <!-- {{p_result.postalcode}} -->
                         </td>
                     </tr>
                     <tr>
@@ -58,7 +58,7 @@
                             Neighbourhood
                         </th>
                         <td>
-                            Halloween
+                            <!-- {{p_result.neighbourhood}} -->
                         </td>
                     </tr>
                     <tr>
@@ -66,7 +66,7 @@
                             Property Type
                         </th>
                         <td>
-                            HDB
+                            <!-- {{p_result.property_type}} -->
                         </td>
                     </tr>
                     <tr>
@@ -74,7 +74,7 @@
                             Square Feet
                         </th>
                         <td>
-                            10000
+                            <!-- {{p_result.square_feet}} -->
                         </td>
                     </tr>
                     <tr>
@@ -82,7 +82,7 @@
                             Number of Rooms
                         </th>
                         <td>
-                            10
+                            <!-- {{p_result.room}} -->
                         </td>
                     </tr>
                     <tr>
@@ -90,7 +90,7 @@
                             House Facing Direction
                         </th>
                         <td>
-                            North
+                            <!-- {{p_result.facing}} -->
                         </td>
                     </tr>
                     <tr>
@@ -98,7 +98,7 @@
                             Build Year
                         </th>
                         <td>
-                            10000
+                            <!-- {{p_result.build_year}} -->
                         </td>
                     </tr>
                 </table>
@@ -242,15 +242,61 @@
 </template>
 
 <script>
+//to edit later 
+const get_all_URL = "http://localhost:5009/get_property_details";
+
 
 export default {
 name: 'PropertyDetailsPage',
     components: {
     },
-}
+    data(){
+        return{
+            //return property details
+            property_result:[],
+            agent_result:[],
+            auction_result:[],
+            message: "",
+            property_id: "1",
+            customer_id:"1" //should not be search
+            
+
+        }
+    },
+    methods:{
+        //get property details based on complex microservice
+    findpropertydetails() {
+    console.log("here")
+    var search_url = get_all_URL + '/'+ this.property_id +'/'+this.customer_id
+    console.log(search_url)
+    const response = fetch(search_url)
+    .then((response) => response.json())
+    .then((data) => {
+        console.log(response);
+        
+        if (data.code === 404) {
+        // no book in db
+        this.message = data.message;
+        } else {
+        this.property_list = data.data.property_result.data.properties;
+        }
+        console.log(this.property_list)
+    })
+    .catch((error) => {
+        // Errors when calling the service; such as network error,
+        // service offline, etc
+        console.log(this.message + error);
+    });
+    },
+    created () {
+                // on Vue instance created, load the book list
+                this.findpropertydetails();
+            }
+            
+
+    },
+};
 
 </script>
 
-<style>
-
-</style>
+<style></style>
