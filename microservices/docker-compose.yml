@@ -13,7 +13,7 @@ services:
     build:
       context: ./
       dockerfile: agent.Dockerfile
-    image: faithanggg/agent:esd
+    image: balveen/agent:esd
     restart: always
     environment:
       dbURL: mysql+mysqlconnector://is213@host.docker.internal:3306/property_management
@@ -41,7 +41,7 @@ services:
     build:
       context: ./
       dockerfile: auctionService.Dockerfile
-    image: faithanggg/auctionservice:esd
+    image: balveen/auctionservice:esd
     restart: always
     environment:
       dbURL: mysql+mysqlconnector://is213@host.docker.internal:3306/property_management
@@ -56,7 +56,7 @@ services:
     build:
       context: ./
       dockerfile: error.Dockerfile
-    image: faithanggg/error:esd
+    image: balveen/error:esd
     restart: always
     depends_on:
       - rabbitmq
@@ -72,7 +72,7 @@ services:
     build:
       context: ./
       dockerfile: bids.Dockerfile
-    image: faithanggg/bids:esd
+    image: balveen/bids:esd
     restart: always
     environment:
       dbURL: mysql+mysqlconnector://is213@host.docker.internal:3306/property_management
@@ -88,7 +88,7 @@ services:
     build:
       context: ./
       dockerfile: booking.Dockerfile
-    image: faithanggg/booking:esd
+    image: balveen/booking:esd
     restart: always
     environment:
       dbURL: mysql+mysqlconnector://is213@host.docker.internal:3306/property_management
@@ -104,7 +104,7 @@ services:
     build:
       context: ./
       dockerfile: customer.Dockerfile
-    image: faithanggg/customer:esd
+    image: balveen/customer:esd
     restart: always
     environment:
       dbURL: mysql+mysqlconnector://is213@host.docker.internal:3306/property_management
@@ -120,7 +120,7 @@ services:
     build:
       context: ./
       dockerfile: notification.Dockerfile
-    image: faithanggg/notification:esd
+    image: balveen/notification:esd
     restart: always
     depends_on:
       - rabbitmq
@@ -136,7 +136,7 @@ services:
     build:
       context: ./
       dockerfile: property.Dockerfile
-    image: faithanggg/property:esd
+    image: balveen/property:esd
     restart: always
     environment:
       dbURL: mysql+mysqlconnector://is213@host.docker.internal:3306/property_management
@@ -151,7 +151,7 @@ services:
     build:
       context: ./
       dockerfile: accept_booking.Dockerfile
-    image: faithanggg/accept_booking:esd
+    image: balveen/accept_booking:esd
     restart: always
     depends_on:
       - booking
@@ -176,7 +176,7 @@ services:
     build:
       context: ./
       dockerfile: add_listing.Dockerfile
-    image: faithanggg/add_listing:esd
+    image: balveen/add_listing:esd
     restart: always
     depends_on:
       - property
@@ -190,7 +190,7 @@ services:
       rabbit_port: 5672
       PYTHONUNBUFFERED: 1
     ports:
-      - "5100:5100"
+      - "5200:5200"
 
   ###############################################
   # Close Bid: The Close Bid microservice
@@ -199,7 +199,7 @@ services:
     build:
       context: ./
       dockerfile: closebid.Dockerfile
-    image: faithanggg/close_bids:esd
+    image: balveen/close_bids:esd
     restart: always
     depends_on:
       - auction
@@ -226,7 +226,7 @@ services:
     build:
       context: ./
       dockerfile: make_bid.Dockerfile
-    image: faithanggg/make_bid:esd
+    image: balveen/make_bid:esd
     restart: always
     depends_on:
       - auction
@@ -253,7 +253,7 @@ services:
     build:
       context: ./
       dockerfile: makebooking.Dockerfile
-    image: faithanggg/make_booking:esd
+    image: balveen/make_booking:esd
     restart: always
     depends_on:
       - booking
@@ -270,7 +270,7 @@ services:
       # shipping_record_URL: http://shipping_record:5002/shipping_record 
       PYTHONUNBUFFERED: 1
     ports:
-      - "5100:5100"
+      - "5800:5800"
 
 
   ###############################################
