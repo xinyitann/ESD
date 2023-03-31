@@ -152,8 +152,8 @@ name: 'AddListingPage',
 
 </script>
 
-<style>
 
+<style>
 </style>
 
 
