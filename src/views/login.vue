@@ -36,7 +36,7 @@
             <!-- Submit button -->
             <div class="d-flex justify-content-center">
               <button type="button" style="background-color:#6d8363; color:white;" class="btn form-control" @click="redirectUser();submitData()">Log In</button>
-              <button type="button" @click="toProfile()">to profile page</button>
+       
             </div>
           </div>
         </form>
