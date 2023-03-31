@@ -6,16 +6,16 @@
                     <div class="row">
                         <div class="col-12 col-md-6 px-5">
                             <div class="mb-3">
-                                <label for="address" class="form-label">Customer ID*</label>
-                                <input v-model="customer_id" type="text" class="form-control" id="address">
+                                <label for="customerid" class="form-label">Customer ID*</label>
+                                <input v-model="customer_id" type="text" class="form-control" id="customerid">
                             </div>
                             <div class="mb-3">
                                 <label for="address" class="form-label">Address*</label>
                                 <input v-model="address" type="text" class="form-control" id="address">
                             </div>
                             <div class="mb-3">
-                                <label for="address" class="form-label">Name*</label>
-                                <input v-model="name" type="text" class="form-control" id="address">
+                                <label for="name" class="form-label">Name*</label>
+                                <input v-model="name" type="text" class="form-control" id="name">
                             </div>
                             <div class="mb-3">
                                 <label for="neighbourhood" class="form-label">neighbourhood</label>
@@ -26,16 +26,16 @@
                                 <input v-model="postalcode" type="text" class="form-control" id="PostalCode">
                             </div>
                             <div class="mb-3">
-                                <label for="buildYear" class="form-label">Build Year*</label>
-                                <input v-mode="buildyear" type="text" class="form-control" id="buildYear">
+                                <label for="build_year" class="form-label">Build Year*</label>
+                                <input v-mode="build_year" type="text" class="form-control" id="build_year">
                             </div>
                             <div class="mb-3">
-                                <label for="size" class="form-label">Size in Square Feet*</label>
-                                <input v-model="size" type="text" class="form-control" id="size">
+                                <label for="sqaure_feet" class="form-label">Size in Square Feet*</label>
+                                <input v-model="square_feet" type="text" class="form-control" id="square_feet">
                             </div>
                             <div class="mb-3">
-                                <label for="roomNo" class="form-label">Number of Rooms*</label>
-                                <input v-model="rooomNo" type="number" class="form-control" id="roomNo">
+                                <label for="room" class="form-label">Number of Rooms*</label>
+                                <input v-model="room" type="number" class="form-control" id="room">
                             </div>
                         </div>
                         <div class="col-12 col-md-6 px-5">
@@ -53,11 +53,11 @@
                             </div>
                             <div class="mb-3">
                                 <label for="optionFee" class="form-label">Option Fee*</label>
-                                <input type="text" class="form-control" id="optionFee">
+                                <input v-model="option_fee" type="text" class="form-control" id="optionFee">
                             </div>
                             <div class="mb-3">
-                                <label for="minBidAmount" class="form-label">Minimum Bid Amount*</label>
-                                <input type="text" class="form-control" id="minBidAmount">
+                                <label for="starting_price" class="form-label">Minimum Bid Amount*</label>
+                                <input v-model="starting_price" type="starting_price" class="form-control" id="starting_price">
                             </div>
                             <div class="mb-3">
                                 <label for="startBidDate" class="form-label">Bidding Start Date*</label>
@@ -71,9 +71,9 @@
                     </div>
                     <div class="d-flex justify-content-center my-5">
                         <router-link to="/myproperty">
-                            <button type="submit" class="btn mx-4" style="background-color: #6d8363; color: white;">Cancel</button>
+                            <button type="button" class="btn mx-4" style="background-color: #6d8363; color: white;">Cancel</button>
                         </router-link>
-                        <button type="submit" class="btn mx-4" style="background-color: #447098; color: white;" @click="submit_add_listing()">Add Listing</button>
+                        <button type="button" class="btn mx-4" style="background-color: #447098; color: white;" @click="submit_add_listing()">Add Listing</button>
                     </div>
                 </form>
         </div>
@@ -88,8 +88,8 @@ name: 'AddListingPage',
     },
     data(){
         return {
-            agent_id: this.agent_id_prop,
-            customer_id: '',
+            agent_id: this.agent_id_prop, //from app
+            customer_id: '', //input based on the customer who called the agent
             name: '',
             address: '',
             postalcode: '',
@@ -99,11 +99,11 @@ name: 'AddListingPage',
             facing: '',
             build_year: '',
             estimated_cost: '',
-            image: '',
+            image: '../src/assets/backgroundhome.jpg',
             starting_price: '',
             option_fee: '',
             neighbourhood: '',
-            status: 'open'
+            status: 'open',
         }   
     },
     methods: {
@@ -136,11 +136,11 @@ name: 'AddListingPage',
             method: 'POST',
             headers: myHeaders,
             body: raw,
-            redirect: 'follow'
             };
 
-            const data_fetch = await fetch("http://127.0.0.1:5100/make_booking", requestOptions)
-            if(data_fetch['code']==201){
+            const data_fetch = await fetch("http://localhost:5200/add_listing", requestOptions)
+            console.log(data_fetch)
+            if(data_fetch['status']==201){
                 alert("listing has been created")
             }
         }
@@ -155,5 +155,6 @@ name: 'AddListingPage',
 <style>
 
 </style>
+
 
 
