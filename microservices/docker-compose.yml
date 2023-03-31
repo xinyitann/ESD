@@ -6,7 +6,7 @@ volumes:
 services:
 
  
-  #######################################################
+  ####################################################### 
   # Agent: The Agent microservice
   #######################################################
   agent:
@@ -34,7 +34,7 @@ services:
     volumes: 
       - rabbitmq_data:/var/lib/rabbitmq
       
-  #################################################
+  ################################################# 
   # Auction: The Auction microservice
   #################################################
   auction:
@@ -65,7 +65,7 @@ services:
       rabbit_port: 5672
       PYTHONUNBUFFERED: 1
 
-  ##################################
+  ################################## 
   # Bids: The Bids microservice
   ##################################
   bids:
@@ -81,7 +81,7 @@ services:
       - "5500:5500"
 
 
-  ##################################
+  ################################## 
   # Booking: The Booking microservice
   ##################################
   booking:
@@ -97,7 +97,7 @@ services:
       - "5005:5005"
 
 
-  ##################################
+  ################################## 
   # Customer: The Customer microservice
   ##################################
   customer:
@@ -129,7 +129,7 @@ services:
       rabbit_port: 5672
       PYTHONUNBUFFERED: 1
 
-  ##################################
+  ################################## not working
   # Property: The Property microservice
   ##################################
   property:
@@ -143,157 +143,3 @@ services:
       PYTHONUNBUFFERED: 1
     ports:
       - "5001:5001"
-
-  ###############################################
-  # Accept Booking: The Accept Booking microservice
-  ###############################################
-  accept_booking:
-    build:
-      context: ./
-      dockerfile: accept_booking.Dockerfile
-    image: balveen/accept_booking:esd
-    restart: always
-    depends_on:
-      - booking
-      - customer
-      - notification
-      - error
-      - rabbitmq
-    environment:
-      rabbit_host: rabbitmq
-      rabbit_port: 5672
-      # booking_URL: http://127.0.0.1:5005/booking
-      # customer_URL: http://localhost:5700/customer
-      PYTHONUNBUFFERED: 1
-    ports:
-      - "5101:5101"
-
-
-  ###############################################
-  # Add Listing: The Add Listing microservice
-  ###############################################
-  add_listing:
-    build:
-      context: ./
-      dockerfile: add_listing.Dockerfile
-    image: balveen/add_listing:esd
-    restart: always
-    depends_on:
-      - property
-      - customer
-      - notification
-      - auction
-      - error
-      - rabbitmq
-    environment:
-      rabbit_host: rabbitmq
-      rabbit_port: 5672
-      PYTHONUNBUFFERED: 1
-    ports:
-      - "5200:5200"
-
-  ###############################################
-  # Close Bid: The Close Bid microservice
-  ###############################################
-  close_bids:
-    build:
-      context: ./
-      dockerfile: closebid.Dockerfile
-    image: balveen/close_bids:esd
-    restart: always
-    depends_on:
-      - auction
-      - customer
-      - notification
-      - property
-      - error
-      - rabbitmq
-    environment:
-      rabbit_host: rabbitmq
-      rabbit_port: 5672
-      # order_URL: http://order:5001/order
-      # shipping_record_URL: http://shipping_record:5002/shipping_record 
-      PYTHONUNBUFFERED: 1
-    ports:
-      - "5801:5801"
-
-
-
-  ###############################################
-  # Make Bid: The Make Bid microservice
-  ###############################################
-  make_bids:
-    build:
-      context: ./
-      dockerfile: make_bid.Dockerfile
-    image: balveen/make_bid:esd
-    restart: always
-    depends_on:
-      - auction
-      - customer
-      - notification
-      - property
-      - bids
-      - error
-      - rabbitmq
-    environment:
-      rabbit_host: rabbitmq
-      rabbit_port: 5672
-      # order_URL: http://order:5001/order
-      # shipping_record_URL: http://shipping_record:5002/shipping_record 
-      PYTHONUNBUFFERED: 1
-    ports:
-      - "5900:5900"
-
-
-  ###############################################
-  # Make Booking: The Make Booking microservice
-  ###############################################
-  make_booking:
-    build:
-      context: ./
-      dockerfile: makebooking.Dockerfile
-    image: balveen/make_booking:esd
-    restart: always
-    depends_on:
-      - booking
-      - customer
-      - notification
-      - property
-      - agent
-      - error
-      - rabbitmq
-    environment:
-      rabbit_host: rabbitmq
-      rabbit_port: 5672
-      # order_URL: http://order:5001/order
-      # shipping_record_URL: http://shipping_record:5002/shipping_record 
-      PYTHONUNBUFFERED: 1
-    ports:
-      - "5800:5800"
-
-
-  ###############################################
-  # Search: The Search microservice
-  ###############################################
-  search:
-    build:
-      context: ./
-      dockerfile: search.Dockerfile
-    image: balveen/search:esd
-    restart: always
-    depends_on:
-      - property
-      - notification
-      - error
-      - rabbitmq
-    environment:
-      rabbit_host: rabbitmq
-      rabbit_port: 5672
-      # order_URL: http://order:5001/order
-      # shipping_record_URL: http://shipping_record:5002/shipping_record 
-      PYTHONUNBUFFERED: 1
-    ports:
-      - "5106:5106"
-
-
