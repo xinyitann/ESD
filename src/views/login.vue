@@ -79,4 +79,29 @@ export default {
     }
   }
 }
+
 </script>
+
+<style>
+    
+#login_main{
+  padding: 50px;
+  background-image: url(../assets/loginBg.jpg);
+  background-size: cover;
+  height: 100vh
+}
+#login{
+  color: white;
+  background-color:  #243F5A;
+  opacity: 95%;
+  border-radius: 10px;
+}
+
+#loginimg{
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 40%;
+}
+
+</style>
