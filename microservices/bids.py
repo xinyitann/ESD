@@ -97,9 +97,9 @@ def create_bid(auction_id, customer_id):
     ), 201
 
 # UPDATE BIDS
-@app.route("/bids/<string:bid_id>/<string:customer_id>/<string:auction_id>", methods=['PUT'])
-def update_bid(bid_id, customer_id,auction_id):
-    bids = Bids.query.filter_by(bid_id=bid_id, customer_id=customer_id, auction_id=auction_id).first()
+@app.route("/bids/<string:bid_id>", methods=['PUT'])
+def update_bid(bid_id):
+    bids = Bids.query.filter_by(bid_id=bid_id).first()
     if bids:
         data = request.get_json()
         if data['bid_amount']:

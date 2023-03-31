@@ -288,7 +288,7 @@ def processAddBidding(bidding_details):
 def processUpdateBidding(bidding_details):
     print('\n-----Invoking bid microservice-----')
     auction_id = str(bidding_details["auction_id"])
-    add_bidding_URL = bid_URL + "/" + str(bidding_details["bid_id"]) + "/" + str(bidding_details["customer_id"]) + "/" + auction_id
+    add_bidding_URL = bid_URL + "/" + str(bidding_details["bid_id"]) 
     # call the bid microservice to update the bid amount of an existing bid
     bidding_details = invoke_http(add_bidding_URL, method='PUT', json=bidding_details)
     print('auction_result from bid microservice:', bidding_details)
