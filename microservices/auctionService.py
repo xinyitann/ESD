@@ -267,6 +267,26 @@ def get_one_auction(auction_id):
         }
     ), 404
 
+# get the option fee for payment
+@app.route('/auctions/option_fee/<string:auction_id>', methods=['GET'])
+def get_option_fee(auction_id):
+    auction = AuctionService.query.filter_by(auction_id=auction_id).first()
+    list = auction.json()
+
+    if auction:
+        return jsonify(
+            {
+                "code": 200,
+                "data": list["option_fee"]
+            }
+        )
+    return jsonify(
+        {
+            "code": 404,
+            "message": "auction not found."
+        }
+    ), 404
+
 
 
 if __name__ == '__main__':
