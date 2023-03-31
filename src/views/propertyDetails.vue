@@ -42,7 +42,7 @@
                             Address
                         </th>
                         <td>
-                            <!-- {{p_result.address}} -->
+                            {{p_result.address}}
                         </td>
                     </tr>
                     <tr>
@@ -50,7 +50,7 @@
                             Postal Code
                         </th>
                         <td>
-                            <!-- {{p_result.postalcode}} -->
+                            {{p_result.postalcode}}
                         </td>
                     </tr>
                     <tr>
@@ -58,7 +58,7 @@
                             Neighbourhood
                         </th>
                         <td>
-                            <!-- {{p_result.neighbourhood}} -->
+                            {{p_result.neighbourhood}}
                         </td>
                     </tr>
                     <tr>
@@ -66,7 +66,7 @@
                             Property Type
                         </th>
                         <td>
-                            <!-- {{p_result.property_type}} -->
+                            {{p_result.property_type}}
                         </td>
                     </tr>
                     <tr>
@@ -74,7 +74,7 @@
                             Square Feet
                         </th>
                         <td>
-                            <!-- {{p_result.square_feet}} -->
+                            {{p_result.square_feet}}
                         </td>
                     </tr>
                     <tr>
@@ -82,7 +82,7 @@
                             Number of Rooms
                         </th>
                         <td>
-                            <!-- {{p_result.room}} -->
+                            {{p_result.room}}
                         </td>
                     </tr>
                     <tr>
@@ -90,7 +90,7 @@
                             House Facing Direction
                         </th>
                         <td>
-                            <!-- {{p_result.facing}} -->
+                            {{p_result.facing}}
                         </td>
                     </tr>
                     <tr>
@@ -98,7 +98,7 @@
                             Build Year
                         </th>
                         <td>
-                            <!-- {{p_result.build_year}} -->
+                            {{p_result.build_year}}
                         </td>
                     </tr>
                 </table>
@@ -263,6 +263,10 @@ name: 'PropertyDetailsPage',
 
         }
     },
+    created() {
+                // on Vue instance created, load the book list
+                this.findpropertydetails();
+            },
     methods:{
         //get property details based on complex microservice
     findpropertydetails() {
@@ -278,7 +282,7 @@ name: 'PropertyDetailsPage',
         // no book in db
         this.message = data.message;
         } else {
-        this.property_list = data.data.property_result.data.properties;
+        this.property_list = data.data.property_result.data;
         }
         console.log(this.property_list)
     })
@@ -288,10 +292,7 @@ name: 'PropertyDetailsPage',
         console.log(this.message + error);
     });
     },
-    created () {
-                // on Vue instance created, load the book list
-                this.findpropertydetails();
-            }
+
             
 
     },
