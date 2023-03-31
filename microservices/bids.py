@@ -157,6 +157,28 @@ def get_highest_bid(auction_id):
         }
     ), 404
 
+# check if customer has bid before
+@app.route("/bids/<string:auction_id>/<string:customer_id>")
+def check_user_bided(auction_id, customer_id):
+    auction = Bids.query.filter_by(auction_id=auction_id, customer_id=customer_id).first()
+
+    if auction:
+        print("true")
+        return jsonify(
+            {
+                "code": 200,
+                "data": True
+            }
+        )
+    else:
+        print("false")
+        return jsonify(
+            {
+                "code": 200,
+                "data": False
+            }
+        )
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5500, debug=True)

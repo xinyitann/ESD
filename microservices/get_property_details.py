@@ -11,7 +11,7 @@ CORS(app)
 
 property_url = "http://localhost:5001/property"
 agent_url = "http://localhost:5003/agent"
-auction_url = "http://localhost:5002/auctions"
+bids_url = "http://localhost:5500/bids"
 
 @app.route("/get_property_details/<string:property_id>/<string:customer_id>", methods=['GET'])
 def get_property_details(property_id,customer_id):    
@@ -67,9 +67,9 @@ def process_get_property_details(property_id,customer_id):
     auction_id = property_result["data"]["auction_id"]
 
     print('\n-----Invoking auction microservice-----')
-    get_auction_url = auction_url + "/" + str(auction_id) + "/" + str(customer_id)
-    auction_result = invoke_http(get_auction_url, method='GET', json=None)
-    print('auction_result:', auction_result)
+    get_bid_url = bids_url + "/" + str(auction_id) + "/" + str(customer_id)
+    bid_result = invoke_http(get_bid_url, method='GET', json=None)
+    print('bid_result:', bid_result)
 
     # return the property details and agent details and if user have bid
     return {
@@ -77,7 +77,7 @@ def process_get_property_details(property_id,customer_id):
         "data": {
         "property_result": property_result,
         "agent_result": agent_result,
-        "auction_result": auction_result
+        "bid_result": bid_result
         }
     }
 
