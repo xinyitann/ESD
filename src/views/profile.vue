@@ -120,7 +120,7 @@ export default {
                 alert('invalid phone number')
             }
             if (this.newEmail.includes('email.com') || this.newEmail.includes('gmail.com') || this.newEmail.includes('yahoo.com')){
-                if(this.user_type=='agent'){
+                if(this.user_type=='user'){
                     var myHeaders = new Headers();
                     myHeaders.append("Content-Type", "application/json");
 
@@ -186,7 +186,7 @@ export default {
         console.log(this.customer_id_prop)
         console.log(this.agent_id_prop)
         console.log(this.user_type)
-        if(this.user_type=='agent'){
+        if(this.user_type=='user'){
             var URLL = "http://127.0.0.1:5123/profile_page/" + String(this.agent_id_prop) + "/agent"
             var response1 = await fetch(URLL);
             var data = await response1.json(); 
