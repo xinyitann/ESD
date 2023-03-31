@@ -116,7 +116,12 @@ const get_all_URL = "http://localhost:5009/get_property_details";
 export default {
 name: 'PropertyDetailsPage',
     components: {
+        // this.$router.push({ path: '/user/' + userId }),
+
     },
+    props: {
+    property_id: String 
+ },
     data(){
         return{
             //return property details
@@ -124,8 +129,8 @@ name: 'PropertyDetailsPage',
             agent_result:[],
             auction_result:[],
             message: "",
-            property_id: "",//passed in from properties
-            customer_id:"", //should not be search
+            // property_id:"1",//passed in from properties
+            customer_id:"1", //should not be search
             filtered_result:[],
             biddingStartTime:"",
             biddingEndTime:"",
@@ -137,9 +142,6 @@ name: 'PropertyDetailsPage',
 
         }
     },
-//     props: {
-//     property_id: Number
-//   },
 
     created() {
                 // on Vue instance created, load the book list
@@ -168,6 +170,8 @@ name: 'PropertyDetailsPage',
         //get property details based on complex microservice
         findpropertydetails() {
         console.log("here")
+        // this.property_id={{}}
+        console.log(this.property_id)
         var search_url = get_all_URL + '/'+ this.property_id +'/'+this.customer_id
         console.log(search_url)
         const response = fetch(search_url)

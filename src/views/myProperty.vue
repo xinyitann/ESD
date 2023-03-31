@@ -16,20 +16,76 @@
             </div> -->
 
             <!-- for testing-->
-            <PropertyCard :carouselNum="1"></PropertyCard>
-            <PropertyCard :carouselNum="2"></PropertyCard>
+            <PropertyCard v-for="properties in property_list"
+                :carouselNum="1"
+                :property_name= "properties.name"
+                :estimated_cost= "properties.estimated_cost"
+                :property_add= "properties.address"
+                v-bind:key="properties"
+                
+
+
+            ></PropertyCard>
+
         </div>
     </div>  
 </template>
 
 <script>
 import PropertyCard from '@/components/propertyCard.vue';
+const get_all_URL = "http://localhost:5001/property/agent";
+
 
 export default {
 name: 'MyPropertyPage',
     components: {
         PropertyCard
     },
+    data() {
+    return {
+      property_list: [],
+      message: "",
+      search: "",
+      agent_id:1
+      
+    };
+  },
+
+  methods: {
+    findproperties() {
+        console.log("here")
+        // this.property_id={{}}
+        // console.log(this.property_id)
+        var search_url = get_all_URL + '/'+ this.agent_id
+        console.log(search_url)
+        const response = fetch(search_url)
+        .then((response) => response.json())
+        .then((data) => {
+            console.log(response);
+            
+            if (data.code === 404) {
+            // no book in db
+            this.message = data.message;
+            } else {
+            this.property_result = data.data.property_result.data;
+            console.log(this.property_result)
+
+            }
+        })
+        .catch((error) => {
+            // Errors when calling the service; such as network error,
+            // service offline, etc
+            console.log("error")
+            console.log(this.message + error);
+        });
+        },
+  },
+  mounted() {
+                // on Vue instance created, load the book list
+                this.findproperties();
+                
+            },
+
 }
 
 </script>

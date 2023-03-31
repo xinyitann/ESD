@@ -221,6 +221,25 @@ def find_by_property_id(property_id):
         }
     ), 404
 
+@app.route("/property/agent/<agent_id>")
+def find_by_agent_id(agent_id):
+    # get the specific property (.first --> gets us the property if we dont have it we will get the list of property)
+    agent_id = int(agent_id)
+    property = Property.query.filter_by(agent_id=agent_id).first()
+    if property:
+        return jsonify(
+            {
+                "code": 200,
+                "data": property.json()
+            }
+        )
+    return jsonify(
+        {
+            "code": 404,
+            "message": "Property not found."
+        }
+    ), 404
+
 @app.route("/property/details/<property_id>")
 def find_by_property_id_no_image(property_id):
     # get the specific property (.first --> gets us the property if we dont have it we will get the list of property)
