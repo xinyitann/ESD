@@ -9,9 +9,9 @@ from invokes import invoke_http
 app = Flask(__name__)
 CORS(app)
 
-property_url = "http://127.0.0.1:5001/property"
-agent_url = "http://127.0.0.1:5003/agent"
-auction_url = "http://127.0.0.1:5002/auctions"
+property_url = "http://localhost:5001/property"
+agent_url = "http://localhost:5003/agent"
+auction_url = "http://localhost:5002/auctions"
 
 @app.route("/get_property_details/<string:property_id>/<string:customer_id>", methods=['GET'])
 def get_property_details(property_id,customer_id):    
