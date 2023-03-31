@@ -116,7 +116,7 @@ def get_highest_bid(close_bid):
 
         # Retrieve the property name associated with the auction ID
         auction_id = close_bid["auction_id"]
-        get_property_name_URL = property_URL + "/name/" + auction_id
+        get_property_name_URL = property_URL + "/name/" + str(auction_id)
         property_name_result = invoke_http(get_property_name_URL, method='GET', json=None)
 
         # Retrieve the customer details associated with the highest bid
