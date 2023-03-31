@@ -45,6 +45,13 @@
 
 
         ></PropertyCard>
+
+        <PropertyDetails v-for="properties in property_list"
+          :property_id="properties.id"
+          v-bind:key="properties"
+
+
+        ></PropertyDetails>
     
 
       <!-- <PropertyCard :carouselNum="2"></PropertyCard> -->
@@ -54,6 +61,7 @@
 
 <script>
 import PropertyCard from "@/components/propertyCard.vue";
+import PropertyDetails from "./propertyDetails.vue"
 
 const get_all_URL = "http://localhost:5106/search_list";
 
@@ -61,12 +69,15 @@ export default {
   name: "PropertiesPage",
   components: {
     PropertyCard,
+    PropertyDetails
   },
+  
   data() {
     return {
       property_list: [],
       message: "",
       search: ""
+      
     };
   },
   methods: {
