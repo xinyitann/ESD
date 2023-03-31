@@ -67,7 +67,8 @@ def create_auction():
     auctions = AuctionService(
         status = data['status'],
         starting_price = data['starting_price'],
-        option_fee = data['option_fee']
+        option_fee = data['option_fee'],
+        customer_id = data['customer_id']
     )
         
     try:
@@ -296,3 +297,5 @@ def get_option_fee(auction_id):
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0',port=5002, debug=True)
+
+   
