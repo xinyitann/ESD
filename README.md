@@ -27,7 +27,7 @@ npm run serve
 - [Express.js](https://expressjs.com/)
 
 # Beyond the lab
-- Use of multiple programming language for microservices (python, javascript)
+- Use of multiple programming language for microservices (Python, Javascript)
 
 # API used
 
