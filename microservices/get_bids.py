@@ -62,7 +62,7 @@ def process_get_bids(customer_id):
     property_result = []
 
     for auction_id in auction_id_list:
-        get_property_url = property_URL + "/details/auction" + str(auction_id)
+        get_property_url = property_URL + "/details/auction/" + str(auction_id)
         property_result.append(invoke_http(get_property_url, method='GET', json=None)["data"]["property"])
 
     print('property_result:', property_result)
@@ -72,7 +72,7 @@ def process_get_bids(customer_id):
     return {
         "code": 201,
         "data": {
-        "bids_result": bids_result['data'],
+        "bids_result": bids_result["data"],
         "property_result": property_result
         }
     }

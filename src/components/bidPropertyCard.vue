@@ -48,12 +48,12 @@
                             <div class="modal-body">
                                 <div class="mb-3">
                                     <label for="updateBidAmount" class="form-label">Updated Bid Amount</label>
-                                    <input type="text" class="form-control" id="updateBidAmount">
+                                    <input type="text" class="form-control" id="updateBidAmount" v-model="updatedBid">
                                 </div>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="background-color: #6d8363; color: white;">Close</button>
-                                <button type="button" class="btn btn-primary" @click="updateBid(bid.bid_id)" style="background-color: #447098; color: white;">Save Changes</button>
+                                <button type="button" class="btn btn-primary" @click="updateBid(bid.bid_id, updatedBidJson)" style="background-color: #447098; color: white;" data-bs-dismiss="modal">Save Changes</button>
                             </div>
                         </div>
                     </div>
@@ -76,46 +76,55 @@ export default {
     },
     data(){ // or could put it in props
         return{
+            updatedBid: "",
             carouselHrefStr:"#carousel-" + this.carouselNum,
             carouselIdStr: "carousel-" + this.carouselNum,
             imageSrc:'../assets/room2.jpg'
         }
     },
+    computed:{
+        updatedBidJson() {
+            return {
+            "bid_amount": Number(this.updatedBid)
+            }
+        }
+    },
     methods:{
         async retractBid(bid_id){
             try {
-                const delete_url = "http://localhost:5500/bids" + String(bid_id);
+                const delete_url = "http://localhost:5500/bids/" + String(bid_id);
                 const response = await fetch(delete_url, {
                     method: "DELETE",
                 });
                 const result = await response.json();
-            console.log(result);
+                console.log(result);
+                location.reload();
             } catch (error) {
                 console.error(error);
             }
         },
         async updateBid(bid_id, updatedBidData){
-            const update_url = "http://localhost:5500/bids/" + String(bid_id);
-            const options = {
-                method: 'PUT',
-                headers: {
-                'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(updatedBidData)
-            };
+            console.log(updatedBidData)
+            try {
+                const update_url = "http://localhost:5500/bids/" + String(bid_id);
+                const options = {
+                    method: 'PUT',
+                    headers: {
+                    'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(updatedBidData)
+                };
 
-            const response = await fetch(update_url, options);
+                const response = await fetch(update_url, options);
+                const result = await response.json();
+                console.log(result)
 
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-
-            const data = await response.json();
-            return data;
+            } catch (error) {
+                console.error(error);
             }
         },
-    }    
-
+    }
+}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
