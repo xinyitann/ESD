@@ -30,7 +30,7 @@
                     <p class="card-text">{{property_image}}</p>
                     <p class="card-text">{{estimated_cost}}</p>
                     <router-link to="/propertyDetails">
-                        <a class="btn btn-light float-end" type="button" style="background-color: #447098; color: white;" @click="submitData()">
+                        <a class="btn btn-light float-end" type="button" style="background-color: #447098; color: white;" @click="send_property_data()">
                             View Details
                         </a>
                     </router-link>
@@ -68,9 +68,8 @@ export default {
         }
     },
     methods:{
-    submitData(){
-
-      this.$emit('passdata', this.propertyId)
+    send_property_data(){
+      this.$emit('submit_property_data', this.propertyId)
     },
     // handleClick() {
     //   this.$emit('property-clicked', this.propertyId);
