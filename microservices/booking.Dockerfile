@@ -2,5 +2,5 @@ FROM python:3-slim
 WORKDIR /usr/src/app
 COPY requirements.txt amqp.reqs.txt ./
 RUN python -m pip install --no-cache-dir -r requirements.txt -r amqp.reqs.txt
-COPY ./booking.py ./app.py ./
-CMD [ "python", "booking.py" ]
+COPY ./booking.py ./credentials.json ./token.json ./
+CMD [ "python", "./booking.py" ]

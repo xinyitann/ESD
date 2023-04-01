@@ -188,6 +188,9 @@ services:
     environment:
       rabbit_host: rabbitmq
       rabbit_port: 5672
+      auction_URL: http://auctions:5002/auctions
+      customer_URL: http://customer:5700/customer
+      property_URL: http://property:5001/property
       PYTHONUNBUFFERED: 1
     ports:
       - "5200:5200"
