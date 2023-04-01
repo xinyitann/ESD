@@ -123,7 +123,6 @@ const get_all_URL = "http://localhost:5009/get_property_details";
 export default {
 name: 'PropertyDetailsPage',
     components: {
-        // this.$router.push({ path: '/user/' + userId }),
 
     },
     props: [
@@ -137,8 +136,8 @@ name: 'PropertyDetailsPage',
             agent_result:[],
             bid_result:[],
             message: "",
-            // property_id:"1",//passed in from properties
-            // customer_id:"1", //should not be search
+            // property_id:"1",//passed in from propertycard
+            // customer_id:"1", //passed in from propertycard
             filtered_result:[],
             biddingStartTime:"",
             biddingEndTime:"",

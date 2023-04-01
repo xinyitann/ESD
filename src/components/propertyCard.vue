@@ -56,7 +56,8 @@ export default {
         'property_add',
         'estimated_cost',
         'property_image',
-        'property_id_prop'
+        'property_id_prop',
+        'propertyId'
 ],
     data(){ // or could put it in props
         return{
@@ -67,10 +68,13 @@ export default {
         }
     },
     methods:{
-        submitData(){
-            
-      this.$emit('passdata', this.property_id_prop)
+    submitData(){
+
+      this.$emit('passdata', this.propertyId)
     },
+    // handleClick() {
+    //   this.$emit('property-clicked', this.propertyId);
+    // }
     }
     
 }
