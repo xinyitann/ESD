@@ -75,9 +75,10 @@ export default {
     };
   },
   mounted: function() {
+    const CLIENT_ID = process.env.VUE_APP_PAYPAL_CLIENT_ID ;
     const script = document.createElement("script");
     script.src =
-      "https://www.paypal.com/sdk/js?client-id=AQcmhSr1a1eAmYSjZRnIOsmpeZxCnGW6KYXFDMHcDlLvNcEgyY8ObbplmIJPeeLPWTKefUuROD9jF6bQ";
+      "https://www.paypal.com/sdk/js?client-id=" + CLIENT_ID;
     script.addEventListener("load", this.setLoaded);
     document.body.appendChild(script);
   },
