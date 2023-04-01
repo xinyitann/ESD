@@ -40,11 +40,11 @@
           :property_name= "properties.name"
           :estimated_cost= "properties.estimated_cost"
           :property_add= "properties.address"
-          :property_id_prop="properties.id"
+          :property_id_card="properties.property_id"
 
           v-bind:key="properties"
           
-
+          @submit_property_data="get_submit_data($event)"
 
         ></PropertyCard>
 
@@ -78,8 +78,8 @@ export default {
     return {
       property_list: [],
       message: "",
-      search: ""
-      
+      search: "",
+      selected_property_id: '',
     };
   },
   methods: {
@@ -104,6 +104,9 @@ export default {
           console.log(this.message + error);
         });
     },
+    get_submit_data(data){
+          this.selected_property_id = data
+    }
     // redirectUser () {
     //   //route to agent
     //   if (document.getElementById('password_input').value == 1234) {
@@ -120,7 +123,18 @@ export default {
     //   this.$router.push('/profile')
     // }
   },
+  
+  watch: {
+    // whenever question changes, this function will run
+    selected_property_id(new_id) {
+      this.$emit('submit_property_data', new_id)
+      console.log('new_id'+new_id)
+
+    }
+  },
+
 };
 </script>
 
 <style></style>
+
