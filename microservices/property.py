@@ -9,6 +9,7 @@ from flask_sqlalchemy import SQLAlchemy
 from os import environ
 import agent
 import customer
+import os
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('dbURL') or 'mysql+mysqlconnector://is213@host.docker.internal:3306/property_management'
@@ -23,14 +24,24 @@ CORS(app)
 # Import the Image module from the PIL library
 
 
-def save_image_to_file():
-    # Open the image with the specified file path
-    picture = Image.open(r'Downloads\3.jpg')  
+# def save_image_to_file():
+#     # Open the image with the specified file path
+#     picture = Image.open(r'Downloads\3.jpg')  
 
-    # Save the image with the specified file name
-    picture = picture.save("dolls.jpg") 
+#     # Save the image with the specified file name
+#     picture = picture.save("dolls.jpg") 
 
-
+def store_image(file):
+    UPLOAD_FOLDER = '/uploads'
+    # Check if the directory exists, create it if not
+    if not os.path.exists(UPLOAD_FOLDER):
+        os.makedirs(UPLOAD_FOLDER)
+    # Save the uploaded file to disk
+    # filename = secure_filename(file.filename)
+    file_path = os.path.join(UPLOAD_FOLDER, file.filename)
+    file.save(file_path)
+    # Return the file path
+    return file_path
  
 # Create a cursor object
 # def get_image(c_file):
@@ -282,6 +293,7 @@ def create_property():
     # print("Data:", data)
     # print("Agent ID:", data['agent_id'])
     # print("Customer ID:", data['customer_id'])
+    print(store_image(data['image']))
     
     property = Property(
         auction_id=data['auction_id'],

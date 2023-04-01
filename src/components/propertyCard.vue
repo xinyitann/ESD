@@ -61,7 +61,7 @@ export default {
         return{
             carouselHrefStr:"#carousel-" + this.carouselNum,
             carouselIdStr: "carousel-" + this.carouselNum,
-            imageSrc:'../assets/room2.jpg'
+            imageSrc:'..src/assets/room2.jpg'
         }
     },
     
