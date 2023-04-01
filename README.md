@@ -29,7 +29,9 @@ npm run serve
 # Beyond the lab
 - Use of multiple programming language for microservices (Python, Javascript)
 
-# API used
+# External services used
+
+## Email
 
 ## PayPal API
 Client ID is stored in an environment variable in .env
