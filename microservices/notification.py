@@ -44,13 +44,14 @@ def processNotification(routing_key, body):
 
     name = notification['name']
     email_receiver = notification['email']
-    booking_date = notification["start_time"]
-    property_name = notification["property_name"]
-    agent_name = notification["agent_name"]
 
     # Check the routing key to determine what type of notification to send
     if routing_key == "booking_accepted.notification":
         # Send a notification to the buyer that schedule is confirmed successfully
+        booking_date = notification["start_time"]
+        property_name = notification["property_name"]
+        agent_name = notification["agent_name"]
+
         content = f"""
         Hey {name}, \n
         I am writing to inform you that your schedule  on {booking_date} regarding the property {property_name} with our agent {agent_name}has been confirmed. Your agent will be contacting you shortly. \n
@@ -75,6 +76,10 @@ def processNotification(routing_key, body):
 
     elif routing_key == "booking_rejected.notification":
         # Send a notification to the buyer that schedule needs to be rebooked because agent rejected
+        booking_date = notification["start_time"]
+        property_name = notification["property_name"]
+        agent_name = notification["agent_name"]
+        
         content = f"""
         Hey {name}, \n
         I am writing to inform you that your schedule on {booking_date} regarding the property {property_name} with our agent {agent_name} has been rejected. Please rebook your appointment with our agent. \n
@@ -98,9 +103,10 @@ def processNotification(routing_key, body):
 
     elif routing_key == "listing.notification":
         # Send a notification to the seller that the listing has been uploaded successfully
+        agent_name = notification["agent_name"]
         content = f"""
         Hey {name}, \n
-        I am writing to inform you that your listing has been successfully uploaded to our platform. Your listing is now visible to our users and you can expect to receive inquiries and offers shortly. \n
+        I am writing to inform you that your listing has been successfully uploaded to our platform by agent {agent_name}. Your listing is now visible to our users and you can expect to receive inquiries and offers shortly. \n
         If you have any questions or concerns, please do not hesitate to contact us at havenis213@gmail.com. \n
         Thank you for choosing Haven! \n
 
