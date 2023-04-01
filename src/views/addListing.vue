@@ -2,7 +2,7 @@
     <div class="container-fluid">
         <div class = "row d-flex justify-content-center">
                 <h2 class="text-center my-5">Add Listing</h2>
-                <form>
+                <form id="my-form">
                     <div class="row">
                         <div class="col-12 col-md-6 px-5">
                             <div class="mb-3">
@@ -75,12 +75,18 @@
                         </router-link>
                         <button type="button" class="btn mx-4" style="background-color: #447098; color: white;" @click="submit_add_listing()">Add Listing</button>
                     </div>
+                    <div>
+                        <button type="submit" @click="check_file()">check file</button>
+                    </div>
                 </form>
         </div>
     </div>
 </template>
 
 <script>
+
+
+
 
 export default {
 name: 'AddListingPage',
@@ -143,6 +149,49 @@ name: 'AddListingPage',
             if(data_fetch['status']==201){
                 alert("listing has been created")
             }
+        },
+        check_file(){
+
+            const form = document.getElementById('my-form')
+            form.addEventListener('submit', (event) => {
+            event.preventDefault();
+            
+            const formData = new FormData();
+            const fileField = document.querySelector('input[type="file"]');
+            
+            formData.append('property_image', fileField.files[0]);
+            console.log(fileField.files[0])
+            fetch('http://192.168.0.195:5200/download_image/', {
+                method: 'POST',
+                body: formData,
+                credentials: 'include'
+            })
+            .then(response => response.text())
+            .then(data => {
+                console.log(data);
+            })
+            .catch(error => {
+                console.error(error);
+            });
+            });
+
+            //var file = document.getElementById('images')
+            //console.log(file)
+            ////--->upload file > start
+			//let formdata = new FormData();
+
+			////single file
+			//formdata.append('property_image',file.files);
+            //formdata.append('user','customer')
+      
+		
+			//var requestOptions = {
+            //method: 'POST',
+            //body: formdata,
+            //};
+
+            //await fetch("http://127.0.0.1:5200/download_image/", requestOptions)
+
         }
     },
     props: [
@@ -152,9 +201,7 @@ name: 'AddListingPage',
 
 </script>
 
-
 <style>
+
 </style>
-
-
 
