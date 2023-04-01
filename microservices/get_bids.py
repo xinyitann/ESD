@@ -70,6 +70,7 @@ def process_get_bids(customer_id):
     return {
         "code": 201,
         "data": {
+        "bids_result": bids_result['data'],
         "property_result": property_result
         }
     }
