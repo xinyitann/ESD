@@ -5,6 +5,7 @@ import os, sys
 
 import requests
 from invokes import invoke_http
+from os import environ
 
 import amqp_setup
 import pika
@@ -18,8 +19,8 @@ load_dotenv()
 app = Flask(__name__)
 CORS(app)
 
-property_URL = "http://localhost:5001/property"
-agent_URL="http://localhost:5003/agent"
+agent_URL = environ.get('agent_URL') or "http://localhost:5003/agent"
+property_URL = environ.get('property_URL') or "http://localhost:5001/property"
 
 # validate seach input
 def validate_search_input(search):

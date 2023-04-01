@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 
 import os, sys
+from os import environ
 
 import requests
 from invokes import invoke_http
@@ -9,8 +10,9 @@ from invokes import invoke_http
 app = Flask(__name__)
 CORS(app)
 
-property_url = "http://localhost:5001/property/details/auction"
-bids_url = "http://localhost:5500/bids"
+property_URL = environ.get('property_URL') or "http://localhost:5001/property"
+bid_URL = environ.get('bid_URL') or "http://localhost:5500/bids"
+
 
 @app.route("/getbids/<string:customer_id>", methods=['GET'])
 def get_bids(customer_id):    
@@ -46,7 +48,7 @@ def process_get_bids(customer_id):
 
     # call bids microservice to get the bids details for specific customer_id
     print('\n-----Invoking bids microservice-----')
-    get_bids_url = bids_url + "/customer_bids/" + str(customer_id)
+    get_bids_url = bid_URL + "/customer_bids/" + str(customer_id)
     bids_result = invoke_http(get_bids_url, method='GET', json=None)
     print('bids_result:', bids_result)
 
@@ -60,7 +62,7 @@ def process_get_bids(customer_id):
     property_result = []
 
     for auction_id in auction_id_list:
-        get_property_url = property_url + "/" + str(auction_id)
+        get_property_url = property_URL + "/details/auction" + str(auction_id)
         property_result.append(invoke_http(get_property_url, method='GET', json=None)["data"]["property"])
 
     print('property_result:', property_result)
