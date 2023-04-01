@@ -10,6 +10,7 @@ import ErrorPage from '../views/error.vue'
 import AddListingPage from "../views/addListing.vue"
 import MyBookingPage from "../views/myBooking.vue"
 import MyPropertyPage from "../views/myProperty.vue"
+import MyBidsPage from "../views/myBids.vue"
 
 
 
@@ -68,6 +69,11 @@ const routes = [
         path: "/myproperty",
         name: "MyProperty",
         component: MyPropertyPage,
+    },
+    {
+        path: "/mybids",
+        name: "MyBids",
+        component: MyBidsPage,
     }
 ]
 
