@@ -47,7 +47,7 @@
                 <div class="card p-3">
                     <h5 class="card-title text-center my-2">Interested?</h5>
                     <div class="card-body">
-                        <p>{{ property_id }}
+                        <p>{{ property_id_prop }}
                             Contact {{ agent_result.name }} @ +65 {{ agent_result.phone }} / {{ agent_result.email }}
                         </p>
                         <div class="row">
@@ -102,6 +102,10 @@
                 </div>
                 <div v-else>
                    <p class="text-center fw-bold my-5"> Your bid is successful</p>
+                   <router-link to="/mybids">
+                    <button class="btn" type="button" style="background-color: #447098; color: white;" id="button-addon"  @click="submitBid()">View Bid</button>
+                   </router-link>
+                   
                 </div>
             </div>
         </div>
@@ -122,9 +126,10 @@ name: 'PropertyDetailsPage',
         // this.$router.push({ path: '/user/' + userId }),
 
     },
-//     props: {
-//     property_id: String 
-//  },
+    props: [
+    'property_id_prop',
+    'customer_id_prop'
+    ],
     data(){
         return{
             //return property details
@@ -132,13 +137,13 @@ name: 'PropertyDetailsPage',
             agent_result:[],
             bid_result:[],
             message: "",
-            property_id:"1",//passed in from properties
-            customer_id:"1", //should not be search
+            // property_id:"1",//passed in from properties
+            // customer_id:"1", //should not be search
             filtered_result:[],
             biddingStartTime:"",
             biddingEndTime:"",
 
-            customerId:1,
+            // customerId:1,
             // propertyId:1,
             bidAmount:0,
             bidSuccess:false
@@ -174,9 +179,9 @@ name: 'PropertyDetailsPage',
         //get property details based on complex microservice
         findpropertydetails() {
         console.log("here")
-        // this.property_id={{}}
-        console.log(this.property_id)
-        var search_url = get_all_URL + '/'+ this.property_id +'/'+this.customer_id
+        // this.property_id_prop={{}}
+        console.log("property_id:"+this.property_id_prop)
+        var search_url = get_all_URL + '/'+ this.property_id_prop +'/'+this.customer_id
         console.log(search_url)
         const response = fetch(search_url)
         .then((response) => response.json())
@@ -221,7 +226,7 @@ name: 'PropertyDetailsPage',
 
         findagentdetails() {
         console.log("here is agent")
-        var search_url = get_all_URL + '/'+ this.property_id +'/'+this.customer_id
+        var search_url = get_all_URL + '/'+ this.property_id_prop +'/'+this.customer_id
         console.log(search_url)
         const response = fetch(search_url)
         .then((response) => response.json())
@@ -245,7 +250,7 @@ name: 'PropertyDetailsPage',
 
         findauctiondetails() {
         console.log("here is auction")
-        var search_url = get_all_URL + '/'+ this.property_id +'/'+this.customer_id
+        var search_url = get_all_URL + '/'+ this.property_id_prop +'/'+this.customer_id
         console.log(search_url)
         const response = fetch(search_url)
         .then((response) => response.json())

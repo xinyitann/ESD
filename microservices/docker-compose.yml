@@ -13,7 +13,7 @@ services:
     build:
       context: ./
       dockerfile: agent.Dockerfile
-    image: balveen/agent:esd
+    image: faithanggg/agent:esd
     restart: always
     environment:
       dbURL: mysql+mysqlconnector://is213@host.docker.internal:3306/property_management
@@ -41,7 +41,7 @@ services:
     build:
       context: ./
       dockerfile: auctionService.Dockerfile
-    image: balveen/auctionservice:esd
+    image: faithanggg/auctionservice:esd
     restart: always
     environment:
       dbURL: mysql+mysqlconnector://is213@host.docker.internal:3306/property_management
@@ -56,7 +56,7 @@ services:
     build:
       context: ./
       dockerfile: error.Dockerfile
-    image: balveen/error:esd
+    image: faithanggg/error:esd
     restart: always
     depends_on:
       - rabbitmq
@@ -72,7 +72,7 @@ services:
     build:
       context: ./
       dockerfile: bids.Dockerfile
-    image: balveen/bids:esd
+    image: faithanggg/bids:esd
     restart: always
     environment:
       dbURL: mysql+mysqlconnector://is213@host.docker.internal:3306/property_management
@@ -88,7 +88,7 @@ services:
     build:
       context: ./
       dockerfile: booking.Dockerfile
-    image: balveen/booking:esd
+    image: faithanggg/booking:esd
     restart: always
     environment:
       dbURL: mysql+mysqlconnector://is213@host.docker.internal:3306/property_management
@@ -110,7 +110,7 @@ services:
     build:
       context: ./
       dockerfile: customer.Dockerfile
-    image: balveen/customer:esd
+    image: faithanggg/customer:esd
     restart: always
     environment:
       dbURL: mysql+mysqlconnector://is213@host.docker.internal:3306/property_management
@@ -126,7 +126,7 @@ services:
     build:
       context: ./
       dockerfile: notification.Dockerfile
-    image: balveen/notification:esd
+    image: faithanggg/notification:esd
     restart: always
     depends_on:
       - rabbitmq
@@ -143,7 +143,7 @@ services:
     build:
       context: ./
       dockerfile: property.Dockerfile
-    image: balveen/property:esd
+    image: faithanggg/property:esd
     restart: always
     environment:
       dbURL: mysql+mysqlconnector://is213@host.docker.internal:3306/property_management
@@ -159,7 +159,7 @@ services:
     build:
       context: ./
       dockerfile: accept_booking.Dockerfile
-    image: balveen/accept_booking:esd
+    image: faithanggg/accept_booking:esd
     restart: always
     depends_on:
       - booking
@@ -187,7 +187,7 @@ services:
     build:
       context: ./
       dockerfile: add_listing.Dockerfile
-    image: balveen/add_listing:esd
+    image: faithanggg/add_listing:esd
     restart: always
     depends_on:
       - property
@@ -215,7 +215,7 @@ services:
     build:
       context: ./
       dockerfile: closebid.Dockerfile
-    image: balveen/close_bids:esd
+    image: faithanggg/close_bids:esd
     restart: always
     depends_on:
       - auction
@@ -241,7 +241,7 @@ services:
     build:
       context: ./
       dockerfile: make_bid.Dockerfile
-    image: balveen/make_bid:esd
+    image: faithanggg/make_bid:esd
     restart: always
     depends_on:
       - auction
@@ -270,7 +270,7 @@ services:
     build:
       context: ./
       dockerfile: makebooking.Dockerfile
-    image: balveen/make_booking:esd
+    image: faithanggg/make_booking:esd
     restart: always
     depends_on:
       - booking
@@ -296,7 +296,7 @@ services:
     build:
       context: ./
       dockerfile: search.Dockerfile
-    image: balveen/search:esd
+    image: faithanggg/search:esd
     restart: always
     depends_on:
       - property
@@ -320,7 +320,7 @@ services:
     build:
       context: ./
       dockerfile: get_bids.Dockerfile
-    image: balveen/get_bids:esd
+    image: faithanggg/get_bids:esd
     restart: always
     depends_on:
       - notification
@@ -345,7 +345,7 @@ services:
     build:
       context: ./
       dockerfile: get_booking.Dockerfile
-    image: balveen/get_booking:esd
+    image: faithanggg/get_booking:esd
     restart: always
     depends_on:
       - notification
@@ -371,7 +371,7 @@ services:
     build:
       context: ./
       dockerfile: get_property_details.Dockerfile
-    image: balveen/get_property_details:esd
+    image: faithanggg/get_property_details:esd
     restart: always
     depends_on:
       - notification
@@ -397,7 +397,7 @@ services:
     build:
       context: ./
       dockerfile: profile_page.Dockerfile
-    image: balveen/profile_page:esd
+    image: faithanggg/profile_page:esd
     restart: always
     depends_on:
       - customer
