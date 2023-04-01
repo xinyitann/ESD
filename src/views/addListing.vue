@@ -75,9 +75,7 @@
                         </router-link>
                         <button type="button" class="btn mx-4" style="background-color: #447098; color: white;" @click="submit_add_listing()">Add Listing</button>
                     </div>
-                    <div>
-                        <button type="button" @click="uploadFile">check file</button>
-                    </div>
+                   
                 </form>
         </div>
     </div>
