@@ -18,8 +18,8 @@ CORS(app)
 
 booking_URL = environ.get('booking_URL') or "http://localhost:5005/booking"
 customer_URL = environ.get('customer_URL') or "http://localhost:5700/customer"
-property_URL = environ.get('property_URl') or "http://localhost:5001/property"
-agent_URL = environ.get('agent_URl') or "http://localhost:5003/agent"
+property_URL = environ.get('property_URL') or "http://localhost:5001/property"
+agent_URL = environ.get('agent_URL') or "http://localhost:5003/agent"
 
 def validate_booking_input(booking_details):
     # will have to get agent_id from agent profile somehow
@@ -82,9 +82,11 @@ def accept_booking():
             print("agent_info_result ", agent_info_result)
             agent_name = agent_info_result["data"]['agent_result']["data"]["name"]
             print("agent_name ", agent_name)
+
+            property_id = booking_details["property_id"]
             
             # get the name of the property
-            property_info_result = get_property_info(customer_id)
+            property_info_result = get_property_info(property_id)
             print("property_info_result ", property_info_result)
             property_name = property_info_result["data"]["property_result"]["data"]["name"]
 
@@ -108,6 +110,7 @@ def accept_booking():
                 } 
 
                 # add the booking into google calendar (with the customer and property name)
+                print("google_booking ", google_booking)
                 google_result = add_google_calendar(google_booking)
                 print('\n------------------------')
                 print('\ngoogle_result: ', google_result)

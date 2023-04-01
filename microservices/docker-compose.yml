@@ -143,3 +143,32 @@ services:
       PYTHONUNBUFFERED: 1
     ports:
       - "5001:5001"
+
+
+  ###############################################
+  # Accept Booking: The Accept Booking microservice
+  ###############################################
+  accept_booking:
+    build:
+      context: ./
+      dockerfile: accept_booking.Dockerfile
+    image: balveen/accept_booking:esd
+    restart: always
+    depends_on:
+      - booking
+      - customer
+      - notification
+      - error
+      - rabbitmq
+      - property
+      - agent
+    environment:
+      rabbit_host: rabbitmq
+      rabbit_port: 5672
+      booking_URL: http://booking:5005/booking
+      customer_URL: http://customer:5700/customer
+      property_URL: http://property:5001/property
+      agent_URL: http://agent:5003/agent
+      PYTHONUNBUFFERED: 1
+    ports:
+      - "5101:5101"

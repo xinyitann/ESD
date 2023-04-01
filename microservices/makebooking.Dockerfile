@@ -6,4 +6,4 @@ COPY ./app.py ./
 COPY ./booking.py ./
 COPY ./property.py ./
 COPY ./agent.py ./
-CMD [ "python", "makebooking.py"]
+CMD [ "python", "./makebooking.py"]

@@ -7,4 +7,4 @@ COPY ./auctionService.py ./
 COPY ./customer.py ./
 COPY ./property.py ./
 COPY ./bids.py ./
-CMD [ "python", "make_bid.py"]
+CMD [ "python", "./make_bid.py"]
