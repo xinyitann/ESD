@@ -7,66 +7,70 @@ import mysql.connector
 import base64
 from PIL import Image
 import io
+import PIL  
 
 
-from os import environ
+# Import the Image module from the PIL library
 
-app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('dbURL')
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/property_management'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {'pool_recycle': 299}
+
+def save_image_to_file():
+    # Open the image with the specified file path
+    picture = Image.open(r'Downloads\3.jpg')  
+
+    # Save the image with the specified file name
+    picture = picture.save("dolls.jpg") 
 
 
  
 # Create a cursor object
-def get_image(c_file):
+# def get_image(c_file):
 
-    mydb = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    password='',
-    database="property_management"  # Name of the database
-)
-    cursor = mydb.cursor()
+#     mydb = mysql.connector.connect(
+#     host="localhost",
+#     user="root",
+#     password='',
+#     database="property_management"  # Name of the database
+# )
+#     cursor = mydb.cursor()
     
-    # Open a file in binary mode
-    file = open(c_file,'rb').read()
+#     # Open a file in binary mode
+#     file = open(c_file,'rb').read()
     
-    # We must encode the file to get base64 string
-    file = base64.b64encode(file)
+#     # We must encode the file to get base64 string
+#     file = base64.b64encode(file)
     
-    # Sample data to be inserted
-    args = ('',file,'1')
+#     # Sample data to be inserted
+#     args = ('',file,'1')
     
-    # Prepare a query
-    query = 'INSERT INTO PROPERTY_IMAGES VALUES(%s,%s,%s)'
+#     # Prepare a query
+#     query = 'INSERT INTO PROPERTY_IMAGES VALUES(%s,%s,%s)'
     
-    # Execute the query and commit the database.
-    cursor.execute(query,args)
-    mydb.commit()
+#     # Execute the query and commit the database.
+#     cursor.execute(query,args)
+#     mydb.commit()
 
-    # Create a cursor object
-    cursor = mydb.cursor()
+#     # Create a cursor object
+#     cursor = mydb.cursor()
     
-    # Prepare the query
-    query = 'SELECT IMG FROM PROPERTY_IMAGES WHERE propertyID_image=1'
+#     # Prepare the query
+#     query = 'SELECT IMG FROM PROPERTY_IMAGES WHERE propertyID_image=1'
     
-    # Execute the query to get the file
-    cursor.execute(query)
+#     # Execute the query to get the file
+#     cursor.execute(query)
     
-    data = cursor.fetchall()
+#     data = cursor.fetchall()
     
-    # The returned data will be a list of list
-    image = data[0][0]
+#     # The returned data will be a list of list
+#     image = data[0][0]
     
-    # Decode the string
-    binary_data = base64.b64decode(image)
+#     # Decode the string
+#     binary_data = base64.b64decode(image)
     
-    # Convert the bytes into a PIL image
-    image = Image.open(io.BytesIO(binary_data))
+#     # Convert the bytes into a PIL image
+#     image = Image.open(io.BytesIO(binary_data))
     
-    # Display the image
-    image.show()
+#     # Display the image
+#     image.show()
 
 
 class Property(db.Model):
@@ -105,7 +109,7 @@ class Property(db.Model):
         self.auction_id = auction_id
 
     def json(self):
-        return {"property_id": self.property_id, "agent_id": self.agent_id, "customer_id": self.customer_id, "name": self.name, "address": self.address, "postalcode": self.postalcode, "property_type": self.property_type, "square_feet": self.square_feet, "room": self.room, "facing": self.facing, "build_year": self.build_year, "estimated_cost": self.estimated_cost, "neighbourhood":self.neighbourhood,"image": get_image(self.image), "auction_id":self.auction_id}
+        return {"property_id": self.property_id, "agent_id": self.agent_id, "customer_id": self.customer_id, "name": self.name, "address": self.address, "postalcode": self.postalcode, "property_type": self.property_type, "square_feet": self.square_feet, "room": self.room, "facing": self.facing, "build_year": self.build_year, "estimated_cost": self.estimated_cost, "neighbourhood":self.neighbourhood,"image": self.image, "auction_id":self.auction_id}
     
     def json_without_image(self):
         return {"property_id": self.property_id, "agent_id": self.agent_id, "customer_id": self.customer_id, "name": self.name, "address": self.address, "postalcode": self.postalcode, "property_type": self.property_type, "square_feet": self.square_feet, "room": self.room, "facing": self.facing, "build_year": self.build_year, "estimated_cost": self.estimated_cost, "neighbourhood":self.neighbourhood,"image": self.image, "auction_id":self.auction_id}
@@ -221,7 +225,7 @@ def find_by_property_id(property_id):
         }
     ), 404
 
-@app.route("/property/agent/<agent_id>")
+@app.route("/property/<agent_id>")
 def find_by_agent_id(agent_id):
     # get the specific property (.first --> gets us the property if we dont have it we will get the list of property)
     agent_id = int(agent_id)

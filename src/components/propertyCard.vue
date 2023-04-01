@@ -4,8 +4,8 @@
             <div class="card-body shadow " style="padding-top: 0px;padding-left: 0px;padding-right: 0px;">
                 <div class="carousel slide" data-bs-ride="false" :id="carouselIdStr">
                     <div class="carousel-inner">
-                        <div class="carousel-item active"><img class="w-100 d-block fit-cover" src="../assets/room2.jpg" alt="Slide Image" ></div>
-                        <div class="carousel-item"><img class="w-100 d-block" src="../assets/room2.jpg" alt="Slide Image"></div>
+                        <div class="carousel-item active"><img class="w-100 d-block fit-cover" :src="imageSrc" alt="Slide Image" ></div>
+                        <div class="carousel-item"><img class="w-100 d-block" v-bind:src="imageSrc" alt="Slide Image"></div>
                         <div class="carousel-item"><img class="w-100 d-block" src="../assets/room2.jpg" alt="Slide Image"></div>
                     </div>
                     <div>
@@ -27,6 +27,7 @@
                 <div class="card-body p-4">
                     <h5 class="card-title my-3">{{ property_name }}</h5>
                     <p class="card-text">{{property_add}}</p>
+                    <p class="card-text">{{property_image}}</p>
                     <p class="card-text">{{estimated_cost}}</p>
                     <router-link to="/propertyDetails">
                         <a class="btn btn-light float-end" type="button" style="background-color: #447098; color: white;">
@@ -53,14 +54,17 @@ export default {
         carouselNum: Number,
         property_name: String,
         property_add: String,
-        estimated_cost: Number
+        estimated_cost: Number,
+        property_image:String
     },
     data(){ // or could put it in props
         return{
             carouselHrefStr:"#carousel-" + this.carouselNum,
             carouselIdStr: "carousel-" + this.carouselNum,
+            imageSrc:'../assets/room2.jpg'
         }
     },
+    
 }
 </script>
 

@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 
 import os, sys
-
+from os import environ
 import requests
 from invokes import invoke_http
 
@@ -13,12 +13,14 @@ import json
 app = Flask(__name__)
 CORS(app)
 
-property_URL = "http://localhost:5001/property"
-auction_URL = "http://localhost:5002/auctions"
+property_URL = environ.get('property_URL') or "http://localhost:5001/property"
+auction_URL = environ.get('auction_URL') or "http://localhost:5002/auctions"
+customer_URL = environ.get('customer_URL') or "http://localhost:5700/customer"
+agent_URL = environ.get('agent_URL') or "http://localhost:5003/agent"
 
 def validate_property_input(listing_details):
     # will have to get agent_id from agent profile somehow
-    required_fields = ['agent_id', 'customer_id', 'name', 'address', 'postalcode', 'property_type', 'square_feet', 'room', 'facing', 'build_year', 'estimated_cost', 'image', 'status', 'starting_price', 'option_fee']
+    required_fields = ['agent_id', 'customer_id', 'name', 'address', 'postalcode', 'property_type', 'neighbourhood', 'square_feet', 'room', 'facing', 'build_year', 'estimated_cost', 'image', 'status', 'starting_price', 'option_fee']
 
     for field in required_fields:
         if field not in listing_details:
@@ -59,6 +61,7 @@ def add_listing():
                 'customer_id': listing_details['customer_id'],
             }
 
+            # add auction 
             auction_result = processAddAuction(auction_data)
             
             if auction_result['code'] == 201:
@@ -114,7 +117,7 @@ def processAddAuction(auction_data):
 
     if code not in range(200, 300):
         # Inform the error microservice
-        print('\n\n-----Publishing the (property error) message with routing_key=property.error-----')
+        print('\n\n-----Publishing the (auction error) message with routing_key=auction.error-----')
 
         amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="auction.error", 
             body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
@@ -130,6 +133,7 @@ def processAddAuction(auction_data):
             "message": "auction creation failure sent for error handling."
         }
 
+    # if reach here, means auction is successfully added
     return {
     "code": 201,
     "data": {
@@ -168,16 +172,20 @@ def processAddListing(property):
 
     # if reached here, no error & property is successfully created
     else: 
-        print('\n\n-----Calling Notification with routing_key=listing.notification-----')
-
+        # get customer name and email from customer microservice
         customer_id = property["customer_id"]
-        customer_URL = f"http://localhost:5700/customer/{customer_id}"
-        customer_result = invoke_http(customer_URL, method='GET', json=None)
+        customer_result = get_customer_info(customer_id)
+
+        # get agent name from agent microservice
+        agent_id = property["agent_id"]
+        agent_info_result = get_agent_info(agent_id)
 
         name_email = {
-            'name' : customer_result['data']['name'],
-            'email' : customer_result['data']['email']
+            'name' : customer_result["data"]["customer_result"]["data"]["name"],
+            'email' : customer_result["data"]["customer_result"]["data"]["email"],
+            'agent_name' : agent_info_result["data"]['agent_result']["data"]["name"]
         }
+        print('\n\n-----Calling Notification with routing_key=listing.notification-----')
 
         amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="listing.notification", 
         body=json.dumps(name_email), properties=pika.BasicProperties(delivery_mode = 2)) 
@@ -189,8 +197,76 @@ def processAddListing(property):
             }
         }
 
+def get_customer_info(customer_id):
+    print('\n-----Invoking customer microservice -----')
+    customer_id = str(customer_id)
+    get_customer_URL = customer_URL + "/" + customer_id
+    customer_result = invoke_http(get_customer_URL, method='GET', json=None)
+
+    code = customer_result["code"]
+    message = json.dumps(customer_result)
+
+    if code not in range(200, 300):
+        # Inform the error microservice
+        print('\n\n-----Publishing the (add_listing error) message due to failure to get customer info with routing_key=add_listing.error-----')
+
+        amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="add_listing.error", 
+            body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
+        print("add_listing status ({:d}) published to the RabbitMQ Exchange:".format(
+            code), customer_result)
+
+        print("add_listing published to RabbitMQ Exchange.\n")\
+
+        return {
+            "code": 500,
+            "data": {"customer_result": customer_result},
+            "message": "unable to find customer."
+        }
+
+    # if reached here, no error & customer details can be retrieved
+    return {
+        "code": 201,
+        "data": {
+            "customer_result": customer_result,
+        }
+    }
+
+def get_agent_info(agent_id):
+    print('\n-----Invoking agent microservice -----')
+    agent_id = str(agent_id)
+    get_agent_URL = agent_URL + "/" + agent_id
+    agent_result = invoke_http(get_agent_URL, method='GET', json=None)
+
+    code = agent_result["code"]
+    message = json.dumps(agent_result)
+
+    if code not in range(200, 300):
+        # Inform the error microservice
+        print('\n\n-----Publishing the (add_listing error) message due to failure to get agent info with routing_key=add_listing.error-----')
+
+
+        amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="add_listing.error", 
+            body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
+        print("add_listing status ({:d}) published to the RabbitMQ Exchange:".format(
+            code), agent_result)
+
+        print("add_listing published to RabbitMQ Exchange.\n")\
+
+        return {
+            "code": 500,
+            "data": {"agent_result": agent_result},
+            "message": "unable to find agent."
+        }
+
+    # if reached here, means no error & agent details can be retrieved
+    return {
+        "code": 201,
+        "data": {
+            "agent_result": agent_result,
+        }
+    }
 
 # Execute this program if it is run as a main script (not by 'import')
 if __name__ == "__main__":
-    print("This is flask " + os.path.basename(__file__) + " for adding a property...")
+    print("This is flask " + os.path.basename(__file__) + " for adding a property listing...")
     app.run(host="0.0.0.0", port=5200, debug=True)
