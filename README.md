@@ -1,5 +1,5 @@
 # Haven
-HAven is an one-stop property bidding platform for users to view property listings, book appointment to view listings and bid for properties.
+Haven is an one-stop property bidding platform for users to view property listings, book appointment to view listings and bid for properties.
 
 # Project setup
 ## Access project folder
