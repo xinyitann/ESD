@@ -473,5 +473,28 @@ def find_property_info_using_customerid(customer_id):
         }
     ), 404
 
+# get property using auction_id
+@app.route("/property/details/auction/<int:auction_id>", methods=['GET'])
+def get_property_from_auction(auction_id):
+    # filter properties by auction_id
+    property = Property.query.filter_by(auction_id=auction_id).first()
+    if property:
+        # return the name of the property
+        return jsonify(
+            {
+                "code": 200,
+                "data": {
+                    "property": property.json()
+                }
+            }
+        )
+    # if property not found return 404
+    return jsonify(
+        {
+            "code": 404,
+            "message": "Property not found with auction_id: {}".format(auction_id)
+        }
+    ), 404
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5001, debug=True) # so that it can be accessed from outside 

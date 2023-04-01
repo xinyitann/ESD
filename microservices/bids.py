@@ -205,6 +205,27 @@ def check_user_bided(auction_id, customer_id):
             }
         )
 
+#get all bids with specific customer_id
+@app.route("/bids/customer_bids/<string:customer_id>")
+def get_bids_for_customer(customer_id):
+    bids = Bids.query.filter_by(customer_id=customer_id).all()
+
+    if len(bids):
+        print("true")
+        return jsonify(
+            {
+                "code": 200,
+                "data": [bid.json() for bid in bids]
+            }
+        )
+    else:
+        print("false")
+        return jsonify(
+            {
+                "code": 200,
+                "data": "bids for customer not found"
+            }
+        )
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5500, debug=True)
