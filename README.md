@@ -29,7 +29,6 @@ npm run serve
 # Beyond the lab
 - Use of multiple programming language for microservices (python, javascript)
 
--
 # API used
 
 ## PayPal API
