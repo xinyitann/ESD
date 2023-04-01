@@ -1,6 +1,6 @@
 <template>
   <NavBar :user_type="user_type"></NavBar>
-  <router-view @passdata="GetData($event)" @agent_id="GetAgent($event)" :customer_id_prop='customer_id' :agent_id_prop='agent_id' :user_type="user_type" :property_id_prop="property_id"></router-view>
+  <router-view @submit_property_data="GetPropertyData($event)" @passdata="GetData($event)" @agent_id="GetAgent($event)" :customer_id_prop='customer_id' :agent_id_prop='agent_id' :user_type="user_type" :property_id_prop="property_id"></router-view>
     <PropertyCard></PropertyCard>
   <FooterComponent></FooterComponent>
   
@@ -20,9 +20,9 @@ export default {
   },
   data(){
     return {
-      customer_id: 2,   //random initial variable for testing will get changed after logging in
+      customer_id: 1,   //random initial variable for testing will get changed after logging in
       agent_id: 1,   //random initial variable for testing will get changed after logging in
-      user_type: 'agent',   //random initial variable for testing will get changed after logging in
+      user_type: 'user',   //random initial variable for testing will get changed after logging in
       property_id: 6
     }
   },
@@ -35,6 +35,9 @@ export default {
     },
     handlePropertyClicked(propertyId) {
       this.property_id = propertyId;
+    },
+    GetPropertyData(data){
+      this.property_id = data
     }
   },
   created(){
@@ -46,4 +49,6 @@ export default {
 <style>
 
 </style>
+
+
 
