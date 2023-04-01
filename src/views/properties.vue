@@ -40,6 +40,7 @@
           :property_name= "properties.name"
           :estimated_cost= "properties.estimated_cost"
           :property_add= "properties.address"
+          :property_id_prop="properties.id"
 
           v-bind:key="properties"
           
@@ -47,12 +48,12 @@
 
         ></PropertyCard>
 
-        <PropertyDetails v-for="properties in property_list"
+        <!-- <PropertyDetails v-for="properties in property_list"
           :property_id="properties.id"
           v-bind:key="properties"
 
 
-        ></PropertyDetails>
+        ></PropertyDetails> -->
     
 
       <!-- <PropertyCard :carouselNum="2"></PropertyCard> -->
@@ -62,7 +63,7 @@
 
 <script>
 import PropertyCard from "@/components/propertyCard.vue";
-import PropertyDetails from "./propertyDetails.vue"
+// import PropertyDetails from "./propertyDetails.vue"
 
 const get_all_URL = "http://localhost:5106/search_list";
 
@@ -70,7 +71,7 @@ export default {
   name: "PropertiesPage",
   components: {
     PropertyCard,
-    PropertyDetails
+    // PropertyDetails
   },
   
   data() {
