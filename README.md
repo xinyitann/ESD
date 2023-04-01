@@ -37,7 +37,9 @@ npm run serve
 API Key is stored in an environment variable in .env
 
 ## OneMap API
-Access token expires every 3 days. To generate an access token:
+API Key is stored in an environment variable in .env
+
+### Access token expires every 3 days. To generate an access token:
 
 - Step 1: Sign up for a free account at https://developers.onemap.sg/register/
 - Step 2: Check your email inbox for a confirmation email. If it is not in the inbox, check your junk/spam folder.
