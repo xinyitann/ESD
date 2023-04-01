@@ -68,11 +68,11 @@
                         </div>
                     </div>
                 </div>
-                <div class="my-5">
+                <div v-if='!bidSuccess' class="my-5">
                     <div class="row mb-3">
                         <div class="col">
                             <p class="text-center fw-bold">
-                                ${{auction_result.starting_price}}
+                                ${{bid_result.starting_price}}
                             </p>
                             <p class="d-flex justify-content-center">
                                 <small class="text-body-secondary">Minimum Bid</small>
@@ -88,7 +88,7 @@
                         </div>
                         <div class="col">
                             <p class="text-center fw-bold">
-                                ${{auction_result.highest_bid}}
+                                ${{bid_result.highest_bid}}
                             </p>
                             <p class="d-flex justify-content-center">
                                 <small class="text-body-secondary">Highest Bid</small>
@@ -99,6 +99,9 @@
                         <input v-model='bidAmount' type="text" class="form-control" placeholder="Enter your bid" aria-label="Enter your bid" aria-describedby="button-addon1">
                         <button class="btn" type="button" style="background-color: #447098; color: white;" id="button-addon"  @click="submitBid()">Place Bid</button>
                     </div>
+                </div>
+                <div v-else>
+                   <p class="text-center fw-bold my-5"> Your bid is successful</p>
                 </div>
             </div>
         </div>
@@ -112,23 +115,24 @@
 const get_all_URL = "http://localhost:5009/get_property_details";
 
 
+
 export default {
 name: 'PropertyDetailsPage',
     components: {
         // this.$router.push({ path: '/user/' + userId }),
 
     },
-    props: {
-    property_id: String 
- },
+//     props: {
+//     property_id: String 
+//  },
     data(){
         return{
             //return property details
             property_result:[],
             agent_result:[],
-            auction_result:[],
+            bid_result:[],
             message: "",
-            // property_id:"1",//passed in from properties
+            property_id:"1",//passed in from properties
             customer_id:"1", //should not be search
             filtered_result:[],
             biddingStartTime:"",
@@ -137,7 +141,7 @@ name: 'PropertyDetailsPage',
             customerId:1,
             // propertyId:1,
             bidAmount:0,
-            
+            bidSuccess:false
 
         }
     },
@@ -146,6 +150,7 @@ name: 'PropertyDetailsPage',
                 // on Vue instance created, load the book list
                 this.findpropertydetails();
                 this.findagentdetails();
+                this.findauctiondetails();
                 
             },
     computed: {
@@ -203,7 +208,8 @@ name: 'PropertyDetailsPage',
         Object.entries(input).forEach(([key, value]) => {
             if (!excludedKeys.includes(key)) {
             const capitalizedKey = key.charAt(0).toUpperCase() + key.slice(1);
-            filtered_result[capitalizedKey] = value;
+            const newKey = capitalizedKey.replace(/_/g, ' ');
+            filtered_result[newKey] = value;
             }
         })
 
@@ -249,14 +255,21 @@ name: 'PropertyDetailsPage',
             if (data.code === 404) {
             // no book in db
             this.message = data.message;
+            console.log("error")
             } else {
-            this.auction_result = data.data.auction_result.data;
-            console.log(this.auction_result)
+            this.bid_result = data.data.bid_result.data;
+            console.log(this.bid_result)
+            if (this.bid_result==true){
+                this.bidSuccess=true
+            }
+            else this.bidSuccess=false
+            
             }
         })
         .catch((error) => {
             // Errors when calling the service; such as network error,
             // service offline, etc
+            console.log("266")
             console.log(this.message + error);
         });
         },
@@ -294,6 +307,7 @@ name: 'PropertyDetailsPage',
                 alert('bidding failed')
             }
                     },
+
 
 
 }

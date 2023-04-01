@@ -1,5 +1,5 @@
 <template>
-  <NavBar></NavBar>
+  <NavBar :user_type="user_type"></NavBar>
   <router-view @passdata="GetData($event)" @agent_id="GetAgent($event)" :customer_id_prop='customer_id' :agent_id_prop='agent_id' :user_type="user_type" :property_id_prop="property_id"></router-view>
   <FooterComponent></FooterComponent>
 </template>
