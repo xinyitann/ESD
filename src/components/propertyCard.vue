@@ -4,9 +4,9 @@
             <div class="card-body shadow " style="padding-top: 0px;padding-left: 0px;padding-right: 0px;">
                 <div class="carousel slide" data-bs-ride="false" :id="carouselIdStr">
                     <div class="carousel-inner">
-                        <div class="carousel-item active"><img class="w-100 d-block fit-cover" :src="'assets/'+imageSrc" alt="Slide Image" ></div>
-                        <div class="carousel-item"><img class="w-100 d-block" v-bind:src=imageSrc alt="Slide Image"></div>
-                        <div class="carousel-item"><img class="w-100 d-block" src="../assets/room2.jpg" alt="Slide Image"></div>
+                        <div class="carousel-item active"><img class="w-100 d-block fit-cover" :src=getimage(imagename2) alt="Slide Image" ></div>
+                        <div class="carousel-item"><img class="w-100 d-block" v-bind:src=getimage(imagename) alt="Slide Image"></div>
+                        <!-- <div class="carousel-item"><img class="w-100 d-block" src="../assets/room2.jpg" alt="Slide Image"></div> -->
                     </div>
                     <div>
                         <a class="carousel-control-prev" :href="carouselHrefStr" role="button" data-bs-slide="prev">
@@ -63,7 +63,9 @@ export default {
         return{
             carouselHrefStr:"#carousel-" + this.carouselNum,
             carouselIdStr: "carousel-" + this.carouselNum,
-            imageSrc:'room2.jpg'
+            imageSrc:'room2.jpg',
+            imagename: "room2.jpg",
+            imagename2: "room1.jpg"
 
         }
     },
@@ -74,6 +76,9 @@ export default {
     // handleClick() {
     //   this.$emit('property-clicked', this.propertyId);
     // }
+    getimage(image){
+        return require("@/assets/" + image)
+    }
     }
     
 }
