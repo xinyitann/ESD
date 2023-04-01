@@ -4,8 +4,8 @@
             <div class="card-body shadow " style="padding-top: 0px;padding-left: 0px;padding-right: 0px;">
                 <div class="carousel slide" data-bs-ride="false" :id="carouselIdStr">
                     <div class="carousel-inner">
-                        <div class="carousel-item active"><img class="w-100 d-block fit-cover" :src="imageSrc" alt="Slide Image" ></div>
-                        <div class="carousel-item"><img class="w-100 d-block" v-bind:src="imageSrc" alt="Slide Image"></div>
+                        <div class="carousel-item active"><img class="w-100 d-block fit-cover" :src="'assets/'+imageSrc" alt="Slide Image" ></div>
+                        <div class="carousel-item"><img class="w-100 d-block" v-bind:src=imageSrc alt="Slide Image"></div>
                         <div class="carousel-item"><img class="w-100 d-block" src="../assets/room2.jpg" alt="Slide Image"></div>
                     </div>
                     <div>
@@ -30,7 +30,7 @@
                     <p class="card-text">{{property_image}}</p>
                     <p class="card-text">{{estimated_cost}}</p>
                     <router-link to="/propertyDetails">
-                        <a class="btn btn-light float-end" type="button" style="background-color: #447098; color: white;">
+                        <a class="btn btn-light float-end" type="button" style="background-color: #447098; color: white;" @click="send_property_data()">
                             View Details
                         </a>
                     </router-link>
@@ -50,20 +50,31 @@
 <script>
 export default {
     name: 'PropertyCard',
-    props: {
-        carouselNum: Number,
-        property_name: String,
-        property_add: String,
-        estimated_cost: Number,
-        property_image:String
-    },
+    props: [
+        'carouselNum',
+        'property_name',
+        'property_add',
+        'estimated_cost',
+        'property_image',
+        'property_id_prop',
+        'propertyId'
+],
     data(){ // or could put it in props
         return{
             carouselHrefStr:"#carousel-" + this.carouselNum,
             carouselIdStr: "carousel-" + this.carouselNum,
-            imageSrc:'..src/assets/room2.jpg'
+            imageSrc:'room2.jpg'
+
         }
     },
+    methods:{
+    send_property_data(){
+      this.$emit('submit_property_data', this.propertyId)
+    },
+    // handleClick() {
+    //   this.$emit('property-clicked', this.propertyId);
+    // }
+    }
     
 }
 </script>

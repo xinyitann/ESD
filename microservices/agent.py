@@ -4,25 +4,16 @@ from os import environ
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('dbURL') or 'mysql+mysqlconnector://is213@host.docker.internal:3306/property_management'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {'pool_recycle': 299}
-
-db = SQLAlchemy(app)
-
-CORS(app)
-
+from app import app, db
 class Agent(db.Model):
     __tablename__ = 'agent'
 
-    agent_id = db.Column(db.String(11), primary_key=True)
+    agent_id = db.Column(db.Integer, db.Sequence('seq_reg_id', start=1, increment=1), primary_key=True)
     name = db.Column(db.String(32), nullable=False)
     phone = db.Column(db.String(8), nullable=False)
     email = db.Column(db.String(20), nullable=False)
 
-    def __init__(self, agent_id, name, phone, email):
-        self.agent_id = agent_id
+    def __init__(self, name, phone, email):
         self.name = name
         self.phone = phone
         self.email = email
@@ -58,11 +49,11 @@ def create_agent():
     try:
         db.session.add(agent)
         db.session.commit()
-    except:
+    except Exception as e:
         return jsonify(
             {
                 "code": 500,
-                "message": "An error occurred creating the agent."
+                "message": "An error occurred creating the agent." + str(e)
             }
         ), 500
 

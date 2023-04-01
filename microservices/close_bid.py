@@ -7,6 +7,7 @@ import os, sys
 
 import requests
 from invokes import invoke_http
+from os import environ
 
 import amqp_setup
 import pika
@@ -15,9 +16,9 @@ import json
 app = Flask(__name__)
 CORS(app)
 
-property_URL = "http://localhost:5001/property"
-auction_URL = "http://localhost:5002/auctions"
-customer_URL = "http://localhost:5700/customer"
+property_URL = environ.get('property_URL') or "http://localhost:5001/property"
+auction_URL = environ.get('auction_URL') or "http://localhost:5002/auctions"
+customer_URL = environ.get('customer_URL') or "http://localhost:5700/customer"
 
 def validate_close_bid_input(closing_details):
     required_fields = ['auction_id', 'status']
