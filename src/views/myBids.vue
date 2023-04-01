@@ -1,74 +1,75 @@
 <template>
-    <div>
+    <div style="min-height: 100vh">
       <h2 class="text-center my-5">My Bids</h2>
 
-  
-      <div class="container-fluid row">
-        <!-- need the index to differentiate carousel to make it work-->
-        <!-- this is the rough idea using a for loop -->
-        <!-- <div v-for="(listing, index) in listings" :key="index">
-                  <PropertyCard :carouselNum="index+1" ></PropertyCard>
-              </div> -->
-  
-        <!-- for testing-->
-        
-          <PropertyCard v-for="properties in property_list"
-            :carouselNum="carouselNum"
-            :property_name= "properties.name"
-            :estimated_cost= "properties.estimated_cost" 
-            :property_add= "properties.address"
-            :key="properties"
-          ></PropertyCard>
-  
-        <!-- <PropertyCard :carouselNum="2"></PropertyCard> -->
+      <!-- carouselNum to delete, update bids and make carousel work-->
+      <div v-if="bidBefore" class="container-fluid row">
+        <BidPropertyCard v-for="(property,index) in property_list"
+          :index="index"
+          :bid="bid_list[index]"
+          :property_name= "property.name"
+          :estimated_cost= "property.estimated_cost" 
+          :property_add= "property.address"
+          :property_image="property.image"
+          :key="property"
+        ></BidPropertyCard>
+      </div>
+      
+
+      <div v-else class="mx-5">
+        <p class="text-center display-6">You have not made a bid yet.</p>
+        <div class="d-flex justify-content-center my-5">
+          <router-link to="/properties">
+            <button type="button" class="btn mx-4" style="background-color: #447098; color: white;">Discover Properties Now</button>
+          </router-link>
+        </div>
       </div>
     </div>
   </template>
   
   <script>
-  import PropertyCard from "@/components/propertyCard.vue";
-
-  const get_all_URL = "http://localhost:5029/getbids";
+  import BidPropertyCard from "@/components/bidPropertyCard.vue";
 
   export default {
     name: "MyBidsPage",
     components: {
-      PropertyCard,
+      BidPropertyCard,
     },
-    
+    props: [
+        'customer_id_prop',
+        'agent_id_prop',
+        'user_type',
+    ],
     data() {
       return {
         property_list: [],
-        carouselNumCounter: 1
-        
+        carouselNumCounter: 0,
+        bid_list: null,
+        bidBefore: false,
       };
     },
-    methods: {
-      carouselNum(){
-        return this.carouselNumCounter + 1
-      },
-      findproperties() {
-        var search_url = get_all_URL + "/" + this.search
-      const response = fetch(search_url)
-        .then((response) => response.json())
-        .then((data) => {
-          console.log(response);
-            
-          if (data.code === 404) {
-            // no book in db
-            this.message = data.message;
-          } else {
-            this.property_list = data.data.property_result.data.properties;
-          }
-          console.log(this.property_list)
-        })
-        .catch((error) => {
-          // Errors when calling the service; such as network error,
-          // service offline, etc
-          console.log(this.message + error);
-        });
-    },
-    },
+    async created(){
+      console.log(this.customer_id_prop)
+      console.log(this.agent_id_prop)
+      console.log(this.user_type)
+
+      try {
+        var get_property_url = "http://localhost:5029/getbids/" + String(1);
+        var response = await fetch(get_property_url);
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        var data = await response.json();
+        this.bidBefore = true;
+        this.property_list = Reflect.get(data['data'], 'property_result');
+        this.bid_list = Reflect.get(data['data'], 'bids_result');
+
+      } catch (error) {
+        console.error(error);
+      }
+    }
   };
   </script>
   

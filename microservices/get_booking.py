@@ -12,7 +12,7 @@ CORS(app)
 
 booking_URL = environ.get('booking_URL') or "http://localhost:5005/booking"
 property_URL = environ.get('property_URL') or "http://localhost:5001/property"
-customer_URL = environ.get('customer_URL') or "http://localhost:5700/customer"
+customer_URL = environ.get('customer_URL') or "http://localhost:5700/customer/"
 
 
 @app.route("/get_booking/<agent_id>")

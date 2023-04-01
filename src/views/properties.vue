@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="min-height: 100vh">
     <h2 class="text-center my-5">All Properties</h2>
 
     <!-- search bar-->
