@@ -1,3 +1,4 @@
+# need changes for post!
 from flask import Flask, request, jsonify
 from os import environ
 from flask_cors import CORS
@@ -7,7 +8,7 @@ from app import app, db
 class Agent(db.Model):
     __tablename__ = 'agent'
 
-    agent_id = db.Column(db.String(11), db.Sequence('seq_reg_id', start=1, increment=1), primary_key=True)
+    agent_id = db.Column(db.Integer, db.Sequence('seq_reg_id', start=1, increment=1), primary_key=True)
     name = db.Column(db.String(32), nullable=False)
     phone = db.Column(db.String(8), nullable=False)
     email = db.Column(db.String(20), nullable=False)
@@ -18,7 +19,7 @@ class Agent(db.Model):
         self.email = email
 
     def json(self):
-        return {"name": self.name, "phone": self.phone, "email": self.email}
+        return {"agent_id": self.agent_id, "name": self.name, "phone": self.phone, "email": self.email}
 
 # GET ONE AGENT
 @app.route("/agent/<agent_id>")
@@ -48,11 +49,11 @@ def create_agent():
     try:
         db.session.add(agent)
         db.session.commit()
-    except:
+    except Exception as e:
         return jsonify(
             {
                 "code": 500,
-                "message": "An error occurred creating the agent."
+                "message": "An error occurred creating the agent." + str(e)
             }
         ), 500
 
