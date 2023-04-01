@@ -99,6 +99,9 @@ export default {
 name: 'MyBookingPage',
     components: {
     },
+    props: [
+        'agent_id_prop'
+    ],
     data(){
         return{
             //update the array accordingly
@@ -179,8 +182,8 @@ name: 'MyBookingPage',
         },
 
     async created() {
-       
-        const response1 = await fetch(`http://127.0.0.1:5102/get_booking/86`);
+        var URLL = `http://127.0.0.1:5102/get_booking/` + this.agent_id_prop
+        const response1 = await fetch(URLL);
         const data = await response1.json(); 
         let pending_data = data['pending']
         let accepted_data = data['accepted']
@@ -199,12 +202,13 @@ name: 'MyBookingPage',
         }
 
         for(let item of all_list){
-            let property_id = item['property_id']
-            const response2 = await fetch(`http://127.0.0.1:5102/get_booking_extra_info/${property_id}`)
+            let customer_id = item['customer_id']
+            const response2 = await fetch(`http://127.0.0.1:5102/get_booking_extra_info/${customer_id}`)
             const data2 = await response2.json();  
             item['address'] = data2['address']
             item['customer_name'] = data2['customer_name']
         }
+        console.log(all_list)
      
         for(let item of all_list){
             if(item.status == 'pending'){
@@ -237,5 +241,8 @@ name: 'MyBookingPage',
     width: 30%;
 }
 </style>
+
+
+
 
 
