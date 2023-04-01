@@ -40,6 +40,7 @@
           :property_name= "properties.name"
           :estimated_cost= "properties.estimated_cost"
           :property_add= "properties.address"
+          :property_image="properties.image"
           v-bind:key="properties"
           
 
@@ -102,6 +103,21 @@ export default {
           console.log(this.message + error);
         });
     },
+    redirectUser () {
+      //route to agent
+      if (document.getElementById('password_input').value == 1234) {
+        this.$router.push('/')
+        // route to user
+      } else if (document.getElementById('password_input').value == 123) {
+        this.$router.push('/')
+      }
+    },
+    submitData(){
+      this.$emit('passdata', this.cur_id)
+    },
+    toProfile(){
+      this.$router.push('/profile')
+    }
   },
 };
 </script>

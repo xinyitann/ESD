@@ -47,7 +47,7 @@
                 <div class="card p-3">
                     <h5 class="card-title text-center my-2">Interested?</h5>
                     <div class="card-body">
-                        <p>
+                        <p>{{ property_id }}
                             Contact {{ agent_result.name }} @ +65 {{ agent_result.phone }} / {{ agent_result.email }}
                         </p>
                         <div class="row">
@@ -103,7 +103,6 @@
             </div>
         </div>
     </div>
-
 </template>
 
 <script>
