@@ -5,13 +5,14 @@ import os, sys
 
 import requests
 from invokes import invoke_http
+from os import environ
 
 app = Flask(__name__)
 CORS(app)
 
-property_url = "http://localhost:5001/property"
-agent_url = "http://localhost:5003/agent"
-bids_url = "http://localhost:5500/bids"
+agent_URL = environ.get('agent_URL') or "http://localhost:5003/agent"
+property_URL = environ.get('property_URL') or "http://localhost:5001/property"
+bid_URL = environ.get('bid_URL') or "http://localhost:5500/bids"
 
 @app.route("/get_property_details/<string:property_id>/<string:customer_id>", methods=['GET'])
 def get_property_details(property_id,customer_id):    
@@ -51,7 +52,7 @@ def process_get_property_details(property_id,customer_id):
 
     # call property microservice to get the property details
     print('\n-----Invoking property microservice-----')
-    get_property_url = property_url + "/details/" + str(property_id)
+    get_property_url = property_URL + "/details/" + str(property_id)
     property_result = invoke_http(get_property_url, method='GET', json=None)
     print('property_result:', property_result)
 
@@ -59,7 +60,7 @@ def process_get_property_details(property_id,customer_id):
     agent_id = property_result["data"]["agent_id"] 
 
     print('\n-----Invoking agent microservice-----')
-    get_agent_url = agent_url + "/" + str(agent_id)
+    get_agent_url = agent_URL + "/" + str(agent_id)
     agent_result = invoke_http(get_agent_url, method='GET', json=None)
     print('agent_result:', agent_result)
 
@@ -67,7 +68,7 @@ def process_get_property_details(property_id,customer_id):
     auction_id = property_result["data"]["auction_id"]
 
     print('\n-----Invoking auction microservice-----')
-    get_bid_url = bids_url + "/" + str(auction_id) + "/" + str(customer_id)
+    get_bid_url = bid_URL + "/" + str(auction_id) + "/" + str(customer_id)
     bid_result = invoke_http(get_bid_url, method='GET', json=None)
     print('bid_result:', bid_result)
 

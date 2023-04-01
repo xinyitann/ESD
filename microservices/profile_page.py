@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+from os import environ
 
 import os, sys
 
@@ -9,7 +10,8 @@ from invokes import invoke_http
 app = Flask(__name__)
 CORS(app)
 
-
+agent_URL = environ.get('agent_URL') or "http://localhost:5003/agent"
+customer_URL = environ.get('customer_URL') or "http://localhost:5700/customer"
 
 @app.route("/profile_page/<id>/<type>", methods=['GET'])
 def get_profile(id,type):
@@ -33,15 +35,15 @@ def get_profile(id,type):
             }), 500
 
 def processMakeBookingg(id,type):
-    agent_URL = "http://localhost:5003/agent/" + str(id)
-    customer_URL = "http://127.0.0.1:5700/customer/" + str(id)
+    get_agent_URL = agent_URL + str(id)
+    get_customer_URL = customer_URL + str(id)
     #invoke agent microservice
     if type == 'agent':
-        agent_result = invoke_http(agent_URL, method='GET')
+        agent_result = invoke_http(get_agent_URL, method='GET')
         if agent_result['code'] in range(200,300):
             return agent_result
     else:
-        customer_result = invoke_http(customer_URL, method='GET')
+        customer_result = invoke_http(get_customer_URL, method='GET')
         if customer_result['code'] in range(200,300):
             return customer_result
         
@@ -68,15 +70,15 @@ def update_profile():
             }), 500
 
 def processMakeBooking(data):
-    agent_URL = "http://localhost:5003/agent/" + str(id)
-    customer_URL = "http://127.0.0.1:5700/customer/" + str(id)
+    get_agent_URL = agent_URL + str(id)
+    get_customer_URL = customer_URL + str(id)
     #invoke agent microservice
     if data['type'] == 'agent':
-        agent_result = invoke_http(agent_URL, method='PUT',json=data)
+        agent_result = invoke_http(get_agent_URL, method='PUT',json=data)
         if agent_result['code'] in range(200,300):
             return agent_result
     else:
-        customer_result = invoke_http(customer_URL, method='PUT',json=data)
+        customer_result = invoke_http(get_customer_URL, method='PUT',json=data)
         if customer_result['code'] in range(200,300):
             return customer_result
 

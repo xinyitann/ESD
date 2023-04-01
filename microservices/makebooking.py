@@ -2,13 +2,16 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 
 import os, sys
-
+from os import environ
 import requests
 from invokes import invoke_http
 
 app = Flask(__name__)
 CORS(app)
 
+agent_URL = environ.get('agent_URL') or "http://localhost:5003/agent"
+property_URL = environ.get('property_URL') or "http://localhost:5001/property"
+booking_URL = environ.get('booking_URL') or "http://localhost:5005/booking"
 
 
 @app.route("/make_booking", methods=['POST'])
@@ -38,13 +41,10 @@ def make_booking():
     }), 400
 
 def processMakeBooking(data):
-    agent_URL = "http://localhost:5003/agent/"
-    property_URL =  "http://localhost:5001/property/"
-    booking_URL = "http://localhost:5005/booking"
-    get_all_booking_URL = "http://localhost:5005/booking/pending/"
+    get_all_booking_URL = booking_URL + "/pending"
     #invoke agent microservice
-    agent_URL = agent_URL + str(data['agent_id'])
-    agent_result = invoke_http(agent_URL, method='GET', json=data)
+    get_agent_URL = agent_URL + str(data['agent_id'])
+    agent_result = invoke_http(get_agent_URL, method='GET', json=data)
     if agent_result['code'] not in range(200,300):
         return 'Fail to add booking (agent microservice)'
     print('agent result:', agent_result)
@@ -57,7 +57,7 @@ def processMakeBooking(data):
     print('property result:', property_result)
 
     #invoke booking microservice
-    booking_result = invoke_http(booking_URL, method='POST', json=data)
+    booking_result = invoke_http(get_all_booking_URL, method='POST', json=data)
     if booking_result['code'] not in range(200,300):
         return 'Fail to add booking (booking microservice)'
 
