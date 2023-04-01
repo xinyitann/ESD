@@ -29,11 +29,10 @@
                     <p class="card-text">{{property_add}}</p>
                     <p class="card-text">{{property_image}}</p>
                     <p class="card-text">{{estimated_cost}}</p>
-                    <router-link to="/propertyDetails">
-                        <a class="btn btn-light float-end" type="button" style="background-color: #447098; color: white;" @click="send_property_data()">
+                    <p class="card-text">{{property_id_card}}</p>
+                        <a class="btn btn-light float-end" type="button" style="background-color: #447098; color: white;" @click="submit_property_data()">
                             View Details
                         </a>
-                    </router-link>
                 </div>
                 <!-- <div class="d-flex">
                     <img class="rounded-circle flex-shrink-0 me-3 fit-cover" width="50" height="50" src="https://cdn.bootstrapstudio.io/placeholders/1400x800.png">
@@ -56,29 +55,26 @@ export default {
         'property_add',
         'estimated_cost',
         'property_image',
-        'property_id_prop',
-        'propertyId'
+        'property_id_card',
 ],
     data(){ // or could put it in props
         return{
             carouselHrefStr:"#carousel-" + this.carouselNum,
             carouselIdStr: "carousel-" + this.carouselNum,
-            imageSrc:'room2.jpg',
-            imagename: "room2.jpg",
-            imagename2: "room1.jpg"
+            imageSrc:'room2.jpg'
 
         }
     },
     methods:{
-    send_property_data(){
-      this.$emit('submit_property_data', this.propertyId)
+    submit_property_data(){
+        console.log('current_id:'+this.property_id_card)
+      this.$emit('submit_property_data', this.property_id_card)
+      this.$router.push('/propertydetails')
+
     },
     // handleClick() {
     //   this.$emit('property-clicked', this.propertyId);
     // }
-    getimage(image){
-        return require("@/assets/" + image)
-    }
     }
     
 }
@@ -87,3 +83,4 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 </style>
+
