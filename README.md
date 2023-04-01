@@ -32,12 +32,13 @@ npm run serve
 # API used
 
 ## PayPal API
+Client ID is stored in an environment variable in .env
 
 ## Google Map API
 API Key is stored in an environment variable in .env
 
 ## OneMap API
-API Key is stored in an environment variable in .env
+Access token is stored in an environment variable in .env
 
 ### Access token expires every 3 days. To generate an access token:
 
