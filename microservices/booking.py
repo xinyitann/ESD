@@ -79,10 +79,12 @@ def get_all_booking_pending():
         )
     return jsonify(
         {
-            "code": 404,
-            "message": "There are no open bookings"
-        }
-    ), 404
+                "code": 200,
+                "data": {
+                    "books": []
+                }
+            }
+    ), 200
 
 # GET ALL ACCEPTED BOOKINGS
 @app.route("/booking/accepted/")
@@ -104,10 +106,12 @@ def get_all_booking_accepted():
         )
     return jsonify(
         {
-            "code": 404,
-            "message": "There are no open bookings"
-        }
-    ), 404
+                "code": 200,
+                "data": {
+                    "books": []
+                }
+            }
+    ), 200
 
 #GET ALL REJECTED BOOKINGS
 @app.route("/booking/rejected/")
@@ -129,10 +133,12 @@ def get_all_booking_rejected():
         )
     return jsonify(
         {
-            "code": 404,
-            "message": "There are no open bookings"
-        }
-    ), 404
+                "code": 200,
+                "data": {
+                    "books": []
+                }
+            }
+    ), 200
 
 #accept or reject a booking
 @app.route("/booking/<string:booking_id>/", methods=['PUT'])
@@ -331,6 +337,7 @@ def create_calendar_event():
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5005, debug=True)
+
 
 
 
