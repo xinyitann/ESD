@@ -65,7 +65,7 @@
                             </div>
                             <div class="mb-3">
                                 <label for="images" class="form-label">Images*</label>
-                                <input type="file" id="images" name="images" accept="image/*" class="form-control" multiple>
+                                <input type="file" @change="handleFileUpload" id="images" name="images" class="form-control" multiple>
                             </div>
                         </div>
                     </div>
@@ -76,7 +76,7 @@
                         <button type="button" class="btn mx-4" style="background-color: #447098; color: white;" @click="submit_add_listing()">Add Listing</button>
                     </div>
                     <div>
-                        <button type="submit" @click="check_file()">check file</button>
+                        <button type="button" @click="uploadFile">check file</button>
                     </div>
                 </form>
         </div>
@@ -85,7 +85,7 @@
 
 <script>
 
-
+import axios from 'axios'
 
 
 export default {
@@ -114,6 +114,18 @@ name: 'AddListingPage',
     },
     methods: {
         async submit_add_listing(){
+            
+
+           
+            const formData = new FormData();
+            formData.append('property_image', this.file);
+            let link = await axios.post('http://192.168.0.195:5200/download_image/', formData);
+          
+            link =  '../src/assets/' + link['data']
+            this.image = link
+            
+
+
             
             var myHeaders = new Headers();
             myHeaders.append("Content-Type", "application/json");
@@ -150,49 +162,10 @@ name: 'AddListingPage',
                 alert("listing has been created")
             }
         },
-        check_file(){
-
-            const form = document.getElementById('my-form')
-            form.addEventListener('submit', (event) => {
-            event.preventDefault();
-            
-            const formData = new FormData();
-            const fileField = document.querySelector('input[type="file"]');
-            
-            formData.append('property_image', fileField.files[0]);
-            console.log(fileField.files[0])
-            fetch('http://192.168.0.195:5200/download_image/', {
-                method: 'POST',
-                body: formData,
-                credentials: 'include'
-            })
-            .then(response => response.text())
-            .then(data => {
-                console.log(data);
-            })
-            .catch(error => {
-                console.error(error);
-            });
-            });
-
-            //var file = document.getElementById('images')
-            //console.log(file)
-            ////--->upload file > start
-			//let formdata = new FormData();
-
-			////single file
-			//formdata.append('property_image',file.files);
-            //formdata.append('user','customer')
-      
-		
-			//var requestOptions = {
-            //method: 'POST',
-            //body: formdata,
-            //};
-
-            //await fetch("http://127.0.0.1:5200/download_image/", requestOptions)
-
-        }
+        handleFileUpload(event) {
+            this.file = event.target.files[0];
+        },
+        
     },
     props: [
         'agent_id_prop',
@@ -204,4 +177,6 @@ name: 'AddListingPage',
 <style>
 
 </style>
+
+
 
