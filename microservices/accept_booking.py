@@ -286,11 +286,11 @@ def get_agent_info(agent_id):
         }
     }
 
-# get the property info using customerid
-def get_property_info(customer_id):
+# get the property info using property_id
+def get_property_info(property_id):
     print('\n-----Invoking property microservice -----')
-    customer_id = str(customer_id)
-    get_property_URL = property_URL + "/details/customer/" + customer_id
+    property_id = str(property_id)
+    get_property_URL = property_URL + "/details/" + property_id
     property_result = invoke_http(get_property_URL, method='GET', json=None)
 
     code = property_result["code"]
