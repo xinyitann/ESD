@@ -29,7 +29,7 @@
                     <p class="card-text">{{property_add}}</p>
                     <p class="card-text">{{property_image}}</p>
                     <p class="card-text">{{estimated_cost}}</p>
-                    <p class="card-text">{{property_id_card}}</p>
+                   
                         <a class="btn btn-light float-end" type="button" style="background-color: #447098; color: white;" @click="submit_property_data()">
                             View Details
                         </a>
@@ -61,7 +61,9 @@ export default {
         return{
             carouselHrefStr:"#carousel-" + this.carouselNum,
             carouselIdStr: "carousel-" + this.carouselNum,
-            imageSrc:'room2.jpg'
+            imageSrc:'room2.jpg',
+            imagename: "room2.jpg",
+            imagename2: "room1.jpg"
 
         }
     },
@@ -75,6 +77,9 @@ export default {
     // handleClick() {
     //   this.$emit('property-clicked', this.propertyId);
     // }
+    },
+    getimage(image){
+        return require("@/assets/" + image)
     }
     
 }
@@ -83,4 +88,5 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 </style>
+
 
