@@ -8,7 +8,7 @@
           <div id="login-form">
             <div class="form-outline mb-4">
               <label class="form-label" for="form2Example1">Email Address</label>
-              <input type="email" placeholder="Enter your email address" id="idinput" class="form-control" />
+              <input v-model="cur_id" type="email" placeholder="Enter your email address" id="idinput" class="form-control" />
             </div>
 
             <!-- Password input -->
@@ -35,7 +35,8 @@
 
             <!-- Submit button -->
             <div class="d-flex justify-content-center">
-              <button type="button" style="background-color:#6d8363; color:white;" class="btn form-control" @click="redirectUser();sethost()">Log In</button>
+              <button type="button" style="background-color:#6d8363; color:white;" class="btn form-control" @click="redirectUser();submitData()">Log In</button>
+       
             </div>
           </div>
         </form>
@@ -61,6 +62,20 @@ export default {
       } else if (document.getElementById('password_input').value == 123) {
         this.$router.push('/')
       }
+    },
+    submitData(){
+      this.$emit('passdata', this.cur_id)
+    },
+    toProfile(){
+      this.$router.push('/profile')
+    }
+  },
+  props: {
+
+  },
+  data() {
+    return {
+      cur_id: '',
     }
   }
 }

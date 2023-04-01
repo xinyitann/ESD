@@ -205,6 +205,7 @@ def accept_booking(booking_id):
 @app.route("/booking", methods=['POST'])
 def create_booking():
     data = request.get_json()
+    data['booking_id'] = None
     booking = Booking(**data)
 
     try:
@@ -330,5 +331,8 @@ def create_calendar_event():
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5005, debug=True)
+
+
+
 
 

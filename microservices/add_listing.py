@@ -55,7 +55,8 @@ def add_listing():
                 'status': listing_details['status'],
                 'starting_price': listing_details['starting_price'],
                 'option_fee': listing_details['option_fee'],
-                'auction_id': None
+                'auction_id': None,
+                'customer_id': listing_details['customer_id'],
             }
 
             auction_result = processAddAuction(auction_data)
@@ -75,7 +76,8 @@ def add_listing():
                     'facing': listing_details['facing'],
                     'build_year': listing_details['build_year'],
                     'estimated_cost': listing_details['estimated_cost'],
-                    'image': listing_details['image']
+                    'image': listing_details['image'],
+                    'neighbourhood': listing_details['neighbourhood']
                 }
 
                 property_result = processAddListing(property_data)

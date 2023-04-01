@@ -6,15 +6,15 @@
                 <form>
                     <div class="mb-3">
                         <label for="customerID" class="form-label">Customer ID</label>
-                        <input type="text" class="form-control" id="customerID" disabled>
+                        <input type="text" class="form-control" id="customerID" v-bind:value="customer_id_prop" disabled>
                     </div>
                     <div class="mb-3">
                         <label for="agentID" class="form-label">Agent ID</label>
-                        <input type="text" class="form-control" id="agentID" disabled>
+                        <input type="text" class="form-control" id="agentID" v-bind:value="agent_id_prop" disabled>
                     </div>
                     <div class="mb-3">
                         <label for="propertyID" class="form-label">Property ID</label>
-                        <input type="text" class="form-control" id="propertyID" disabled>
+                        <input type="text" class="form-control" id="propertyID" v-bind:value="property_id_prop" disabled>
                     </div>
                     <div class="mb-3">
                         <label for="bookingDate" class="form-label">Select a Date*</label>
@@ -72,12 +72,17 @@ export default {
 name: 'BookingPage',
     components: {
     },
+    props: [
+        'customer_id_prop',
+        'agent_id_prop',
+        'property_id_prop',
+    ],
     
     data(){
         return{
-            customerID:"55",
-            agentID: "86",
-            propertyID: "55",
+            customerID: this.customer_id_prop,
+            agentID: this.agent_id_prop,
+            propertyID: this.property_id_prop,
             bookingDate:"",
             bookingStartTime:"",
             bookingEndTime:"",
@@ -116,7 +121,6 @@ name: 'BookingPage',
             myHeaders.append("Content-Type", "application/json");
 
             var raw = JSON.stringify({
-            "booking_id": this.customerID,
             "agent_id": this.agentID,
             "customer_id": this.customerID,
             "property_id": this.propertyID,
@@ -132,7 +136,7 @@ name: 'BookingPage',
             redirect: 'follow'
             };
 
-            const data_fetch = await fetch("http://127.0.0.1:5100/make_booking", requestOptions)
+            const data_fetch = await fetch("http://127.0.0.1:5800/make_booking", requestOptions)
             this.check = await data_fetch.json()
             console.log(data_fetch)
             if (data_fetch['status'] == 200){
@@ -141,11 +145,7 @@ name: 'BookingPage',
             else{
                 alert('booking creation failed')
             }
-                    },
-            
-            
-       
-            
+                    },   
     },
 }
 

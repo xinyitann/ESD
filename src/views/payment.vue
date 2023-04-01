@@ -70,10 +70,8 @@ export default {
         expiration: "",
         cvv: "",
         postalCode: "",
-        product: {
-            price: 1000,
-            description: "Option fee for Auction ID"
-      }
+        auction_id:[],
+        product:[]
     };
   },
   mounted: function() {
@@ -83,6 +81,23 @@ export default {
     script.addEventListener("load", this.setLoaded);
     document.body.appendChild(script);
   },
+  created() {
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Access-Control-Allow-Origin", "*");
+
+    var requestOptions = {
+      method: 'GET',
+      headers: myHeaders,
+      redirect: 'follow'
+    };
+    fetch(`http://127.0.0.1:5002/auctions/option_fee/${this.auction_id}`,requestOptions)
+      .then(response => response.json())
+      .then(data => {
+        this.product = data;
+      });
+  },
+  
   methods: {
     setLoaded: function() {
       this.loaded = true;
