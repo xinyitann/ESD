@@ -9,17 +9,23 @@
       </button>
       <div class="collapse navbar-collapse justify-content-end" id="navbarText">
         <ul class="navbar-nav me-2">
-          <li class="nav-item mx-2">
+          <li v-if="user_type =='customer'" class="nav-item mx-2">
             <router-link to="/properties" class="nav-link">Discover</router-link>
           </li>
-          <li class="nav-item mx-2">
-            <router-link to="/bookingnow" class="nav-link">Book an Appointment</router-link>
+          <li v-if="user_type != ''" class="nav-item mx-2">
+            <router-link to="/mybooking" class="nav-link">My Bookings</router-link>
           </li>
-          <li class="nav-item mx-2">
-            <router-link to="/mybooking" class="nav-link">My Booking</router-link>
+          <li v-if="user_type=='customer'" class="nav-item mx-2">
+            <router-link to="/mybids" class="nav-link">My Bids</router-link>
           </li>
-          <li class="nav-item mx-2">
+          <li v-if="user_type=='agent'" class="nav-item mx-2">
+            <router-link to="/myproperty" class="nav-link">My Properties</router-link>
+          </li>
+          <li v-if="user_type==''" class="nav-item mx-2">
             <router-link to="/login" class="nav-link">Log In</router-link>
+          </li>
+          <li v-else class="nav-item mx-2">
+            <router-link to="/profile" class="nav-link">Profile</router-link>
           </li>
         </ul>
       </div>
@@ -30,9 +36,10 @@
 <script>
 export default {
   name: 'NavBar',
-  props: {
-  },
-  data(){ // or could put it in props
+  props: [
+      'user_type',
+  ],
+  data(){ 
     return{
     }
   }
