@@ -28,6 +28,8 @@
   <script>
   import PropertyCard from "@/components/propertyCard.vue";
 
+  const get_all_URL = "http://localhost:5029/getbids";
+
   export default {
     name: "MyBidsPage",
     components: {
@@ -37,8 +39,6 @@
     data() {
       return {
         property_list: [],
-        message: "",
-        search: "",
         carouselNumCounter: 1
         
       };
@@ -46,7 +46,28 @@
     methods: {
       carouselNum(){
         return this.carouselNumCounter + 1
-      }
+      },
+      findproperties() {
+        var search_url = get_all_URL + "/" + this.search
+      const response = fetch(search_url)
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(response);
+            
+          if (data.code === 404) {
+            // no book in db
+            this.message = data.message;
+          } else {
+            this.property_list = data.data.property_result.data.properties;
+          }
+          console.log(this.property_list)
+        })
+        .catch((error) => {
+          // Errors when calling the service; such as network error,
+          // service offline, etc
+          console.log(this.message + error);
+        });
+    },
     },
   };
   </script>
