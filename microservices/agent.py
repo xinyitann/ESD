@@ -1,11 +1,17 @@
-from app import app, db
-from flask import request, jsonify
+# need changes for post!
+from flask import Flask, request, jsonify
 from os import environ
+from flask_cors import CORS
+from flask_sqlalchemy import SQLAlchemy
 
-app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('dbURL')
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/property_management'
+app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('dbURL') or 'mysql+mysqlconnector://is213@host.docker.internal:3306/property_management'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {'pool_recycle': 299}
+
+db = SQLAlchemy(app)
+
+CORS(app)
 
 class Agent(db.Model):
     __tablename__ = 'agent'

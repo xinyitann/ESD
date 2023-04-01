@@ -1,13 +1,23 @@
-from app import app, db
-from customer import Customer
-from agent import Agent
-from auctionService import AuctionService
-from flask import request, jsonify
+from flask import Flask, request, jsonify
 import mysql.connector
 import base64
 from PIL import Image
 import io
 import PIL  
+from flask_cors import CORS
+from flask_sqlalchemy import SQLAlchemy
+from os import environ
+import agent
+import customer
+
+app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('dbURL') or 'mysql+mysqlconnector://is213@host.docker.internal:3306/property_management'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {'pool_recycle': 299}
+
+db = SQLAlchemy(app)
+
+CORS(app)
 
 
 # Import the Image module from the PIL library

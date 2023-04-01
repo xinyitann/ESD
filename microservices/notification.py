@@ -54,7 +54,7 @@ def processNotification(routing_key, body):
 
         content = f"""
         Hey {name}, \n
-        I am writing to inform you that your schedule  on {booking_date} regarding the property {property_name} with our agent {agent_name}has been confirmed. Your agent will be contacting you shortly. \n
+        I am writing to inform you that your schedule on {booking_date} regarding the property {property_name} with our agent {agent_name} has been confirmed. Your agent will be contacting you shortly. \n
         If you have any questions or concerns, please do not hesitate to contact us at havenis213@gmail.com. \n
         Thank you for choosing Haven! \n
 

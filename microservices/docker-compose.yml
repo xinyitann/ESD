@@ -93,6 +93,12 @@ services:
     environment:
       dbURL: mysql+mysqlconnector://is213@host.docker.internal:3306/property_management
       PYTHONUNBUFFERED: 1
+      GOOGLE_APPLICATION_CREDENTIALS: ./credentials.json 
+      client_id: 976196717049-ln65umr1112o4mrd9533rbon20qf4iir.apps.googleusercontent.com 
+      client_secret: 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 
+      refresh_token: 1//0gArI7UZjvbC-CgYIARAAGBASNwF-L9Ir2ApBBtXLQq6MRFp1xG55jkjohbGZgJvNXG3fL8hAGN0xE764KJ0mTd1nxYj_dbt46jw
+      token: ya29.a0Ael9sCOgFOKrFj1gJaQsjQGvRyQhG4rqz0Jwgwz8DvdCR2GFCqeaeOYHbM1W4SD7c7Xh0YQbwIVkYwAqXmmCb7G3waHyFWJ_pPHyT4MQ9ecHdHh5ypj8Ew95Z6EB0FCTMm3qEaabFNJNBEAKdTUUQ2NF9QjKHhNEaCgYKAUgSARASFQF4udJh7TZAQ_ECA5l5LcICeUUygg0167
+      project_id: groovy-height-381506
     ports:
       - "5005:5005"
 
@@ -128,6 +134,7 @@ services:
       rabbit_host: rabbitmq
       rabbit_port: 5672
       PYTHONUNBUFFERED: 1
+      EMAIL_PASSWORD: vgcpmtfhuchlyizw
 
   ################################## not working
   # Property: The Property microservice
@@ -172,3 +179,31 @@ services:
       PYTHONUNBUFFERED: 1
     ports:
       - "5101:5101"
+
+  ###############################################
+  # Add Listing: The Add Listing microservice
+  ###############################################
+  add_listing:
+    build:
+      context: ./
+      dockerfile: add_listing.Dockerfile
+    image: balveen/add_listing:esd
+    restart: always
+    depends_on:
+      - property
+      - customer
+      - notification
+      - auction
+      - agent
+      - error
+      - rabbitmq
+    environment:
+      rabbit_host: rabbitmq
+      rabbit_port: 5672
+      auction_URL: http://auction:5002/auctions
+      customer_URL: http://customer:5700/customer
+      property_URL: http://property:5001/property
+      agent_URL: http://agent:5003/agent
+      PYTHONUNBUFFERED: 1
+    ports:
+      - "5200:5200"
