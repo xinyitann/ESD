@@ -3,8 +3,8 @@ from datetime import datetime
 import time
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
-import customer
-import auctionService
+from customer import Customer
+from auctionService import AuctionService
 from os import environ
 
 app = Flask(__name__)
