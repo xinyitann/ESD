@@ -8,7 +8,7 @@
           <div id="login-form">
             <div class="form-outline mb-4">
               <label class="form-label" for="form2Example1">Email Address</label>
-              <input v-model="cur_id" type="email" placeholder="Enter your email address" id="idinput" class="form-control" />
+              <input v-model="current_email" type="email" placeholder="Enter your email address" id="idinput" class="form-control" />
             </div>
 
             <!-- Password input -->
@@ -35,7 +35,7 @@
 
             <!-- Submit button -->
             <div class="d-flex justify-content-center">
-              <button type="button" style="background-color:#6d8363; color:white;" class="btn form-control" @click="redirectUser();submitData()">Log In</button>
+              <button type="button" style="background-color:#6d8363; color:white;" class="btn form-control" @click="process_account()">Log In</button>
        
             </div>
           </div>
@@ -53,29 +53,27 @@ export default {
 
   },
   methods: {
-
-    redirectUser () {
-      //route to agent
-      if (document.getElementById('password_input').value == 1234) {
-        this.$router.push('/')
-        // route to user
-      } else if (document.getElementById('password_input').value == 123) {
-        this.$router.push('/')
+    async process_account(){
+      let URLL = 'http://127.0.0.1:5805/login/' + this.current_email
+      let data_fetch = await fetch(URLL)
+      data_fetch = await data_fetch.json(); 
+      console.log(data_fetch)
+      if(data_fetch['code']==404){
+        alert('login error please check your email and try again')
+        return
       }
+      this.$emit('passdata',data_fetch['id'])
+      this.$emit('set_user_type',data_fetch['user_type'])
+      this.$router.push('/')
     },
-    submitData(){
-      this.$emit('passdata', this.cur_id)
-    },
-    toProfile(){
-      this.$router.push('/profile')
-    }
   },
   props: {
 
   },
   data() {
     return {
-      cur_id: '',
+      current_email: '',
+      current_id: ''
     }
   }
 }
