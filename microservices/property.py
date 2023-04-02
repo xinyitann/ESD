@@ -11,15 +11,7 @@ import agent
 import customer
 import os
 
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('dbURL') or 'mysql+mysqlconnector://is213@host.docker.internal:3306/property_management'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {'pool_recycle': 299}
-
-db = SQLAlchemy(app)
-
-CORS(app)
-
+from app import app, db
 
 # Import the Image module from the PIL library
 

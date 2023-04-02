@@ -9,6 +9,7 @@ from invokes import invoke_http
 import amqp_setup
 import pika
 import json
+from bs4 import BeautifulSoup
 
 app = Flask(__name__)
 CORS(app)
@@ -266,7 +267,20 @@ def get_agent_info(agent_id):
         }
     }
 
+
+@app.route("/download_image/", methods=['POST'])
+def download_image():
+    file = request.files['property_image']
+    filename = file.filename
+    file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+    return filename
+ 
+
+
+
 # Execute this program if it is run as a main script (not by 'import')
 if __name__ == "__main__":
     print("This is flask " + os.path.basename(__file__) + " for adding a property listing...")
+    app.config['UPLOAD_FOLDER'] = '../src/assets/'
     app.run(host="0.0.0.0", port=5200, debug=True)
+

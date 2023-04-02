@@ -4,9 +4,9 @@
             <div class="card-body shadow " style="padding-top: 0px;padding-left: 0px;padding-right: 0px;">
                 <div class="carousel slide" data-bs-ride="false" :id="carouselIdStr">
                     <div class="carousel-inner">
-                        <div class="carousel-item active"><img class="w-100 d-block fit-cover" :src="imageSrc" alt="Slide Image" ></div>
-                        <div class="carousel-item"><img class="w-100 d-block" v-bind:src="imageSrc" alt="Slide Image"></div>
-                        <div class="carousel-item"><img class="w-100 d-block" src="../assets/room2.jpg" alt="Slide Image"></div>
+                        <div class="carousel-item active"><img class="w-100 d-block fit-cover" :src=getimage(imagename2) alt="Slide Image" ></div>
+                        <div class="carousel-item"><img class="w-100 d-block" v-bind:src=getimage(imagename) alt="Slide Image"></div>
+                        <!-- <div class="carousel-item"><img class="w-100 d-block" src="../assets/room2.jpg" alt="Slide Image"></div> -->
                     </div>
                     <div>
                         <a class="carousel-control-prev" :href="carouselHrefStr" role="button" data-bs-slide="prev">
@@ -29,11 +29,10 @@
                     <p class="card-text">{{property_add}}</p>
                     <p class="card-text">{{property_image}}</p>
                     <p class="card-text">{{estimated_cost}}</p>
-                    <router-link to="/propertyDetails">
-                        <a class="btn btn-light float-end" type="button" style="background-color: #447098; color: white;">
+                   
+                        <a class="btn btn-light float-end" type="button" style="background-color: #447098; color: white;" @click="submit_property_data()">
                             View Details
                         </a>
-                    </router-link>
                 </div>
                 <!-- <div class="d-flex">
                     <img class="rounded-circle flex-shrink-0 me-3 fit-cover" width="50" height="50" src="https://cdn.bootstrapstudio.io/placeholders/1400x800.png">
@@ -50,20 +49,38 @@
 <script>
 export default {
     name: 'PropertyCard',
-    props: {
-        carouselNum: Number,
-        property_name: String,
-        property_add: String,
-        estimated_cost: Number,
-        property_image:String
-    },
+    props: [
+        'carouselNum',
+        'property_name',
+        'property_add',
+        'estimated_cost',
+        'property_image',
+        'property_id_card',
+],
     data(){ // or could put it in props
         return{
             carouselHrefStr:"#carousel-" + this.carouselNum,
             carouselIdStr: "carousel-" + this.carouselNum,
-            imageSrc:'..src/assets/room2.jpg'
+            imageSrc:'room2.jpg',
+            imagename: "room2.jpg",
+            imagename2: "room1.jpg"
+
         }
     },
+    methods:{
+    submit_property_data(){
+        console.log('current_id:'+this.property_id_card)
+      this.$emit('submit_property_data', this.property_id_card)
+      this.$router.push('/propertydetails')
+
+    },
+    // handleClick() {
+    //   this.$emit('property-clicked', this.propertyId);
+    // }
+    },
+    getimage(image){
+        return require("@/assets/" + image)
+    }
     
 }
 </script>
@@ -71,3 +88,5 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 </style>
+
+

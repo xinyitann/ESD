@@ -2,7 +2,7 @@
     <div class="container-fluid">
         <div class = "row d-flex justify-content-center">
                 <h2 class="text-center my-5">Add Listing</h2>
-                <form>
+                <form id="my-form">
                     <div class="row">
                         <div class="col-12 col-md-6 px-5">
                             <div class="mb-3">
@@ -65,7 +65,7 @@
                             </div>
                             <div class="mb-3">
                                 <label for="images" class="form-label">Images*</label>
-                                <input type="file" id="images" name="images" accept="image/*" class="form-control" multiple>
+                                <input type="file" @change="handleFileUpload" id="images" name="images" class="form-control" multiple>
                             </div>
                         </div>
                     </div>
@@ -75,12 +75,16 @@
                         </router-link>
                         <button type="button" class="btn mx-4" style="background-color: #447098; color: white;" @click="submit_add_listing()">Add Listing</button>
                     </div>
+                   
                 </form>
         </div>
     </div>
 </template>
 
 <script>
+
+import axios from 'axios'
+
 
 export default {
 name: 'AddListingPage',
@@ -108,6 +112,18 @@ name: 'AddListingPage',
     },
     methods: {
         async submit_add_listing(){
+            
+
+           
+            const formData = new FormData();
+            formData.append('property_image', this.file);
+            let link = await axios.post('http://192.168.0.195:5200/download_image/', formData);
+          
+            link =  '../src/assets/' + link['data']
+            this.image = link
+            
+
+
             
             var myHeaders = new Headers();
             myHeaders.append("Content-Type", "application/json");
@@ -143,7 +159,11 @@ name: 'AddListingPage',
             if(data_fetch['status']==201){
                 alert("listing has been created")
             }
-        }
+        },
+        handleFileUpload(event) {
+            this.file = event.target.files[0];
+        },
+        
     },
     props: [
         'agent_id_prop',
@@ -152,8 +172,8 @@ name: 'AddListingPage',
 
 </script>
 
-
 <style>
+
 </style>
 
 

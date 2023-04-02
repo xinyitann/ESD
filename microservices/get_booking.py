@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+from os import environ
 
 import os, sys
 
@@ -9,6 +10,9 @@ from invokes import invoke_http
 app = Flask(__name__)
 CORS(app)
 
+booking_URL = environ.get('booking_URL') or "http://localhost:5005/booking"
+property_URL = environ.get('property_URL') or "http://localhost:5001/property"
+customer_URL = environ.get('customer_URL') or "http://localhost:5700/customer/"
 
 
 @app.route("/get_booking/<agent_id>")
@@ -34,9 +38,9 @@ def get_page_info(agent_id):
             }), 500
     
 def processGetData(data):
-    booking_info_pending = "http://127.0.0.1:5005/booking/pending/"
-    booking_info_accepted = "http://127.0.0.1:5005/booking/accepted/"
-    booking_info_rejected = "http://127.0.0.1:5005/booking/rejected/"
+    booking_info_pending = booking_URL + "/pending/"
+    booking_info_accepted = booking_URL + "/accepted/"
+    booking_info_rejected = booking_URL + "/rejected/"
 
     agent_id = data['agent_id']
 
@@ -96,8 +100,8 @@ def get_info(customer_id):
     
 
 def ProcessData(customer_id):
-    customer_info = "http://127.0.0.1:5700/customer/" + customer_id
-    property_info = "http://127.0.0.1:5001/property/details/" + customer_id
+    customer_info = customer_URL + customer_id
+    property_info = property_URL + "/details/" + customer_id
     customer_result = invoke_http(customer_info, method='GET')
     property_result = invoke_http(property_info, method='GET')
     print(customer_result)
