@@ -27,8 +27,8 @@
                 <div class="card-body p-4">
                     <h5 class="card-title my-3">{{ property_name }}</h5>
                     <p class="card-text">{{property_add}}</p>
-                    <p class="card-text">{{property_image}}</p>
-                    <p class="card-text">{{estimated_cost}}</p>
+                    <!-- <p class="card-text">{{property_image}}</p> -->
+                    <p class="card-text">${{estimated_cost}}</p>
                    
                         <a class="btn btn-light float-end" type="button" style="background-color: #447098; color: white;" @click="submit_property_data()">
                             View Details
