@@ -9,8 +9,8 @@ from invokes import invoke_http
 app = Flask(__name__)
 CORS(app)
 
-agent_URL = environ.get('agent_URL') or "http://localhost:5003/agent"
-property_URL = environ.get('property_URL') or "http://localhost:5001/property"
+agent_URL = environ.get('agent_URL') or "http://localhost:5003/agent/"
+property_URL = environ.get('property_URL') or "http://localhost:5001/property/"
 booking_URL = environ.get('booking_URL') or "http://localhost:5005/booking"
 
 
@@ -41,16 +41,16 @@ def make_booking():
     }), 400
 
 def processMakeBooking(data):
-    get_all_booking_URL = booking_URL + "/pending"
+
+    get_all_booking_URL = booking_URL
     #invoke agent microservice
-    get_agent_URL = agent_URL + "/" + str(data['agent_id'])
+    get_agent_URL = agent_URL + str(data['agent_id'])
     agent_result = invoke_http(get_agent_URL, method='GET', json=data)
     if agent_result['code'] not in range(200,300):
         return 'Fail to add booking (agent microservice)'
     print('agent result:', agent_result)
-
     #invoke property microservice
-    get_property_URL = property_URL + "/" + str(data['property_id'])
+    get_property_URL = property_URL + str(data['property_id'])
     property_result = invoke_http(get_property_URL, method='GET', json=data)
     if property_result['code'] not in range(200,300):
         return 'Fail to add booking (property microservice)'
@@ -77,3 +77,4 @@ if __name__ == "__main__":
     print("This is flask " + os.path.basename(__file__) +
           " for placing an order...")
     app.run(host="0.0.0.0", port=5800, debug=True)
+
