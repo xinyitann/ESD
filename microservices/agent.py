@@ -64,6 +64,24 @@ def create_agent():
         }
     ), 201
 
+# GET ONE AGENT ID
+@app.route("/agent/agent_id/<string:email>")
+def find_agentid_using_email(email):
+    agent = Agent.query.filter_by(email=email).first()
+    if agent:
+        return jsonify(
+            {
+                "code": 200,
+                "data": agent.json()
+            }
+        )
+    return jsonify(
+        {
+            "code": 404,
+            "message": "agent not found."
+        }
+    ), 404
+
 # UPDATE AGENT DETAILS
 @app.route("/agent/<string:agent_id>", methods=['PUT'])
 def update_agent(agent_id):
