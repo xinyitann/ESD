@@ -42,26 +42,6 @@ def find_customer(customer_id):
         }
     ), 404
 
-
-# GET ONE CUSTOMER ID
-@app.route("/customer/customer_id/<string:email>")
-def find_customerid_using_email(email):
-    customer = Customer.query.filter_by(email=email).first()
-    if customer:
-        return jsonify(
-            {
-                "code": 200,
-                "data": customer.json()
-            }
-        )
-    return jsonify(
-        {
-            "code": 404,
-            "message": "customer not found."
-        }
-    ), 404
-
-
 # ADDING A CUSTOMER
 @app.route("/customer", methods=['POST'])
 def create_customer():
