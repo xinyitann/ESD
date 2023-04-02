@@ -136,6 +136,23 @@ def delete_agent(agent_id):
         }
     ), 404
 
+@app.route("/agent/get_id_by_email/<string:email>")
+def find_customer_by_email(email):
+    agent = Agent.query.filter_by(email=email).first()
+    if agent:
+        return jsonify(
+            {
+                "code": 200,
+                "data": agent.json()
+            }
+        )
+    return jsonify(
+        {
+            "code": 404,
+            "message": "agent not found."
+        }
+    ), 404
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5003, debug=True)
