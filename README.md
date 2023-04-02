@@ -31,9 +31,11 @@ npm run serve
 
 # External services used
 
-## Email
+## Gmail SMTP Service
+Email and Password is stored in environment variables in docker-compose.yml
 
 ## Google Calendar API
+API Key is stored in environment variables in docker-compose.yml
 
 ## Google Map API
 API Key is stored in an environment variable in .env
