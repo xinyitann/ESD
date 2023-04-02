@@ -15,8 +15,6 @@ import amqp_setup
 app = Flask(__name__)
 email_sender = 'havenis213@gmail.com'
 email_password = os.environ.get('EMAIL_PASSWORD') 
-
-em = EmailMessage()
 monitorBindingKey='*.notification' #e.g booking.notification; bidding.notification; listing.notification
 
 
@@ -38,13 +36,14 @@ def callback(channel, method, properties, body): # required signature for the ca
 
 #change to processNoti which calls the email api to send the noti
 def processNotification(routing_key, body):
+    em = EmailMessage()
+    em['From'] = email_sender
     print("in notification microservice")
     notification = json.loads(body)
     print(notification) 
 
     name = notification['name']
     email_receiver = notification['email']
-    em['From'] = email_sender
 
     # Check the routing key to determine what type of notification to send
     if routing_key == "booking_accepted.notification":
@@ -62,18 +61,9 @@ def processNotification(routing_key, body):
         Best regards, \n
         G2T4 Haven Team
         """
-        # em['From'] = email_sender
         em['To'] = email_receiver
         em['Subject'] = "Booking Confirmation"
         em.set_content(content)
-
-        context = ssl.create_default_context()
-
-        with smtplib.SMTP_SSL('smtp.gmail.com', 465, context=context) as smtp:
-            smtp.login(email_sender, email_password)
-            smtp.sendmail(email_sender, email_receiver, em.as_string())
-
-        print(f"Sent booking confirmation to {email_receiver} via email")
 
     elif routing_key == "booking_rejected.notification":
         # Send a notification to the buyer that schedule needs to be rebooked because agent rejected
@@ -90,17 +80,10 @@ def processNotification(routing_key, body):
         Best regards, \n
         G2T4 Haven Team
         """
-        # em['From'] = email_sender
+
         em['To'] = email_receiver
         em['Subject'] = "Booking Rejected"
         em.set_content(content)
-
-        context = ssl.create_default_context()
-
-        with smtplib.SMTP_SSL('smtp.gmail.com', 465, context=context) as smtp:
-            smtp.login(email_sender, email_password)
-            smtp.sendmail(email_sender, email_receiver, em.as_string())
-        print(f"Sent listing confirmation to {email_receiver} via email")
 
     elif routing_key == "listing.notification":
         # Send a notification to the seller that the listing has been uploaded successfully
@@ -114,21 +97,16 @@ def processNotification(routing_key, body):
         Best regards, \n
         G2T4 Haven Team
         """
-        # em['From'] = email_sender
         em['To'] = email_receiver
         em['Subject'] = "Property Listed"
         em.set_content(content)
 
-        context = ssl.create_default_context()
-
-        with smtplib.SMTP_SSL('smtp.gmail.com', 465, context=context) as smtp:
-            smtp.login(email_sender, email_password)
-            smtp.sendmail(email_sender, email_receiver, em.as_string())
-        print(f"Sent listing confirmation to {email_receiver} via email")
-
     else:
         # bidding.notification
         property_name= notification['property_name']
+        option_fee = notification['option_fee']
+        payment_URL = f"http://localhost:8080/optionfee={option_fee}"
+        print(option_fee)
         content = f"""
         Hey {name}, \n
         I am writing to inform you that you are the highest bidder for the property. Congratulations on winning the bid! \n
@@ -136,9 +114,9 @@ def processNotification(routing_key, body):
         Here are the details of your bid: \n
 
         Property Title: {property_name}  \n
-        Bid Amount: [insert bid amount here] \n
+        Option Fee: {option_fee} \n
 
-        As the highest bidder, you are now required to proceed with the payment for the property within the next [insert payment duration here] days. You can make the payment by [insert payment method here]. \n
+        As the highest bidder, you are now required to proceed with the payment for the property within the next [insert payment duration here] days. You can make the payment by {payment_URL}. \n
 
         Please note that if you fail to make the payment within the specified time, we reserve the right to offer the property to the next highest bidder or relist it for auction. \n
 
@@ -148,17 +126,17 @@ def processNotification(routing_key, body):
         Best regards, \n
         G2T4 Haven Team
         """
-        # em['From'] = email_sender
         em['To'] = email_receiver
         em['Subject'] = "Congratulations! You are the highest bidder for the property"
         em.set_content(content)
 
-        context = ssl.create_default_context()
-
-        with smtplib.SMTP_SSL('smtp.gmail.com', 465, context=context) as smtp:
-            smtp.login(email_sender, email_password)
-            smtp.sendmail(email_sender, email_receiver, em.as_string())
-        print(f"Sent bidding results to {email_receiver} via email")
+    message_string = em.as_string()
+    context = ssl.create_default_context()
+    
+    with smtplib.SMTP_SSL('smtp.gmail.com', 465, context=context) as smtp:
+        smtp.login(email_sender, email_password)
+        smtp.sendmail(email_sender, email_receiver, message_string)
+    print(f"Sent bidding results to {email_receiver} via email")
 
     return
 
