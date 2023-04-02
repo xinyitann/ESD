@@ -33,11 +33,13 @@ npm run serve
 
 ## Email
 
-## PayPal API
-Client ID is stored in an environment variable in .env
+## Google Calendar API
 
 ## Google Map API
 API Key is stored in an environment variable in .env
+
+## PayPal API
+Client ID is stored in an environment variable in .env
 
 ## OneMap API
 Access token is stored in an environment variable in .env
