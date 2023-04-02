@@ -100,7 +100,7 @@ export default {
     //   });
 
     try {
-      var get_option_fee_url = "http://localhost:5002/auctions/option_fee/" + String(this.auction_id);
+      var get_option_fee_url = "http://localhost:5002/auctions/option_fee/" + String(this.optionFee);
       var response = await fetch(get_option_fee_url);
 
       if (!response.ok) {
@@ -128,10 +128,9 @@ export default {
             return actions.order.create({
               purchase_units: [
                 {
-                  description: this.product.description,
                   amount: {
                     currency_code: "USD",
-                    value: this.product.price
+                    value: this.optionFee
                   }
                 }
               ]
@@ -139,7 +138,6 @@ export default {
           },
           onApprove: async (data, actions) => {
             const order = await actions.order.capture();
-            this.paidFor = true;
             console.log(order);
           },
           onError: err => {
