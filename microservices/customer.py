@@ -140,6 +140,23 @@ def delete_customer(customer_id):
         }
     ), 404
 
+@app.route("/customer/get_id_by_email/<string:email>")
+def find_customer_by_email(email):
+    customer = Customer.query.filter_by(email=email).first()
+    if customer:
+        return jsonify(
+            {
+                "code": 200,
+                "data": customer.json()
+            }
+        )
+    return jsonify(
+        {
+            "code": 404,
+            "message": "customer not found."
+        }
+    ), 404
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5700, debug=True)
