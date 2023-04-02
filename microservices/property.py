@@ -1,3 +1,4 @@
+from app import app, db
 from flask import Flask, request, jsonify
 import mysql.connector
 import base64
@@ -7,12 +8,11 @@ import PIL
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from os import environ
-import agent
-import customer
+from agent import Agent
+from customer import Customer
+from auctionService import AuctionService
 import os
 from auctionService import auctionService
-
-from app import app, db
 
 # Import the Image module from the PIL library
 
