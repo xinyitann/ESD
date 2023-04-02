@@ -50,8 +50,8 @@ def processMakeBooking(data):
     print('agent result:', agent_result)
 
     #invoke property microservice
-    property_URL = property_URL + "/" + str(data['property_id'])
-    property_result = invoke_http(property_URL, method='GET', json=data)
+    get_property_URL = property_URL + "/" + str(data['property_id'])
+    property_result = invoke_http(get_property_URL, method='GET', json=data)
     if property_result['code'] not in range(200,300):
         return 'Fail to add booking (property microservice)'
     print('property result:', property_result)
