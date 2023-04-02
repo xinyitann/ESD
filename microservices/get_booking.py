@@ -11,7 +11,7 @@ app = Flask(__name__)
 CORS(app)
 
 booking_URL = environ.get('booking_URL') or "http://localhost:5005/booking"
-property_URL = environ.get('property_URL') or "http://localhost:5001/property"
+property_URL = environ.get('property_URL') or "http://localhost:5001/property/"
 customer_URL = environ.get('customer_URL') or "http://localhost:5700/customer/"
 
 
@@ -78,11 +78,11 @@ def processGetData(data):
     ans_dic['code'] = 200
     return ans_dic
 
-@app.route("/get_booking_extra_info/<customer_id>")  
-def get_info(customer_id):
+@app.route("/get_booking_extra_info/<customer_id>/<property_id>")  
+def get_info(customer_id,property_id):
     if True:
         try:
-            result = ProcessData(customer_id)
+            result = ProcessData(customer_id,property_id)
             if isinstance(result, str):
                 return result
             return jsonify(result), result['code']
@@ -99,9 +99,9 @@ def get_info(customer_id):
             }), 500
     
 
-def ProcessData(customer_id):
+def ProcessData(customer_id,property_id):
     customer_info = customer_URL + customer_id
-    property_info = property_URL + "/details/" + customer_id
+    property_info = property_URL + property_id
     customer_result = invoke_http(customer_info, method='GET')
     property_result = invoke_http(property_info, method='GET')
     print(customer_result)

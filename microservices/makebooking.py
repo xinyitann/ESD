@@ -43,15 +43,15 @@ def make_booking():
 def processMakeBooking(data):
     get_all_booking_URL = booking_URL + "/pending"
     #invoke agent microservice
-    get_agent_URL = agent_URL + str(data['agent_id'])
+    get_agent_URL = agent_URL + "/" + str(data['agent_id'])
     agent_result = invoke_http(get_agent_URL, method='GET', json=data)
     if agent_result['code'] not in range(200,300):
         return 'Fail to add booking (agent microservice)'
     print('agent result:', agent_result)
 
     #invoke property microservice
-    property_URL = property_URL + str(data['property_id'])
-    property_result = invoke_http(property_URL, method='GET', json=data)
+    get_property_URL = property_URL + "/" + str(data['property_id'])
+    property_result = invoke_http(get_property_URL, method='GET', json=data)
     if property_result['code'] not in range(200,300):
         return 'Fail to add booking (property microservice)'
     print('property result:', property_result)

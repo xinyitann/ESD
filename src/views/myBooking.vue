@@ -203,7 +203,8 @@ name: 'MyBookingPage',
 
         for(let item of all_list){
             let customer_id = item['customer_id']
-            const response2 = await fetch(`http://127.0.0.1:5102/get_booking_extra_info/${customer_id}`)
+            let property_id = item['property_id']
+            const response2 = await fetch(`http://127.0.0.1:5102/get_booking_extra_info/${customer_id}/${property_id}`)
             const data2 = await response2.json();  
             item['address'] = data2['address']
             item['customer_name'] = data2['customer_name']
@@ -241,6 +242,11 @@ name: 'MyBookingPage',
     width: 30%;
 }
 </style>
+
+
+
+
+
 
 
 
