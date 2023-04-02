@@ -4,8 +4,8 @@
             <div class="card-body shadow " style="padding-top: 0px;padding-left: 0px;padding-right: 0px;">
                 <div class="carousel slide" data-bs-ride="false" :id="carouselIdStr">
                     <div class="carousel-inner">
-                        <div class="carousel-item active"><img class="w-100 d-block fit-cover" :src=getimage(imagename2) alt="Slide Image" ></div>
-                        <div class="carousel-item"><img class="w-100 d-block" v-bind:src=getimage(imagename) alt="Slide Image"></div>
+                        <div class="carousel-item active"><img class="w-100 d-block fit-cover" :src=getimage(property_image) alt="Slide Image" ></div>
+                        <!-- <div class="carousel-item"><img class="w-100 d-block" v-bind:src=getimage(property_image) alt="Slide Image"></div> -->
                         <!-- <div class="carousel-item"><img class="w-100 d-block" src="../assets/room2.jpg" alt="Slide Image"></div> -->
                     </div>
                     <div>
@@ -20,8 +20,8 @@
                     </div>
                     <ol class="carousel-indicators">
                         <li :data-bs-target="carouselHrefStr" data-bs-slide-to="0" class="active"></li>
-                        <li :data-bs-target="carouselHrefStr" data-bs-slide-to="1"></li>
-                        <li :data-bs-target="carouselHrefStr" data-bs-slide-to="2"></li>
+                        <!-- <li :data-bs-target="carouselHrefStr" data-bs-slide-to="1"></li>
+                        <li :data-bs-target="carouselHrefStr" data-bs-slide-to="2"></li> -->
                     </ol>
                 </div>
                 <div class="card-body p-4">
@@ -61,9 +61,9 @@ export default {
         return{
             carouselHrefStr:"#carousel-" + this.carouselNum,
             carouselIdStr: "carousel-" + this.carouselNum,
-            imageSrc:'room2.jpg',
-            imagename: "room2.jpg",
-            imagename2: "room1.jpg"
+            imageSrc:'',
+            imagename: "",
+            imagename2: ""
 
         }
     },
@@ -74,13 +74,14 @@ export default {
       this.$router.push('/propertydetails')
 
     },
+    getimage(image){
+        return require('@/assets/' + image)
+    }
     // handleClick() {
     //   this.$emit('property-clicked', this.propertyId);
     // }
     },
-    getimage(image){
-        return require("@/assets/" + image)
-    }
+
     
 }
 </script>

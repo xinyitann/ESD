@@ -5,14 +5,14 @@
         <div class="carousel slide" data-bs-ride="false" id="carousel-1">
             <div class="carousel-inner">
                 <div class="carousel-item active">
+                    <img class="w-100 d-block"  :src=getimage(property_result.image) alt="Slide Image" width="1393" height="525">
+                </div>
+                <!-- <div class="carousel-item">
                     <img class="w-100 d-block" src="../assets/room2.jpg" alt="Slide Image" width="1393" height="525">
                 </div>
                 <div class="carousel-item">
                     <img class="w-100 d-block" src="../assets/room2.jpg" alt="Slide Image" width="1393" height="525">
-                </div>
-                <div class="carousel-item">
-                    <img class="w-100 d-block" src="../assets/room2.jpg" alt="Slide Image" width="1393" height="525">
-                </div>
+                </div> -->
             </div>
             <div>
                 <a class="carousel-control-prev" href="#carousel-1" role="button" data-bs-slide="prev">
@@ -47,7 +47,7 @@
                 <div class="card p-3">
                     <h5 class="card-title text-center my-2">Interested?</h5>
                     <div class="card-body">
-                        <p>{{ property_id_prop }}
+                        <p>
                             Contact {{ agent_result.name }} @ +65 {{ agent_result.phone }} / {{ agent_result.email }}
                         </p>
                         <div class="row">
@@ -141,6 +141,7 @@ name: 'PropertyDetailsPage',
             filtered_result:[],
             biddingStartTime:"",
             biddingEndTime:"",
+            imagename2: "",
 
             // customerId:1,
             // propertyId:1,
@@ -311,6 +312,9 @@ name: 'PropertyDetailsPage',
                 alert('bidding failed')
             }
                     },
+        getimage(image){
+        return require('@/assets/' + image)
+    }
 
 
 
