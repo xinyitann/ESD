@@ -27,7 +27,8 @@ npm run serve
 - [Express.js](https://expressjs.com/)
 
 # Beyond the lab
-- Use of multiple programming language for microservices (Python, Javascript)
+- Use of multiple programming language for microservices 
+Customer.py and agent.py use Javascript and the rest of the microservices use Python
 
 # External services used
 
@@ -35,7 +36,7 @@ npm run serve
 Email and Password is stored in environment variables in docker-compose.yml
 
 ## Google Calendar API
-API Key is stored in environment variables in docker-compose.yml
+API Key is stored in an environment variable in docker-compose.yml
 
 ## Google Map API
 API Key is stored in an environment variable in .env
