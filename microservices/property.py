@@ -23,17 +23,17 @@ from app import app, db
 #     # Save the image with the specified file name
 #     picture = picture.save("dolls.jpg") 
 
-def store_image(file):
-    UPLOAD_FOLDER = '/uploads'
-    # Check if the directory exists, create it if not
-    if not os.path.exists(UPLOAD_FOLDER):
-        os.makedirs(UPLOAD_FOLDER)
-    # Save the uploaded file to disk
-    # filename = secure_filename(file.filename)
-    file_path = os.path.join(UPLOAD_FOLDER, file.filename)
-    file.save(file_path)
-    # Return the file path
-    return file_path
+# def store_image(file):
+#     UPLOAD_FOLDER = '/uploads'
+#     # Check if the directory exists, create it if not
+#     if not os.path.exists(UPLOAD_FOLDER):
+#         os.makedirs(UPLOAD_FOLDER)
+#     # Save the uploaded file to disk
+#     # filename = secure_filename(file.filename)
+#     file_path = os.path.join(UPLOAD_FOLDER, file.filename)
+#     file.save(file_path)
+#     # Return the file path
+#     return file_path
  
 # Create a cursor object
 # def get_image(c_file):
@@ -285,7 +285,7 @@ def create_property():
     # print("Data:", data)
     # print("Agent ID:", data['agent_id'])
     # print("Customer ID:", data['customer_id'])
-    print(store_image(data['image']))
+    # print(store_image(data['image']))
     
     property = Property(
         auction_id=data['auction_id'],
