@@ -35,8 +35,8 @@ def get_profile(id,type):
             }), 500
 
 def processMakeBookingg(id,type):
-    get_agent_URL = agent_URL + str(id)
-    get_customer_URL = customer_URL + str(id)
+    get_agent_URL = agent_URL + "/"+ str(id)
+    get_customer_URL = customer_URL +"/" + str(id)
     #invoke agent microservice
     if type == 'agent':
         agent_result = invoke_http(get_agent_URL, method='GET')
