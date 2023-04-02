@@ -119,7 +119,7 @@ def delete_agent(agent_id):
     ), 404
 
 @app.route("/agent/get_id_by_email/<string:email>")
-def find_customer_by_email(email):
+def find_agent_by_email(email):
     agent = Agent.query.filter_by(email=email).first()
     if agent:
         return jsonify(
