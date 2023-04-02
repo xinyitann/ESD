@@ -10,6 +10,7 @@ from os import environ
 import agent
 import customer
 import os
+from auctionService import auctionService
 
 from app import app, db
 
