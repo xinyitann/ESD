@@ -27,7 +27,8 @@ npm run serve
 - [Express.js](https://expressjs.com/)
 
 # Beyond the lab
-- Use of multiple programming language for microservices 
+
+## Use of multiple programming language for microservices 
 Customer.py and agent.py use Javascript and the rest of the microservices use Python
 
 # External services used
