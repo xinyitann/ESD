@@ -44,6 +44,7 @@ def processNotification(routing_key, body):
 
     name = notification['name']
     email_receiver = notification['email']
+    em['From'] = email_sender
 
     # Check the routing key to determine what type of notification to send
     if routing_key == "booking_accepted.notification":
@@ -61,7 +62,7 @@ def processNotification(routing_key, body):
         Best regards, \n
         G2T4 Haven Team
         """
-        em['From'] = email_sender
+        # em['From'] = email_sender
         em['To'] = email_receiver
         em['Subject'] = "Booking Confirmation"
         em.set_content(content)
@@ -89,7 +90,7 @@ def processNotification(routing_key, body):
         Best regards, \n
         G2T4 Haven Team
         """
-        em['From'] = email_sender
+        # em['From'] = email_sender
         em['To'] = email_receiver
         em['Subject'] = "Booking Rejected"
         em.set_content(content)
@@ -113,7 +114,7 @@ def processNotification(routing_key, body):
         Best regards, \n
         G2T4 Haven Team
         """
-        em['From'] = email_sender
+        # em['From'] = email_sender
         em['To'] = email_receiver
         em['Subject'] = "Property Listed"
         em.set_content(content)
@@ -147,7 +148,7 @@ def processNotification(routing_key, body):
         Best regards, \n
         G2T4 Haven Team
         """
-        em['From'] = email_sender
+        # em['From'] = email_sender
         em['To'] = email_receiver
         em['Subject'] = "Congratulations! You are the highest bidder for the property"
         em.set_content(content)
