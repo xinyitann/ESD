@@ -9,13 +9,13 @@
       </button>
       <div class="collapse navbar-collapse justify-content-end" id="navbarText">
         <ul class="navbar-nav me-2">
-          <li v-if="user_type =='customer'" class="nav-item mx-2">
+          <li v-if="user_type =='user'" class="nav-item mx-2">
             <router-link to="/properties" class="nav-link">Discover</router-link>
           </li>
           <li v-if="user_type != ''" class="nav-item mx-2">
             <router-link to="/mybooking" class="nav-link">My Bookings</router-link>
           </li>
-          <li v-if="user_type=='customer'" class="nav-item mx-2">
+          <li v-if="user_type=='user'" class="nav-item mx-2">
             <router-link to="/mybids" class="nav-link">My Bids</router-link>
           </li>
           <li v-if="user_type=='agent'" class="nav-item mx-2">

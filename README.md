@@ -27,17 +27,23 @@ npm run serve
 - [Express.js](https://expressjs.com/)
 
 # Beyond the lab
-- Use of multiple programming language for microservices (Python, Javascript)
+
+## Use of multiple programming language for microservices 
+Customer.py and agent.py use Javascript and the rest of the microservices use Python
 
 # External services used
 
-## Email
+## Gmail SMTP Service
+Email and Password is stored in environment variables in docker-compose.yml
 
-## PayPal API
-Client ID is stored in an environment variable in .env
+## Google Calendar API
+API Key is stored in an environment variable in docker-compose.yml
 
 ## Google Map API
 API Key is stored in an environment variable in .env
+
+## PayPal API
+Client ID is stored in an environment variable in .env
 
 ## OneMap API
 Access token is stored in an environment variable in .env

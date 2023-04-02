@@ -54,7 +54,7 @@
       console.log(this.user_type)
 
       try {
-        var get_property_url = "http://localhost:5029/getbids/" + String(1);
+        var get_property_url = "http://localhost:5029/getbids/" + String(this.customer_id_prop);
         var response = await fetch(get_property_url);
 
         if (!response.ok) {
