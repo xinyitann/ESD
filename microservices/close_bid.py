@@ -115,21 +115,27 @@ def get_highest_bid(close_bid):
     else:
         print('\n\n-----Calling Notification with routing_key=bidding.notification-----')
 
-        # Retrieve the property name associated with the auction ID
+        # Retrieve the property name and propertyID associated with the auction ID
         auction_id = close_bid["auction_id"]
-        get_property_name_URL = property_URL + "/name/" + str(auction_id)
-        property_name_result = invoke_http(get_property_name_URL, method='GET', json=None)
+        get_property_details_URL = property_URL + "/details/auction/" + str(auction_id)
+        property_name_result = invoke_http(get_property_details_URL, method='GET', json=None)
 
         # Retrieve the customer details associated with the highest bid
         customer_id = higest_bid_result["data"]
         get_customer_URL = customer_URL + "/" + str(customer_id)
         customer_result = invoke_http(get_customer_URL, method='GET', json=None)
 
+        # Retrieve option fee
+        get_option_fee_URL = auction_URL + "/option_fee/" + str(auction_id)
+        option_fee_result = invoke_http(get_option_fee_URL, method='GET', json=None)
+
         #Create the name_email dictionary with the customer name, email, and property name
         name_email_property = {
             'name' : customer_result['data']['name'],
             'email' : customer_result['data']['email'],
-            'property_name' : property_name_result['data']['property_name']
+            'property_name' : property_name_result['data']['property']['name'],
+            'property_id' : property_name_result['data']['property']['property_id'],
+            'option_fee' : option_fee_result['data']          
         }
 
         amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="bidding.notification", 
