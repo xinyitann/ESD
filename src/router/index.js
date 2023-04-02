@@ -46,7 +46,7 @@ const routes = [
         component: BookingPage
     },
     {
-        path: '/payment',
+        path: '/payment/optionfee=:option_fee',
         name: 'Payment',
         component: PaymentPage
     },

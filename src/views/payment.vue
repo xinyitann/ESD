@@ -70,8 +70,9 @@ export default {
         expiration: "",
         cvv: "",
         postalCode: "",
-        auction_id:[],
-        product:[]
+        optionFee: this.$route.params.option_fee
+        // auction_id:[],
+        // product:[]
     };
   },
   mounted: function() {
