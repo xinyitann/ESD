@@ -11,7 +11,7 @@ import AddListingPage from "../views/addListing.vue"
 import MyBookingPage from "../views/myBooking.vue"
 import MyPropertyPage from "../views/myProperty.vue"
 import MyBidsPage from "../views/myBids.vue"
-
+import PaymentSuccessPage from "../views/paymentSuccess.vue"
 
 
 const routes = [
@@ -74,6 +74,11 @@ const routes = [
         path: "/mybids",
         name: "MyBids",
         component: MyBidsPage,
+    },
+    {
+        path: "/paymentsuccess",
+        name: "PaymentSuccess",
+        component: PaymentSuccessPage,
     }
 ]
 
