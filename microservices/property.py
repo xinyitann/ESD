@@ -12,6 +12,7 @@ from agent import Agent
 from customer import Customer
 from auctionService import AuctionService
 import os
+from auctionService import auctionService
 
 # Import the Image module from the PIL library
 
