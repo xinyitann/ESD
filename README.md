@@ -45,6 +45,10 @@ API Key is stored in an environment variable in .env
 ## PayPal API
 Client ID is stored in an environment variable in .env
 
+### Test customer account details
+- Email: john_doe_1979@personal.example.com
+- Password: R<Zl1dKC
+
 ## OneMap API
 Access token is stored in an environment variable in .env
 

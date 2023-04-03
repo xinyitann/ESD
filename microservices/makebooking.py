@@ -5,6 +5,9 @@ import os, sys
 from os import environ
 import requests
 from invokes import invoke_http
+import amqp_setup
+import pika
+import json
 
 app = Flask(__name__)
 CORS(app)
@@ -41,26 +44,64 @@ def make_booking():
     }), 400
 
 def processMakeBooking(data):
-
-    get_all_booking_URL = booking_URL
     #invoke agent microservice
-    get_agent_URL = agent_URL + str(data['agent_id'])
+    get_agent_URL = agent_URL + "/" + str(data['agent_id'])
     agent_result = invoke_http(get_agent_URL, method='GET', json=data)
     if agent_result['code'] not in range(200,300):
-        return 'Fail to add booking (agent microservice)'
+        error_message = {
+            "code": 400,
+            "message": "Fail to add booking (agent microservice)"
+        }
+        print('\n\n-----Publishing the error message with routing_key=make_booking.error-----')
+        amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="make_booking.error",
+                                            body=json.dumps(error_message),
+                                            properties=pika.BasicProperties(delivery_mode=2))
+        print("\nFail to add booking (agent microservice) published to the RabbitMQ Exchange.\n")
+
+        return {
+            "code": 400,
+            "message": "Fail to add booking (agent microservice)"
+        }
+
     print('agent result:', agent_result)
+    
     #invoke property microservice
-    get_property_URL = property_URL + str(data['property_id'])
+    get_property_URL = property_URL + "/" + str(data['property_id'])
     property_result = invoke_http(get_property_URL, method='GET', json=data)
     if property_result['code'] not in range(200,300):
-        return 'Fail to add booking (property microservice)'
+        error_message = {
+            "code": 400,
+            "message": "Fail to add booking (property microservice)"
+        }
+        print('\n\n-----Publishing the error message with routing_key=make_booking.error-----')
+        amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="make_booking.error",
+                                            body=json.dumps(error_message),
+                                            properties=pika.BasicProperties(delivery_mode=2))
+        print("\nFail to add booking (property microservice) published to the RabbitMQ Exchange.\n")
+
+        return {
+            "code": 400,
+            "message": "Fail to add booking (property microservice)"
+        }
+
     print('property result:', property_result)
-
     #invoke booking microservice
-    booking_result = invoke_http(get_all_booking_URL, method='POST', json=data)
+    booking_result = invoke_http(booking_URL, method='POST', json=data)
     if booking_result['code'] not in range(200,300):
-        return 'Fail to add booking (booking microservice)'
+        error_message = {
+            "code": 400,
+            "message": "Fail to add booking (booking microservice)"
+        }
+        print('\n\n-----Publishing the error message with routing_key=make_booking.error-----')
+        amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="make_booking.error",
+                                            body=json.dumps(error_message),
+                                            properties=pika.BasicProperties(delivery_mode=2))
+        print("\nFail to add booking (booking microservice) published to the RabbitMQ Exchange.\n")
 
+        return {
+            "code": 400,
+            "message": "Fail to add booking (booking microservice)"
+        }
     
     combine = {}
     for item in agent_result['data']:
