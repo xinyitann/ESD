@@ -113,7 +113,6 @@ app.put('/agent/:agent_id', function(req, res) {
     });
 });
 
-//DELETE AN AGENT
 // DELETE AN AGENT
 app.delete('/agent/:agent_id', function(req, res) {
     const agent_id = req.params.agent_id;
@@ -139,5 +138,27 @@ app.delete('/agent/:agent_id', function(req, res) {
                 "agent_id": agent_id
             }
         });
+    });
+});
+
+
+//GET AGENT'S ID FROM EMAIL
+app.get('/agent/get_id_by_email/:email', function(req, res) {
+    const email = req.params.email;
+    con.query("SELECT * FROM agent WHERE email = ?", [email], function (err, result) {
+        if (err) throw err;
+
+        if (result.length > 0) {
+            const agent = new Agent(result[0].agent_id, result[0].name, result[0].phone, result[0].email);
+            res.json({
+                "code": 200,
+                "data": agent.json()
+            });
+        } else {
+            res.status(404).json({
+                "code": 404,
+                "message": "agent not found."
+            });
+        }
     });
 });

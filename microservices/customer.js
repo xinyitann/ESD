@@ -142,4 +142,25 @@ app.delete('/customer/:customer_id', function(req, res) {
 });
 
 
+//GET CUSTOMER'S ID FROM EMAIL
+app.get('/customer/get_id_by_email/:email', function(req, res) {
+    const email = req.params.email;
+    con.query("SELECT * FROM customer WHERE email = ?", [email], function (err, result) {
+        if (err) throw err;
+
+        if (result.length > 0) {
+            const customer = new Customer(result[0].customer_id, result[0].name, result[0].phone, result[0].email);
+            res.json({
+                "code": 200,
+                "data": customer.json()
+            });
+        } else {
+            res.status(404).json({
+                "code": 404,
+                "message": "customer not found."
+            });
+        }
+    });
+});
+
 
