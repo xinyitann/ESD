@@ -21,19 +21,21 @@
                         <table class="table">
                             <thead>
                                 <tr>
-                                    <th scope="col">Customer Name</th>
+                                    <th scope="col">Name</th>
                                     <th scope="col">Address</th>
                                     <th scope="col">Time</th>
-                                    <th scope="col">Confirmation</th>
+                                    <th v-if="user_type=='agent'" scope="col">Confirmation</th>
+                                    <th v-else></th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr v-for="item in pending" :key="item" class="table-style">
-                                    <td>{{item.customer_name}}</td>
+                                    <td>{{item.name}}</td>
                                     <td>{{item.address}}</td>
                                     <td width="20%">{{item.booking_time }}</td>
                                     <td>
-                                        <div class="col" style="width:auto">
+                                        
+                                        <div v-if="user_type=='agent'" class="col" style="width:auto">
                                             <div class="row">
                                                 <button type="button" class="btn btn-success bookingbutton" @click="accept(item.booking_id)">accept</button>
                                             </div>
@@ -41,6 +43,9 @@
                                             <div class="row">
                                                 <button type="button" class="btn btn-danger bookingbutton" @click="reject(item.booking_id)">reject</button>
                                             </div>
+                                        </div>
+                                        <div v-else class="col" style="width:auto">
+        
                                         </div>
                                     </td>
                                 </tr>
@@ -52,7 +57,7 @@
                             <thead>
                                 <tr>
                                 
-                                    <th scope="col">Customer Name</th>
+                                    <th scope="col">Name</th>
                                     <th scope="col">Address</th>
                                     <th scope="col">Time</th>
                                 </tr>
@@ -60,7 +65,7 @@
                             <tbody>
                                 <tr class="table-style" v-for="item in accepted" :key="item">
                             
-                                    <td>{{item.customer_name}}</td>
+                                    <td>{{item.name}}</td>
                                 <td>{{item.address}}</td>
                                 <td width="20%">{{item.booking_time }}</td>
                                 </tr>
@@ -71,7 +76,7 @@
                         <table class="table">
                             <thead>
                                 <tr>
-                                    <th scope="col">Customer Name</th>
+                                    <th scope="col">Name</th>
                                     <th scope="col">Address</th>
                                     <th scope="col">Time</th>
                                 </tr>
@@ -79,7 +84,7 @@
                             <tbody>
                                 <tr class="table-style" v-for="item in rejected" :key="item">
 
-                                    <td>{{item.customer_name}}</td>
+                                    <td>{{item.name}}</td>
                                 <td>{{item.address}}</td>
                                 <td width="20%">{{item.booking_time }}</td>
                                 </tr>
@@ -100,7 +105,9 @@ name: 'MyBookingPage',
     components: {
     },
     props: [
-        'agent_id_prop'
+        'agent_id_prop',
+        'customer_id_prop',
+        'user_type'
     ],
     data(){
         return{
@@ -141,7 +148,8 @@ name: 'MyBookingPage',
                     let indexOf = this.pending.indexOf(item)
                     this.pending.splice(indexOf,1)
                     this.accepted.push(item)
-                    break
+                    console.log(this.pending)
+                    console.log(this.accepted)
                 }
             }
         },   
@@ -171,58 +179,102 @@ name: 'MyBookingPage',
                     redirect: 'follow'
                     };
                     await fetch("http://127.0.0.1:5101/accept_booking", requestOptions)
-
                     let indexOf = this.pending.indexOf(item)
                     this.pending.splice(indexOf,1)
                     this.rejected.push(item)
-                    break
                 }
             }
         } 
         },
 
     async created() {
-        var URLL = `http://127.0.0.1:5102/get_booking/` + this.agent_id_prop
-        const response1 = await fetch(URLL);
-        const data = await response1.json(); 
-        let pending_data = data['pending']
-        let accepted_data = data['accepted']
-        let rejected_data = data['rejected']
-    
-        let all_list = pending_data.concat(accepted_data)
-        all_list = all_list.concat(rejected_data)
+        if(this.user_type == 'agent'){
+            let URLL = `http://127.0.0.1:5102/get_booking/` + this.agent_id_prop + '/' + this.user_type
+            const response1 = await fetch(URLL);
+            const data = await response1.json();
+            let pending_data = data['pending']
+            let accepted_data = data['accepted']
+            let rejected_data = data['rejected']
+        
+            let all_list = pending_data.concat(accepted_data)
+            all_list = all_list.concat(rejected_data)
 
-        for(let item of all_list){
-            let start_time = item['datetimestart'].split(' ')
-            start_time = start_time.slice(0,5)
-            start_time = start_time.join(' ')
-            let end_time = item['datetimeend'].split(' ')[4]
-            let final_time = start_time + ' - ' + end_time
-            item['booking_time'] = final_time
-        }
+            for(let item of all_list){
+                let start_time = item['datetimestart'].split(' ')
+                start_time = start_time.slice(0,5)
+                start_time = start_time.join(' ')
+                let end_time = item['datetimeend'].split(' ')[4]
+                let final_time = start_time + ' - ' + end_time
+                item['booking_time'] = final_time
+            }
 
-        for(let item of all_list){
-            let customer_id = item['customer_id']
-            let property_id = item['property_id']
-            const response2 = await fetch(`http://127.0.0.1:5102/get_booking_extra_info/${customer_id}/${property_id}`)
-            const data2 = await response2.json();  
-            item['address'] = data2['address']
-            item['customer_name'] = data2['customer_name']
+            for(let item of all_list){
+                let customer_id = item['customer_id']
+                let property_id = item['property_id']
+                const response2 = await fetch(`http://127.0.0.1:5102/get_booking_extra_customer/${customer_id}/${property_id}`)
+                const data2 = await response2.json();  
+                item['address'] = data2['address']
+                item['name'] = data2['customer_name']
+            }
+            console.log(all_list)
+        
+            for(let item of all_list){
+                if(item.status == 'pending'){
+                    this.pending.push(item)
+                }
+                else if(item.status == 'accepted'){
+                    this.accepted.push(item)
+                }
+                else{
+                    this.rejected.push(item)
+                }
+            }
+            console.log(all_list)
         }
-        console.log(all_list)
-     
-        for(let item of all_list){
-            if(item.status == 'pending'){
-                this.pending.push(item)
+        else{
+            let URLL = `http://127.0.0.1:5102/get_booking/` + this.customer_id_prop + '/' + this.user_type
+            const response1 = await fetch(URLL);
+            const data = await response1.json(); 
+            let pending_data = data['pending']
+            let accepted_data = data['accepted']
+            let rejected_data = data['rejected']
+        
+            let all_list = pending_data.concat(accepted_data)
+            all_list = all_list.concat(rejected_data)
+
+            for(let item of all_list){
+                let start_time = item['datetimestart'].split(' ')
+                start_time = start_time.slice(0,5)
+                start_time = start_time.join(' ')
+                let end_time = item['datetimeend'].split(' ')[4]
+                let final_time = start_time + ' - ' + end_time
+                item['booking_time'] = final_time
             }
-            else if(item.status == 'accepted'){
-                this.accepted.push(item)
+
+            for(let item of all_list){
+                let agent_id = item['agent_id']
+                let property_id = item['property_id']
+                const response2 = await fetch(`http://127.0.0.1:5102/get_booking_extra_agent/${agent_id}/${property_id}`)
+                const data2 = await response2.json();  
+                item['address'] = data2['address']
+                item['name'] = data2['agent_name']
             }
-            else{
-                this.rejected.push(item)
+            console.log(all_list)
+        
+            for(let item of all_list){
+                if(item.status == 'pending'){
+                    this.pending.push(item)
+                }
+                else if(item.status == 'accepted'){
+                    this.accepted.push(item)
+                }
+                else{
+                    this.rejected.push(item)
+                }
             }
+            console.log(all_list)
         }
-        console.log(all_list)
+        
     }
 }
 
@@ -242,7 +294,6 @@ name: 'MyBookingPage',
     width: 30%;
 }
 </style>
-
 
 
 
