@@ -9,7 +9,7 @@ app.listen(5700, function() {
 });
 
 var mysql = require('mysql2');
-// const con = mysql.createConnection(process.env.dbURL);
+const con = mysql.createConnection(process.env.dbURL);
 
 // var con = mysql.createConnection({
 //     host: "host.docker.internal",
