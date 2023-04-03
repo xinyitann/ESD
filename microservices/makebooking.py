@@ -108,9 +108,12 @@ def processMakeBooking(data):
         if item not in combine:
             combine[item] = agent_result['data'][item]
     for item in property_result['data']:
+        if item == 'name':
+            combine['property_name'] = property_result['data'][item]
         if item not in combine:
             combine[item] = property_result['data'][item]
     combine['code'] = 200
+    print(combine)
     return combine
 
 
@@ -118,4 +121,3 @@ if __name__ == "__main__":
     print("This is flask " + os.path.basename(__file__) +
           " for placing an order...")
     app.run(host="0.0.0.0", port=5800, debug=True)
-

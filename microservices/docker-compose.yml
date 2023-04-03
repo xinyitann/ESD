@@ -360,6 +360,7 @@ services:
       property_URL: http://property:5001/property
       booking_URL: http://booking:5005/booking
       customer_URL: http://customer:5700/customer
+      agent_URL: http://agent:5003/agent
       PYTHONUNBUFFERED: 1
     ports:
       - "5102:5102"
