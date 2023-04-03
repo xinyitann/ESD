@@ -94,7 +94,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal" style="background-color: #6d8363; color: white;" >Close</button>
-                    <button type="button" class="btn btn-primary ms-2" style="background-color: #447098; color: white;" @click="editListing(jsonBodyEdit)">Save changes</button>
+                    <button type="button" class="btn btn-primary ms-2" style="background-color: #447098; color: white;" @click="editListing(jsonBodyEdit)"  data-bs-dismiss="modal">Save changes</button>
                 </div>
                 </div>
             </div>
