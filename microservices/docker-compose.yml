@@ -16,7 +16,7 @@ services:
     image: faithanggg/agent:esd
     restart: always
     environment:
-      dbURL: mysql+mysqlconnector://is213@host.docker.internal:3306/property_management
+      dbURL: mysql2://is213@host.docker.internal:3306/property_management
       PYTHONUNBUFFERED: 1
     ports:
       - "5003:5003"
@@ -113,7 +113,7 @@ services:
     image: faithanggg/customer:esd
     restart: always
     environment:
-      dbURL: mysql+mysqlconnector://is213@host.docker.internal:3306/property_management
+      dbURL: mysql2://is213@host.docker.internal:3306/property_management
       PYTHONUNBUFFERED: 1
     ports:
       - "5700:5700"
