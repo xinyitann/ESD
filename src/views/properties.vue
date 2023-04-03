@@ -108,21 +108,7 @@ export default {
     get_submit_data(data){
           this.selected_property_id = data
     }
-    // redirectUser () {
-    //   //route to agent
-    //   if (document.getElementById('password_input').value == 1234) {
-    //     this.$router.push('/')
-    //     // route to user
-    //   } else if (document.getElementById('password_input').value == 123) {
-    //     this.$router.push('/')
-    //   }
-    // },
-    // submitData(){
-    //   this.$emit('passdata', this.cur_id)
-    // },
-    // toProfile(){
-    //   this.$router.push('/profile')
-    // }
+
   },
   
   watch: {
