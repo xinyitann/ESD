@@ -121,7 +121,7 @@ def get_highest_bid(close_bid):
         property_name_result = invoke_http(get_property_details_URL, method='GET', json=None)
 
         # Retrieve the customer details associated with the highest bid
-        customer_id = higest_bid_result["data"]
+        customer_id = higest_bid_result["customer id"]
         get_customer_URL = customer_URL + "/" + str(customer_id)
         customer_result = invoke_http(get_customer_URL, method='GET', json=None)
 
@@ -135,7 +135,7 @@ def get_highest_bid(close_bid):
             'email' : customer_result['data']['email'],
             'property_name' : property_name_result['data']['property']['name'],
             'property_id' : property_name_result['data']['property']['property_id'],
-            'option_fee' : option_fee_result['data']          
+            'option_fee' : option_fee_result['option fee']          
         }
 
         amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="bidding.notification", 
