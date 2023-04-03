@@ -88,7 +88,7 @@
                         </div> -->
                         <div class="col">
                             <p class="text-center fw-bold">
-                                ${{gethighestbid()}}
+                                ${{highestBid}}
                             </p>
                             <p class="d-flex justify-content-center">
                                 <small class="text-body-secondary">Highest Bid</small>
@@ -145,34 +145,19 @@ name: 'PropertyDetailsPage',
             // customerId:1,
             // propertyId:1,
             bidAmount:0,
-            bidSuccess:false
+            bidSuccess:false,
+            highestBid: 0,
 
         }
     },
 
     async created() {
 
-                // on Vue instance created, load the book list
-            this.findpropertydetails();
-            this.findagentdetails();
-            this.findauctiondetails();
-            console.log(this.property_result.auction_id)
-
-            try {
-                var get_property_url = "http://localhost:5002/auctions/" + this.property_result.auction_id;
-                var response = await fetch(get_property_url);
-
-                if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-                }
-
-                var data = await response.json();
-                console.log(data)
-
-            } catch (error) {
-                console.error(error);
-            }
-        },
+        // on Vue instance created, load the book list
+        this.findpropertydetails();
+        this.findagentdetails();
+        this.findauctiondetails();
+    },
                 
     
     computed: {
@@ -214,8 +199,8 @@ name: 'PropertyDetailsPage',
             } else {
             this.property_result = data.data.property_result.data;
             console.log(this.property_result)
+            this.findHighestBid()
 
-        
             this.transformObject(this.property_result)
             }
         })
@@ -331,17 +316,34 @@ name: 'PropertyDetailsPage',
             else{
                 alert('Bid creation failed')
             }
-                    },
+        },
         getimage(image){
         return require('@/assets/' + image)
-    },
+        },
 
-    
+        async findHighestBid(){
+            console.log(this.property_result.auction_id)
+            console.log(this.property_result)
+            console.log('hgoebgbekjg ')
 
+            try {
+                var get_property_url = "http://localhost:5002/auctions/" + String(this.property_result.auction_id);
+                var response = await fetch(get_property_url);
 
+                if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+                }
 
+                var data = await response.json();
+                console.log(data)
 
-}
+            } catch (error) {
+                console.error(error);
+            }
+            console.log('-------')
+        }
+
+    }
 };
 
 </script>
