@@ -157,7 +157,7 @@ name: 'AddListingPage',
             const data_fetch = await fetch("http://localhost:5200/add_listing", requestOptions)
             console.log(data_fetch)
             if(data_fetch['status']==201){
-                alert("listing has been created")
+                alert("Listing has been successfully created")
             }
         },
         handleFileUpload(event) {

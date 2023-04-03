@@ -140,10 +140,10 @@ name: 'BookingPage',
             this.check = await data_fetch.json()
             console.log(data_fetch)
             if (data_fetch['status'] == 200){
-                alert('booking has been created')
+                alert('Booking has been successfully created')
             } 
             else{
-                alert('booking creation failed')
+                alert('Booking creation failed')
             }
                     },   
     },

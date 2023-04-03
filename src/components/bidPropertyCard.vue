@@ -98,9 +98,11 @@ export default {
                 });
                 const result = await response.json();
                 console.log(result);
+                alert("Bid has been retracted")
                 // location.reload();
             } catch (error) {
                 console.error(error);
+                alert("Retraction of bid has failed")
             }
         },
         async updateBid(bid_id, updatedBidData){
@@ -118,9 +120,11 @@ export default {
                 const response = await fetch(update_url, options);
                 const result = await response.json();
                 console.log(result)
+                alert("Bid details has been updated.")
 
             } catch (error) {
                 console.error(error);
+                alert("Bid detail update has failed")
             }
         },
     }

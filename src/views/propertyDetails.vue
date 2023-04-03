@@ -305,10 +305,10 @@ name: 'PropertyDetailsPage',
             this.check = await data_fetch.json()
             console.log(data_fetch)
             if (data_fetch['status'] == 201){
-                alert('bidding has been created')
+                alert('Bid has been submitted')
             } 
             else{
-                alert('bidding failed')
+                alert('Bid creation failed')
             }
                     },
         getimage(image){
