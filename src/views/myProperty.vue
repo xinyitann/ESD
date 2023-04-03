@@ -41,7 +41,7 @@ name: 'MyPropertyPage',
         property_list: [],
         message: "",
         search: "",
-        agent_id:1
+        agent_id:this.agent_id_prop
     };
   },
 
@@ -74,12 +74,26 @@ name: 'MyPropertyPage',
             console.log(this.message + error);
         });
     },
+    get_submit_data(data){
+          this.selected_property_id = data
+    }
   },
   mounted() {
                 // on Vue instance created, load the book list
                 this.findproperties();
                 
             },
+    watch: {
+    // whenever question changes, this function will run
+    selected_property_id(new_id) {
+      this.$emit('submit_property_data', new_id)
+      console.log('new_id'+new_id)
+
+    }
+  },
+  props:[
+    'agent_id_prop',
+  ],
 
 }
 
