@@ -59,15 +59,17 @@ def make_bidding():
             
             if auction_result['code'] == 201:
                 print("auction_id", auction_result['data']["auction_result"]["data"])
-                auction_id = auction_result["data"]['auction_result']["data"]
+                auction_id = auction_result["data"]['auction_result']["data"]["auction_id"]
 
                 print("bid_details ", bid_details)
+                print("auctin_id" ,auction_id)
 
 
                 # check if the bid amount is more than the starting price
                 starting_price_result = get_starting_price(auction_id)
+                print("starting_price_result", starting_price_result)
 
-                starting_price = starting_price_result['data']["starting_price_result"]["data"]
+                starting_price = starting_price_result["data"]["starting_price_result"]["starting price"]
 
                 if bid_details["bid_amount"] > starting_price:
                     if "bid_id" in bid_details:
@@ -183,6 +185,7 @@ def get_auction_id(property_id):
 
 def get_starting_price(auction_id):
     print('\n-----Invoking auction microservice-----')
+    print(auction_id)
     starting_price_URL = auction_URL + "/starting_price/" + str(auction_id)
     # call the auction microservice to get the starting price of the bid
     starting_price_result = invoke_http(starting_price_URL, method='GET', json=None)
