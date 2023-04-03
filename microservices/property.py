@@ -52,8 +52,8 @@ class Property(db.Model):
     def json(self):
         return {"property_id": self.property_id, "agent_id": self.agent_id, "customer_id": self.customer_id, "name": self.name, "address": self.address, "postalcode": self.postalcode, "property_type": self.property_type, "square_feet": self.square_feet, "room": self.room, "facing": self.facing, "build_year": self.build_year, "estimated_cost": self.estimated_cost, "neighbourhood":self.neighbourhood,"image": self.image, "auction_id":self.auction_id}
     
-    # def json_without_image(self):
-    #     return {"property_id": self.property_id, "agent_id": self.agent_id, "customer_id": self.customer_id, "name": self.name, "address": self.address, "postalcode": self.postalcode, "property_type": self.property_type, "square_feet": self.square_feet, "room": self.room, "facing": self.facing, "build_year": self.build_year, "estimated_cost": self.estimated_cost, "neighbourhood":self.neighbourhood,"image": self.image, "auction_id":self.auction_id}
+    def json_without_image(self):
+        return {"property_id": self.property_id, "agent_id": self.agent_id, "customer_id": self.customer_id, "name": self.name, "address": self.address, "postalcode": self.postalcode, "property_type": self.property_type, "square_feet": self.square_feet, "room": self.room, "facing": self.facing, "build_year": self.build_year, "estimated_cost": self.estimated_cost, "neighbourhood":self.neighbourhood,"image": self.image, "auction_id":self.auction_id}
 
 @app.route("/property")
 def get_all():
@@ -186,7 +186,24 @@ def find_by_agent_id(agent_id):
         }
     ), 200
 
-
+@app.route("/property/details/<property_id>")
+def find_by_property_id_no_image(property_id):
+    # get the specific property (.first --> gets us the property if we dont have it we will get the list of property)
+    property_id = int(property_id)
+    property = Property.query.filter_by(property_id=property_id).first()
+    if property:
+        return jsonify(
+            {
+                "code": 200,
+                "data": property.json_without_image()
+            }
+        )
+    return jsonify(
+        {
+            "code": 404,
+            "message": "Property not found."
+        }
+    ), 404
 # by default it is GET (for other methods you need to specify)
 @app.route("/property", methods=['POST'])
 def create_property():

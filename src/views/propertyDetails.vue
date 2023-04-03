@@ -180,7 +180,7 @@ name: 'PropertyDetailsPage',
         console.log("here")
         // this.property_id_prop={{}}
         console.log("property_id:"+this.property_id_prop)
-        var search_url = get_all_URL + '/'+ this.property_id_prop +'/'+this.customer_id
+        var search_url = get_all_URL + '/'+ this.property_id_prop +'/'+this.customer_id_prop
         console.log(search_url)
         const response = fetch(search_url)
         .then((response) => response.json())
@@ -225,7 +225,7 @@ name: 'PropertyDetailsPage',
 
         findagentdetails() {
         console.log("here is agent")
-        var search_url = get_all_URL + '/'+ this.property_id_prop +'/'+this.customer_id
+        var search_url = get_all_URL + '/'+ this.property_id_prop +'/'+this.customer_id_prop
         console.log(search_url)
         const response = fetch(search_url)
         .then((response) => response.json())
