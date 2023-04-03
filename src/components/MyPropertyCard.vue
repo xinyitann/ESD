@@ -28,18 +28,74 @@
                     <h5 class="card-title my-3">{{ property_name }}</h5>
                     <p class="card-text">{{ property_add }}</p>
                     <!-- <p class="card-text">{{property_image}}</p> -->
-                    <p class="card-text">${{ estimated_cost }}</p>
+                    <p class="card-text">${{ property_estimated_cost }}</p>
 
-                        <div>
-                            <a class="btn btn-light float-end" type="button" style="background-color: #447098; color: white;" @click="closeBidding(jsonBody)">
+                        <div class ="d-flex justify-content-between">
+                            <a class="btn btn-light float-end" type="button" style="background-color: #6d8363; color: white;" @click="closeBidding(jsonBodyClose)">
                                 Close Bidding
                             </a>
-                            <!-- <a class="btn btn-light float-end" type="button" style="background-color: #447098; color: white;" @click="submit_property_data()">
-                                View Details
-                            </a> -->
+                            <a class="btn btn-light float-end" type="button" style="background-color: #447098; color: white;" data-bs-toggle="modal" data-bs-target="#modal">
+                                Edit Listing
+                            </a>
                         </div>
+                </div>
+            </div>
+        </div>
 
-                        
+        <!-- Modal -->
+        <div class="modal fade" id="modal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Update Property Details</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="propertyName" class="form-label">Property Name</label>
+                        <input type="text" class="form-control" v-model="updatedName" id="propertyName">
+                    </div>
+                    <div class="mb-3">
+                        <label for="propertyAddress" class="form-label">Address</label>
+                        <input type="text" class="form-control" v-model="updatedAddress" id="propertyAddress">
+                    </div>
+                    <div class="mb-3">
+                        <label for="propertyPC" class="form-label">Postal Code</label>
+                        <input type="text" class="form-control" v-model="updatedPostalCode" id="propertyPC">
+                    </div>
+                    <div class="mb-3">
+                        <label for="propertyType" class="form-label">Property Type</label>
+                        <input type="text" class="form-control" v-model="updatedType" id="propertyType">
+                    </div>
+                    <div class="mb-3">
+                        <label for="propertySquareFeet" class="form-label">Square Feet</label>
+                        <input type="text" class="form-control" v-model="updatedSquareFeet" id="propertySquareFeet">
+                    </div>
+                    <div class="mb-3">
+                        <label for="propertyRoom" class="form-label">Number of Rooms</label>
+                        <input type="text" class="form-control" v-model="updatedRoom" id="propertyRoom">
+                    </div>
+                    <div class="mb-3">
+                        <label for="propertyFacing" class="form-label">Property Facing Direction</label>
+                        <input type="text" class="form-control" v-model="updatedFacing" id="propertyFacing">
+                    </div>
+                    <div class="mb-3">
+                        <label for="propertyBuildYear" class="form-label">Build Year</label>
+                        <input type="text" class="form-control" v-model="updatedBuildYear" id="propertyBuildYear">
+                    </div>
+                    <div class="mb-3">
+                        <label for="propertyEstimatedCost" class="form-label">Estimated Cost</label>
+                        <input type="text" class="form-control" v-model="updatedEstimatedCost" id="propertyEstimatedCost">
+                    </div>
+                    <div class="mb-3">
+                        <label for="propertyNeighourhood" class="form-label">Neigbourhood</label>
+                        <input type="text" class="form-control" v-model="updatedNeighbourhood" id="propertyNeigbourhood">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal" style="background-color: #6d8363; color: white;" >Close</button>
+                    <button type="button" class="btn btn-primary ms-2" style="background-color: #447098; color: white;" @click="editListing(jsonBodyEdit)">Save changes</button>
+                </div>
                 </div>
             </div>
         </div>
@@ -53,10 +109,19 @@ export default {
         'carouselNum',
         'property_name',
         'property_add',
-        'estimated_cost',
+        'property_postal_code',
+        'property_type',
+        'property_square_feet',
+        'property_room',
+        'property_facing',
+        'property_build_year',
+        'property_estimated_cost',
+        'property_neighbourhood',
         'property_image',
-        'property_id_card',
-        'auction_id'
+        'property_id',
+        'auction_id',
+        'property_agent_id',
+        'property_customer_id'
 ],
     data(){ // or could put it in props
         return{
@@ -64,15 +129,43 @@ export default {
             carouselIdStr: "carousel-" + this.carouselNum,
             imageSrc:'',
             imagename: "",
-            imagename2: ""
-
+            imagename2: "",
+            updatedName: this.property_name,
+            updatedAddress: this.property_add,
+            updatedPostalCode: this.property_postal_code,
+            updatedType: this.property_type,
+            updatedSquareFeet: this.property_square_feet,
+            updatedRoom: this.property_room,
+            updatedFacing: this.property_facing,
+            updatedBuildYear: this.property_build_year,
+            updatedEstimatedCost: this.property_estimated_cost,
+            image: 'room1.jpg',
+            updatedNeighbourhood: this.property_neighbourhood
         }
     },
     computed:{
-        jsonBody(){
+        jsonBodyClose(){
             return {
                 "auction_id": Number(this.auction_id),
                 "status": "close"
+            }
+        },
+        jsonBodyEdit(){
+            return {
+                
+                "agent_id": this.property_agent_id,
+                "customer_id": this.property_customer_id,
+                "name": this.updatedNeighbourhood,
+                "address": this.updatedAddress,
+                "postalcode": this.updatedPostalCode,
+                "property_type": this.updatedType,
+                "square_feet": this.updatedSquareFeet,
+                "room": this.updatedRoom,
+                "facing": this.updatedFacing,
+                "build_year": this.updatedBuildYear,
+                "estimated_cost": this.updatedEstimatedCost,
+                "image": this.property_image,
+                "neighbourhood": this.updatedNeighbourhood
             }
         }
     },
@@ -109,6 +202,29 @@ export default {
             } catch (error) {
                 console.error(error);
                 alert("Something went wrong! Please try to close the bidding again.")
+            }
+        },
+
+    async editListing(jsonBody){
+        console.log(jsonBody)
+            try {
+                const update_url = 'http://localhost:5001/property/' + String(this.property_id);
+                console.log(update_url)
+                const options = {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(jsonBody)
+                };
+
+                const response = await fetch(update_url, options);
+                const result = await response.json();
+                console.log(result)
+                alert("Property Details have been successfully changed")
+            } catch (error) {
+                console.error(error);
+                alert("Something went wrong! Please try to update the details again.")
             }
         },
     },
