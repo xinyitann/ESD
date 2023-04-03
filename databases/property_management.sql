@@ -258,21 +258,21 @@ CREATE TABLE IF NOT EXISTS booking (
 INSERT INTO `booking` (`booking_id`,`agent_id`,`customer_id`, `property_id`,`datetimestart`, `datetimeend`, `status`) VALUES
 ('1','1','1','1','2023-03-11 14:00:00', '2023-03-11 15:00:00','pending' );
 INSERT INTO `booking` (`booking_id`,`agent_id`,`customer_id`, `property_id`,`datetimestart`, `datetimeend`, `status`) VALUES
-('2','2','2','2','2023-03-12 10:00:00', '2023-03-12 11:00:00','confirmed' );
+('2','2','2','2','2023-03-12 10:00:00', '2023-03-12 11:00:00','accepted' );
 INSERT INTO `booking` (`booking_id`,`agent_id`,`customer_id`, `property_id`,`datetimestart`, `datetimeend`, `status`) VALUES
 ('3','3','3','3','2023-03-13 14:00:00', '2023-03-13 15:00:00','pending' );
 INSERT INTO `booking` (`booking_id`,`agent_id`,`customer_id`, `property_id`,`datetimestart`, `datetimeend`, `status`) VALUES
-('4','4','4','4','2023-03-14 11:00:00', '2023-03-14 12:00:00','cancelled' );
+('4','4','4','4','2023-03-14 11:00:00', '2023-03-14 12:00:00','rejected' );
 INSERT INTO `booking` (`booking_id`,`agent_id`,`customer_id`, `property_id`,`datetimestart`, `datetimeend`, `status`) VALUES
-('5','5','5','5','2023-03-15 15:00:00', '2023-03-15 16:00:00','confirmed' );
+('5','5','5','5','2023-03-15 15:00:00', '2023-03-15 16:00:00','accepted' );
 INSERT INTO `booking` (`booking_id`,`agent_id`,`customer_id`, `property_id`,`datetimestart`, `datetimeend`, `status`) VALUES
 ('6','6','6','6','2023-03-16 10:00:00', '2023-03-16 11:00:00','pending' );
 INSERT INTO `booking` (`booking_id`,`agent_id`,`customer_id`, `property_id`,`datetimestart`, `datetimeend`, `status`) VALUES
-('7','7','7','7','2023-03-17 14:00:00', '2023-03-17 15:00:00','confirmed' );
+('7','7','7','7','2023-03-17 14:00:00', '2023-03-17 15:00:00','accepted' );
 INSERT INTO `booking` (`booking_id`,`agent_id`,`customer_id`, `property_id`,`datetimestart`, `datetimeend`, `status`) VALUES
 ('8','8','8','8','2023-03-18 11:00:00', '2023-03-18 12:00:00','pending' );
 INSERT INTO `booking` (`booking_id`,`agent_id`,`customer_id`, `property_id`,`datetimestart`, `datetimeend`, `status`) VALUES
-('9','9','9','9','2023-03-19 15:00:00', '2023-03-19 16:00:00','confirmed' );
+('9','9','9','9','2023-03-19 15:00:00', '2023-03-19 16:00:00','accepted' );
 INSERT INTO `booking` (`booking_id`,`agent_id`,`customer_id`, `property_id`,`datetimestart`, `datetimeend`, `status`) VALUES
 ('10','10','10','10','2023-03-20 10:00:00', '2023-03-20 11:00:00','pending' );
 
