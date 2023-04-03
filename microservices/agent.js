@@ -60,8 +60,8 @@ app.get('/agent/:agent_id', function(req, res) {
 //ADD AN AGENT
 app.post('/agent', function(req, res) {
     console.log(req.body); // log the request body
-    const { agent_id, name, phone, email } = req.body;
-    const agent = new Agent(agent_id, name, phone, email);
+    const { name, phone, email } = req.body;
+    const agent = new Agent(name, phone, email);
 
     con.query("INSERT INTO agent SET ?", agent, function (err, result) {
         if (err) {
