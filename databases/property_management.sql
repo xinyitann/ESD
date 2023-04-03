@@ -120,7 +120,7 @@ CREATE TABLE IF NOT EXISTS `auctions` (
   `updated_at` TIMESTAMP NOT NULL DEFAULT NOW(),
   `status` varchar(20) NOT NULL,
   PRIMARY KEY (`auction_id`),
-  constraint auctions_fk1 foreign key (customer_id) references customer(customer_id)
+  constraint auctions_fk1 foreign key (customer_id) references customer(customer_id) ON DELETE CASCADE
 )ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 INSERT INTO `auctions` (`auction_id`, `customer_id`, `starting_price`,`option_fee`, `highest_bid`, `created_at`, `updated_at`, `status`)VALUES 
@@ -199,9 +199,9 @@ CREATE TABLE IF NOT EXISTS property (
   `neighbourhood` varchar(45) NOT NULL,
   `image` varchar(255) NOT NULL, -- store the file path instead of varbinary data
   PRIMARY KEY (`property_id`),
-  constraint property_fk1 foreign key (agent_id) references agent(agent_id),
-  constraint property_fk2 foreign key (customer_id) references customer(customer_id),
-  constraint property_fk3 foreign key (auction_id) references auctions(auction_id)
+  constraint property_fk1 foreign key (agent_id) references agent(agent_id) ON DELETE CASCADE,
+  constraint property_fk2 foreign key (customer_id) references customer(customer_id) ON DELETE CASCADE,
+  constraint property_fk3 foreign key (auction_id) references auctions(auction_id) ON DELETE CASCADE
 );
 
 
@@ -249,9 +249,9 @@ CREATE TABLE IF NOT EXISTS booking (
   `datetimeend` timestamp NOT NULL,
   `status` varchar(45) NOT NULL,
   PRIMARY KEY (`booking_id`),
-  constraint booking_fk1 foreign key (agent_id) references agent(agent_id),
-  constraint booking_fk2 foreign key (customer_id) references customer(customer_id),
-  constraint booking_fk3 foreign key (property_id) references property(property_id)
+  constraint booking_fk1 foreign key (agent_id) references agent(agent_id) ON DELETE CASCADE,
+  constraint booking_fk2 foreign key (customer_id) references customer(customer_id) ON DELETE CASCADE,
+  constraint booking_fk3 foreign key (property_id) references property(property_id) ON DELETE CASCADE
 );
 
 -- Dumping data for table `booking`

@@ -20,7 +20,7 @@ class AuctionService(db.Model):
     __tablename__ = 'auctions'
         
     auction_id = db.Column(db.Integer, primary_key=True)
-    customer_id = db.Column(db.Integer, db.ForeignKey('customer.customer_id'), nullable=False)
+    customer_id = db.Column(db.Integer, db.ForeignKey('customer.customer_id', ondelete='CASCADE'), nullable=False)
     starting_price = db.Column(db.Float)
     option_fee = db.Column(db.Float)
     highest_bid = db.Column(db.Float)

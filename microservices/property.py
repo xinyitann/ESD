@@ -18,8 +18,8 @@ class Property(db.Model):
     __tablename__ = 'property'
 
     property_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    agent_id = db.Column(db.Integer, db.ForeignKey('agent.agent_id'), nullable=False)
-    customer_id = db.Column(db.Integer, db.ForeignKey('customer.customer_id'), nullable=False)
+    agent_id = db.Column(db.Integer, db.ForeignKey('agent.agent_id', ondelete='CASCADE'), nullable=False)
+    customer_id = db.Column(db.Integer, db.ForeignKey('customer.customer_id', ondelete='CASCADE'), nullable=False)
     name = db.Column(db.String(32), nullable=False)
     address = db.Column(db.String(45), nullable=False)
     postalcode = db.Column(db.Integer, nullable=False)
@@ -31,7 +31,7 @@ class Property(db.Model):
     estimated_cost = db.Column(db.Float, nullable=False)
     neighbourhood = db.Column(db.String(45), nullable=False)
     image = db.Column(db.String, nullable=False)
-    auction_id = db.Column(db.Integer, db.ForeignKey('auctions.auction_id'), nullable=False)
+    auction_id = db.Column(db.Integer, db.ForeignKey('auctions.auction_id', ondelete='CASCADE'), nullable=False)
 
     def __init__(self, agent_id, customer_id, name, address, postalcode, property_type, square_feet, room, facing, build_year, estimated_cost, neighbourhood,image,auction_id):
         self.agent_id = agent_id
