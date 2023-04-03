@@ -105,7 +105,7 @@ def processNotification(routing_key, body):
         # bidding.notification
         property_name= notification['property_name']
         option_fee = notification['option_fee']
-        payment_URL = f"http://localhost:8080/optionfee={option_fee}"
+        payment_URL = f"http://localhost:8080/payment/optionfee={option_fee}"
         print(option_fee)
         content = f"""
         Hey {name}, \n
