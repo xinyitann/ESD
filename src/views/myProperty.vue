@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h2 class="text-center my-5">All Properties</h2>
+        <h2 class="text-center my-5">My Properties</h2>
 
         <div class="d-flex justify-content-end">
             <router-link to="/addlisting">
@@ -9,14 +9,8 @@
         </div>
         
         <div class="container-fluid row">
-            <!-- need the index to differentiate carousel to make it work-->
-            <!-- this is the rough idea using a for loop -->
-            <!-- <div v-for="(listing, index) in listings" :key="index">
-                <PropertyCard :carouselNum="index+1" ></PropertyCard>
-            </div> -->
 
-            <!-- for testing-->
-            <PropertyCard v-for="properties in property_list"
+            <MyPropertyCard v-for="properties in property_list"
                 :carouselNum="1"
                 :property_name= "properties.name"
                 :estimated_cost= "properties.estimated_cost"
@@ -24,32 +18,30 @@
                 v-bind:key="properties"
                 :property_image = "properties.image"
                 :property_id = "properties.property_id"
-                
-
-
-            ></PropertyCard>
+                :auction_id = "properties.auction_id"
+            ></MyPropertyCard>
 
         </div>
     </div>  
 </template>
 
 <script>
-import PropertyCard from '@/components/propertyCard.vue';
+import MyPropertyCard from '../components/MyPropertyCard.vue';
+
 const get_all_URL = "http://localhost:5001/property/agent";
 
 
 export default {
 name: 'MyPropertyPage',
     components: {
-        PropertyCard
+        MyPropertyCard
     },
     data() {
     return {
-      property_list: [],
-      message: "",
-      search: "",
-      agent_id:1
-      
+        property_list: [],
+        message: "",
+        search: "",
+        agent_id:1
     };
   },
 
@@ -81,7 +73,7 @@ name: 'MyPropertyPage',
             console.log("error")
             console.log(this.message + error);
         });
-        },
+    },
   },
   mounted() {
                 // on Vue instance created, load the book list

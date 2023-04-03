@@ -101,11 +101,10 @@
                     </div>
                 </div>
                 <div v-else>
-                   <p class="text-center fw-bold my-5"> Your bid is successful</p>
-                   <router-link to="/mybids">
-                    <button class="btn" type="button" style="background-color: #447098; color: white;" id="button-addon"  @click="submitBid()">View Bid</button>
-                   </router-link>
-                   
+                    <p class="text-center fw-bold my-5"> Your bid is successful</p>
+                    <router-link to="/mybids">
+                        <button class="btn" type="button" style="background-color: #447098; color: white;" id="button-addon"  @click="submitBid()">View Bid</button>
+                    </router-link>
                 </div>
             </div>
         </div>

@@ -98,7 +98,7 @@ export default {
                 });
                 const result = await response.json();
                 console.log(result);
-                location.reload();
+                // location.reload();
             } catch (error) {
                 console.error(error);
             }
