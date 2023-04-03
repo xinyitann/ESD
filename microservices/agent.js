@@ -30,6 +30,7 @@ class Agent {
 
     json() {
         return {
+            "agent_id": this.agent_id,
             "name": this.name,
             "phone": this.phone,
             "email": this.email
