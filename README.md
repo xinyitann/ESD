@@ -1,8 +1,9 @@
 # Haven
 Haven is an one-stop property bidding platform for users to view property listings, book appointment to view listings and bid for properties.
 
-#Requirements
-###Install Google Auth
+# Requirements
+
+### Install Google Auth
 - pip install --upgrade google-api-python-client google-auth-httplib2 google-auth-oauthlib
 
 # Project setup
