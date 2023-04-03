@@ -57,6 +57,7 @@
 
 
 <script>
+import PaymentSuccessPage from './paymentSuccess.vue';
 
 export default {
   name: 'PaymentPage',
@@ -71,8 +72,6 @@ export default {
         cvv: "",
         postalCode: "",
         optionFee: this.$route.params.option_fee
-        // auction_id:[],
-        // product:[]
     };
   },
   mounted: function() {
@@ -82,41 +81,6 @@ export default {
       "https://www.paypal.com/sdk/js?client-id=" + CLIENT_ID;
     script.addEventListener("load", this.setLoaded);
     document.body.appendChild(script);
-  },
-   async created() {
-    // var myHeaders = new Headers();
-    // myHeaders.append("Content-Type", "application/json");
-    // myHeaders.append("Access-Control-Allow-Origin", "*");
-
-    // var requestOptions = {
-    //   method: 'GET',
-    //   headers: myHeaders,
-    //   redirect: 'follow'
-    // };
-    // fetch(`http://127.0.0.1:5002/auctions/option_fee/${this.auction_id}`,requestOptions)
-    //   .then(response => response.json())
-    //   .then(data => {
-    //     this.product = data;
-    //   });
-
-    // try {
-    //   var get_option_fee_url = "http://localhost:5002/auctions/option_fee/" + String(this.optionFee);
-    //   var response = await fetch(get_option_fee_url);
-
-    //   if (!response.ok) {
-    //     throw new Error(`HTTP error! status: ${response.status}`);
-    //   }
-
-    //   var data = await response.json();
-    //   // this.bidBefore = true;
-    //   // this.property_list = Reflect.get(data['data'], 'property_result');
-    //   // this.bid_list = Reflect.get(data['data'], 'bids_result');
-    //   console.log(data)
-
-    // } catch (error) {
-    //   console.error(error);
-    // }
-
   },
   
   methods: {
@@ -139,6 +103,7 @@ export default {
           onApprove: async (data, actions) => {
             const order = await actions.order.capture();
             console.log(order);
+            this.$router.push({ name: 'PaymentSuccess' });
           },
           onError: err => {
             console.log(err);
