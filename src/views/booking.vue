@@ -99,7 +99,7 @@
                     <br>
                     <div class="row">
                         <div class="col">
-                            Property Name
+                            Property Name:
                         </div>
                         <div class="col">
                             {{ check['property_name'] }}
@@ -107,7 +107,7 @@
                     </div>
                     <div class="row">
                         <div class="col">
-                            Property Address
+                            Property Address:
                         </div>
                         <div class="col">
                             {{ check['address'] }}
@@ -115,7 +115,7 @@
                     </div>
                     <div class="row">
                         <div class="col">
-                            Booking start time
+                            Booking start time:
                         </div>
                         <div class="col">
                             {{ bookingStartTime }}
@@ -123,7 +123,7 @@
                     </div>
                     <div class="row">
                         <div class="col">
-                            Booking end time
+                            Booking end time:
                         </div>
                         <div class="col">
                             {{ bookingEndTime }}
