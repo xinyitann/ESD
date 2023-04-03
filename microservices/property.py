@@ -13,78 +13,6 @@ from customer import Customer
 from auctionService import AuctionService
 import os
 
-# Import the Image module from the PIL library
-
-
-# def save_image_to_file():
-#     # Open the image with the specified file path
-#     picture = Image.open(r'Downloads\3.jpg')  
-
-#     # Save the image with the specified file name
-#     picture = picture.save("dolls.jpg") 
-
-# def store_image(file):
-#     UPLOAD_FOLDER = '/uploads'
-#     # Check if the directory exists, create it if not
-#     if not os.path.exists(UPLOAD_FOLDER):
-#         os.makedirs(UPLOAD_FOLDER)
-#     # Save the uploaded file to disk
-#     # filename = secure_filename(file.filename)
-#     file_path = os.path.join(UPLOAD_FOLDER, file.filename)
-#     file.save(file_path)
-#     # Return the file path
-#     return file_path
- 
-# Create a cursor object
-# def get_image(c_file):
-
-#     mydb = mysql.connector.connect(
-#     host="localhost",
-#     user="root",
-#     password='',
-#     database="property_management"  # Name of the database
-# )
-#     cursor = mydb.cursor()
-    
-#     # Open a file in binary mode
-#     file = open(c_file,'rb').read()
-    
-#     # We must encode the file to get base64 string
-#     file = base64.b64encode(file)
-    
-#     # Sample data to be inserted
-#     args = ('',file,'1')
-    
-#     # Prepare a query
-#     query = 'INSERT INTO PROPERTY_IMAGES VALUES(%s,%s,%s)'
-    
-#     # Execute the query and commit the database.
-#     cursor.execute(query,args)
-#     mydb.commit()
-
-#     # Create a cursor object
-#     cursor = mydb.cursor()
-    
-#     # Prepare the query
-#     query = 'SELECT IMG FROM PROPERTY_IMAGES WHERE propertyID_image=1'
-    
-#     # Execute the query to get the file
-#     cursor.execute(query)
-    
-#     data = cursor.fetchall()
-    
-#     # The returned data will be a list of list
-#     image = data[0][0]
-    
-#     # Decode the string
-#     binary_data = base64.b64decode(image)
-    
-#     # Convert the bytes into a PIL image
-#     image = Image.open(io.BytesIO(binary_data))
-    
-#     # Display the image
-#     image.show()
-
 
 class Property(db.Model):
     __tablename__ = 'property'
@@ -152,43 +80,41 @@ def get_all():
 #function works
 @app.route("/property/neighbourhood/<string:neighbourhood>",methods=['GET'])
 def get_property_by_neighbourhood(neighbourhood):
-    prop_list = Property.query.filter_by(neighbourhood=neighbourhood)
-    print(prop_list)
-    # for property in prop_list:
-        # print (type(property))
-    
+    prop_list = Property.query.filter_by(neighbourhood=neighbourhood).all()
+
     if prop_list:
         return jsonify(
-                    {
-                        "code": 200,
-                        "data": {
-                            "properties": [property.json() for property in prop_list]
-                        }
-                    }
-                )
-    return jsonify(
-    {
-        "code": 404,
-        "message": "Property not found."
-    }
-), 404
+            {
+                "code": 200,
+                "data": {
+                    "properties": [property.json() for property in prop_list]
+                }
+            }
+        )
+    else:
+        return jsonify(
+            {
+                "code": 404,
+                "message": "No properties found for the specified neighbourhood."
+            }
+        ), 404
 
 #function working
 @app.route("/property/postal_code/<string:postalcode_str>",methods=['GET'])
 def get_property_by_postalcode(postalcode_str):
 
-    print(postalcode_str)
-    print(type(postalcode_str)) #string
+    # print(postalcode_str)
+    # print(type(postalcode_str)) #string
 
     #convert string to list 
     postalcode_list=eval(postalcode_str)
-    print(postalcode_list)
-    print(type(postalcode_list)) #list
+    # print(postalcode_list)
+    # print(type(postalcode_list)) #list
 
     postal_list=[]
     for postalcode in postalcode_list:  
         # print(postalcode)
-        prop_list = Property.query.filter_by(postalcode=postalcode)
+        prop_list = Property.query.filter_by(postalcode=postalcode).all()
         # print(prop_list)
         if prop_list:
             postal_list.append(prop_list)
@@ -211,10 +137,10 @@ def get_property_by_postalcode(postalcode_str):
                     }
                 )
     return jsonify(
-    {
-        "code": 404,
-        "message": "Property not found."
-    }
+        {
+            "code": 404,
+            "message": "Property not found."
+        }
 ), 404
 
 

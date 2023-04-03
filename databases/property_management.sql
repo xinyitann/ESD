@@ -208,25 +208,25 @@ CREATE TABLE IF NOT EXISTS property (
 --
 -- Dumping data for table `property`
 INSERT INTO `property` (`property_id`, `auction_id`, `agent_id`,`customer_id`, `name`, `address`, `postalcode`,`property_type`, `square_feet`, `room`, `facing`,`build_year`, `estimated_cost`,`neighbourhood`,`image`) VALUES
-('1','1','1','1', 'Waterfront condominium', 'waterfront street 17', '123456', 'Condominium','5929',  '4', 'north','2011', '13150000','Bishan','../src/assets/backgroundhome.jpg');
+('1','1','1','1', 'Waterfront condominium', 'waterfront street 17', '123456', 'Condominium','5929',  '4', 'north','2011', '13150000','Bishan','room1.jpg');
 INSERT INTO property (property_id, auction_id, agent_id, customer_id, name, address, postalcode, property_type, square_feet, room, facing, build_year, estimated_cost, neighbourhood, image) VALUES
-('2', '2', '2', '2', 'HDB flat in Punggol', 'Punggol field street 2', '654321', 'HDB', '1076', '3', 'south', '2005', '27000000', 'Punggol', '../src/assets/backgroundhome.jpg');
+('2', '2', '2', '2', 'HDB flat in Punggol', 'Punggol field street 2', '654321', 'HDB', '1076', '3', 'south', '2005', '27000000', 'Punggol', 'room2.jpg');
 INSERT INTO property (property_id, auction_id, agent_id, customer_id, name, address, postalcode, property_type, square_feet, room, facing, build_year, estimated_cost, neighbourhood, image) VALUES
-('3', '3', '3', '3', 'Condominium in Jurong', 'Jurong west street 41', '555555', 'Condominium', '1281', '3', 'east', '2010', '14250000', 'Jurong', '../src/assets/backgroundhome.jpg');
+('3', '3', '3', '3', 'Condominium in Jurong', 'Jurong west street 41', '555555', 'Condominium', '1281', '3', 'east', '2010', '14250000', 'Jurong', 'room3.jpg');
 INSERT INTO property (property_id, auction_id, agent_id, customer_id, name, address, postalcode, property_type, square_feet, room, facing, build_year, estimated_cost, neighbourhood, image) VALUES
-('4', '4', '4', '4', 'Luxury house in Sentosa Cove', 'Sentosa cove street 1', '098765', 'Landed', '7500', '5', 'south', '2015', '36500000', 'Sentosa', '../src/assets/backgroundhome.jpg');
+('4', '4', '4', '4', 'Luxury house in Sentosa Cove', 'Sentosa cove street 1', '098765', 'Landed', '7500', '5', 'south', '2015', '36500000', 'Sentosa', 'room4.jpg');
 INSERT INTO property (property_id, auction_id, agent_id, customer_id, name, address, postalcode, property_type, square_feet, room, facing, build_year, estimated_cost, neighbourhood, image) VALUES
-('5', '5', '5', '5', 'HDB in Bukit Batok', 'Bukit Batok street 22', '222222', 'HDB', '1076', '3', 'west', '1995', '15250000', 'Bukit Batok', '../src/assets/backgroundhome.jpg');
+('5', '5', '5', '5', 'HDB in Bukit Batok', 'Bukit Batok street 22', '222222', 'HDB', '1076', '3', 'west', '1995', '15250000', 'Bukit Batok', 'room5.jpg');
 INSERT INTO property (property_id, auction_id, agent_id, customer_id, name, address, postalcode, property_type, square_feet, room, facing, build_year, estimated_cost, neighbourhood, image) VALUES
-('6', '6', '6', '6', 'Condominium in Clementi', 'Clementi street 1', '456789', 'Condominium', '1087', '3', 'north', '2008', '13500000', 'Clementi', '../src/assets/backgroundhome.jpg');
+('6', '6', '6', '6', 'Condominium in Clementi', 'Clementi street 1', '456789', 'Condominium', '1087', '3', 'north', '2008', '13500000', 'Clementi', 'room6.jpg');
 INSERT INTO property (property_id, auction_id, agent_id, customer_id, name, address, postalcode, property_type, square_feet, room, facing, build_year, estimated_cost, neighbourhood, image) VALUES
-('7','7','7','7', 'Luxury Condo', 'Grange Road', '249583', 'Condominium','2000', '4', 'west','2015', '4500000','Orchard','../src/assets/backgroundhome.jpg');
+('7','7','7','7', 'Luxury Condo', 'Grange Road', '249583', 'Condominium','2000', '4', 'west','2015', '4500000','Orchard','room7.jpg');
 INSERT INTO property (property_id, auction_id, agent_id, customer_id, name, address, postalcode, property_type, square_feet, room, facing, build_year, estimated_cost, neighbourhood, image) VALUES
-('8','8','8','8', 'Spacious HDB', 'Tampines Street 45', '523465', 'HDB','1000', '3', 'north','2000', '450000','Tampines','../src/assets/backgroundhome.jpg');
+('8','8','8','8', 'Spacious HDB', 'Tampines Street 45', '523465', 'HDB','1000', '3', 'north','2000', '450000','Tampines','room8.jpg');
 INSERT INTO property (property_id, auction_id, agent_id, customer_id, name, address, postalcode, property_type, square_feet, room, facing, build_year, estimated_cost, neighbourhood, image) VALUES
-('9','9','9','9', 'Good Class Bungalow', 'Ridout Road', '248745', 'Detached House','10000', '6', 'east','1990', '20000000','Tanglin','../src/assets/backgroundhome.jpg');
+('9','9','9','9', 'Good Class Bungalow', 'Ridout Road', '248745', 'Detached House','10000', '6', 'east','1990', '20000000','Tanglin','room9.jpg');
 INSERT INTO property (property_id, auction_id, agent_id, customer_id, name, address, postalcode, property_type, square_feet, room, facing, build_year, estimated_cost, neighbourhood, image) VALUES
-('10','10','10','10', 'City Fringe Condo', 'Jalan Besar', '208792', 'Condominium','800', '2', 'south','2010', '1000000','Jalan Besar','../src/assets/backgroundhome.jpg');
+('10','10','10','10', 'City Fringe Condo', 'Jalan Besar', '208792', 'Condominium','800', '2', 'south','2010', '1000000','Jalan Besar','room10.jpg');
 
 
 DROP TABLE IF EXISTS property_images;
