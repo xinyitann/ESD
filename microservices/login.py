@@ -9,8 +9,8 @@ from invokes import invoke_http
 app = Flask(__name__)
 CORS(app)
 
-agent_URL = environ.get('agent_URL') or "http://localhost:5003/agent/get_id_by_email/"
-customer_URL = environ.get('customer_URL') or "http://localhost:5700/customer/get_id_by_email/"
+agent_URL = environ.get('agent_URL') or "http://localhost:5003/agent"
+customer_URL = environ.get('customer_URL') or "http://localhost:5700/customer"
 
 
 
@@ -29,13 +29,14 @@ def login(email):
 
             return jsonify({
                 "code": 500,
-                "message": "makebooking.py internal error: " + ex_str
+                "message": "login.py internal error: " + ex_str
             }), 500
 
 def processMakeBooking(email):
 
-    get_agent_URL = agent_URL + email
-    get_customer_URL = customer_URL + email
+    get_agent_URL = agent_URL + "/get_id_by_email/" + email
+    print(get_agent_URL)
+    get_customer_URL = customer_URL + "/get_id_by_email/" + email
 
     #invoke agent microservice
     agent_result = invoke_http(get_agent_URL, method='GET')

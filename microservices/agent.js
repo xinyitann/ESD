@@ -9,13 +9,13 @@ app.listen(5003, function() {
 });
 
 var mysql = require('mysql2');
-const con = mysql.createConnection(process.env.dbURL);
-// var con = mysql.createConnection({
-//     host: "host.docker.internal",
-//     user: "is213",
-//     password: "",
-//     database: "property_management"
-// });
+// const con = mysql.createConnection(process.env.dbURL);
+var con = mysql.createConnection({
+    host: "host.docker.internal",
+    user: "is213",
+    password: "",
+    database: "property_management"
+});
 
 class Agent {
     constructor(agent_id, name, phone, email) {
