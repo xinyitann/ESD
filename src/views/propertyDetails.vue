@@ -97,7 +97,7 @@
                     </div>
                     <div class="input-group mb-3">
                         <input v-model='bidAmount' type="text" class="form-control" placeholder="Enter your bid" aria-label="Enter your bid" aria-describedby="button-addon1">
-                        <button class="btn" type="button" style="background-color: #447098; color: white;" id="button-addon"  @click="submitBid()">Place Bid</button>
+                        <button class="btn" type="button" style="background-color: #447098; color: white;" id="button-addon"  @click="submitBid(jsonBody)">Place Bid</button>
                     </div>
                 </div>
                 <div v-else>
@@ -175,7 +175,13 @@ name: 'PropertyDetailsPage',
             final = final + ' ' + timing
             return final
         },
-        
+        jsonBody(){
+            return {
+                "customer_id": this.customer_id_prop,
+                "bid_amount": parseFloat(this.bidAmount),
+                "property_id":this.property_id_prop
+            }
+        }
 
 
     },
@@ -283,40 +289,63 @@ name: 'PropertyDetailsPage',
             console.log(this.message + error);
         });
         },
-        //idk if it works :o
-        async submitBid(){
-            // let dateTimeStart = this.date_time_end
-            // let dateTimeEnd = this.date_time_end
-            
+        async submitBid(jsonBody){
+            console.log(jsonBody)
+            console.log('hello')
+            try {
+                const submit_url = "http://localhost:5900/make_bid";
+                const options = {
+                    method: 'POST',
+                    headers: {
+                    'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(jsonBody)
+                };
 
-            var myHeaders = new Headers();
-            myHeaders.append("Content-Type", "application/json");
+                const response = await fetch(submit_url, options);
+                const result = await response.json();
+                console.log(result)
+                alert("Bid has been made.")
 
-            var raw = JSON.stringify({
-
-            "customer_id": this.customer_id_prop,
-            "bid_amount": parseInt(this.bidAmount),
-            "property_id":this.property_id_prop
-        
-            });
-            console.log(raw)
-            var requestOptions = {
-            method: 'POST',
-            headers: myHeaders,
-            body: raw,
-            redirect: 'follow'
-            };
-
-            const data_fetch = await fetch("http://localhost:5900/make_bid", requestOptions)
-            this.check = await data_fetch.json()
-            console.log(data_fetch)
-            if (data_fetch['status'] == 201){
-                alert('Bid has been submitted')
-            } 
-            else{
-                alert('Bid creation failed')
+            } catch (error) {
+                console.error(error);
+                alert("Creation of bid failed.")
             }
         },
+        //idk if it works :o
+        // async submitBid(){
+        //     // let dateTimeStart = this.date_time_end
+        //     // let dateTimeEnd = this.date_time_end
+            
+
+        //     var myHeaders = new Headers();
+        //     myHeaders.append("Content-Type", "application/json");
+
+        //     var raw = JSON.stringify({
+
+        //     "customer_id": this.customer_id_prop,
+        //     "bid_amount": parseInt(this.bidAmount),
+        //     "property_id":this.property_id_prop
+        
+        //     });
+        //     console.log(raw)
+        //     var requestOptions = {
+        //     method: 'POST',
+        //     headers: myHeaders,
+        //     body: raw,
+        //     redirect: 'follow'
+        //     };
+
+        //     const data_fetch = await fetch("http://localhost:5900/make_bid", requestOptions)
+        //     this.check = await data_fetch.json()
+        //     console.log(data_fetch)
+        //     if (data_fetch['status'] == 201){
+        //         alert('Bid has been submitted')
+        //     } 
+        //     else{
+        //         alert('Bid creation failed')
+        //     }
+        // },
         getimage(image){
         return require('@/assets/' + image)
         },
@@ -327,7 +356,7 @@ name: 'PropertyDetailsPage',
             console.log('hgoebgbekjg ')
 
             try {
-                var get_property_url = "http://localhost:5002/auctions/highest_bid/" + String(this.property_result.auction_id);
+                var get_property_url = "http://localhost:5500/bids/highest_bid/" + String(this.property_result.auction_id);
                 var response = await fetch(get_property_url);
 
                 if (!response.ok) {
@@ -336,7 +365,7 @@ name: 'PropertyDetailsPage',
 
                 var data = await response.json();
                 console.log(data)
-                this.highestBid = data['highest bid']
+                this.highestBid = data['data']['highest_bid']
 
             } catch (error) {
                 console.error(error);

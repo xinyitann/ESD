@@ -177,7 +177,7 @@ def convert_coordinates_to_SVY21(lat, long):
 
     # Send a GET request to the API endpoint
     response = requests.get(apiEndpoint)
-
+    print(response)
     # Convert response.content to JSON
     jsonString = response.content.decode('utf8').replace("'", '"')
     jsonObj = json.loads(jsonString)
@@ -190,6 +190,7 @@ def list_from_postal_code_input(searchInput):
     
     # OneMap API, regenerate access token and change it in .env file
     accessToken = os.getenv('ONE_MAP_API_KEY')
+    print(accessToken)
 
     # Convert searched postal code to lat and long
     lat, long = convert_postal_code_to_coordinates(searchInput)
@@ -198,10 +199,12 @@ def list_from_postal_code_input(searchInput):
     # Convert lat and long to required SVY21 format
     location = convert_coordinates_to_SVY21(lat, long)
 
-    apiEndpoint = f"https://developers.onemap.sg/privateapi/commonsvc/revgeocodexy?location={location}&token={accessToken}?&buffer=500&addressType=HDB"
+    apiEndpoint = f"https://developers.onemap.sg/privateapi/commonsvc/revgeocodexy?location={location}&token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOjEwMTMzLCJ1c2VyX2lkIjoxMDEzMywiZW1haWwiOiJ0aWFuY2h1bGluMTJAZ21haWwuY29tIiwiZm9yZXZlciI6ZmFsc2UsImlzcyI6Imh0dHA6XC9cL29tMi5kZmUub25lbWFwLnNnXC9hcGlcL3YyXC91c2VyXC9zZXNzaW9uIiwiaWF0IjoxNjgwNTUxNDM3LCJleHAiOjE2ODA5ODM0MzcsIm5iZiI6MTY4MDU1MTQzNywianRpIjoiOTU0NGE0ZWU4N2UxMjk2ZGJjOGNjZWQyZTQ5MTA3MTcifQ.Cth9QbWCGTeXgcAoYl0f6uSMWNDPdqPIbK7XU8GLtEE?&buffer=500&addressType=HDB"
+    print(apiEndpoint)
 
     # Send a GET request to the API endpoint
     response = requests.get(apiEndpoint)
+    print(response)
 
     # Convert response.content to JSON
     responseString = response.content.decode('utf8').replace("'", '"')

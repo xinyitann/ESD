@@ -297,27 +297,6 @@ def get_option_fee(auction_id):
         }
     ), 404
 
-#get the highest bid for an auction
-@app.route('/auctions/highest_bid/<string:auction_id>', methods=['GET'])
-def get_highest_bid(auction_id):
-    auction = AuctionService.query.filter_by(auction_id=auction_id).first()
-    list = auction.json()
-
-    if auction:
-        return jsonify(
-            {
-                "code": 200,
-                "highest bid": list["highest_bid"]
-            }
-        )
-    return jsonify(
-        {
-            "code": 404,
-            "message": "auction not found."
-        }
-    ), 404
-
-
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0',port=5002, debug=True)
