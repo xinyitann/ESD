@@ -88,7 +88,7 @@
                         </div> -->
                         <div class="col">
                             <p class="text-center fw-bold">
-                                ${{highestBid}}
+                                ${{ highestBid }}
                             </p>
                             <p class="d-flex justify-content-center">
                                 <small class="text-body-secondary">Highest Bid</small>
@@ -327,7 +327,7 @@ name: 'PropertyDetailsPage',
             console.log('hgoebgbekjg ')
 
             try {
-                var get_property_url = "http://localhost:5002/auctions/" + String(this.property_result.auction_id);
+                var get_property_url = "http://localhost:5002/auctions/highest_bid/" + String(this.property_result.auction_id);
                 var response = await fetch(get_property_url);
 
                 if (!response.ok) {
@@ -336,6 +336,7 @@ name: 'PropertyDetailsPage',
 
                 var data = await response.json();
                 console.log(data)
+                this.highestBid = data['highest bid']
 
             } catch (error) {
                 console.error(error);
