@@ -57,7 +57,6 @@
 
 
 <script>
-import PaymentSuccessPage from './paymentSuccess.vue';
 
 export default {
   name: 'PaymentPage',
