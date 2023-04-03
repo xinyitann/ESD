@@ -309,9 +309,9 @@ name: 'PropertyDetailsPage',
 
             var raw = JSON.stringify({
 
-            "customer_id": this.customerId,
+            "customer_id": this.customer_id_prop,
             "bid_amount": parseInt(this.bidAmount),
-            "property_id":this.propertyId
+            "property_id":this.property_id_prop
         
             });
             console.log(raw)

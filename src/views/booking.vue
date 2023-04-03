@@ -3,7 +3,8 @@
         <div class = "row d-flex justify-content-center">
             <div class="col-10 col-md-8 col-lg-7 my-3">
                 <h2 class="text-center my-4">Book An Appointment</h2>
-                <form>
+                <div v-if="check_make_booking==false">
+                    <form>
                     <div class="mb-3">
                         <label for="customerID" class="form-label">Customer ID</label>
                         <input type="text" class="form-control" id="customerID" v-bind:value="customer_id_prop" disabled>
@@ -61,6 +62,76 @@
                         <button @click="call_makebooking()" type="button" class="btn" style="background-color: #447098; color: white;">Book Now</button>
                     </div>
                 </form>
+                </div>
+                <div v-else>
+                    <div style="text-align: center;">Booking successful</div>
+                    <br>
+                    <br>
+                    <div style="text-align: center;">Agent information</div>
+                    <br>
+                    <div class="row">
+                        <div class="col">
+                            Agent Name:
+                        </div>
+                        <div class="col">
+                            {{ check['name'] }}
+                        </div>
+                    <div class="row">
+                        <div class="col">
+                            Agent Contact Information:
+                        </div>
+                        <div class="col">
+                            {{ check['phone'] }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            Agent Email:
+                        </div>
+                        <div class="col">
+                            {{ check['email'] }}
+                        </div>
+                    </div>
+                    <br>
+                    <br>
+                    <div style="text-align: center;">Property Information</div>
+                    <br>
+                    <br>
+                    <div class="row">
+                        <div class="col">
+                            Property Name
+                        </div>
+                        <div class="col">
+                            {{ check['property_name'] }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            Property Address
+                        </div>
+                        <div class="col">
+                            {{ check['address'] }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            Booking start time
+                        </div>
+                        <div class="col">
+                            {{ bookingStartTime }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            Booking end time
+                        </div>
+                        <div class="col">
+                            {{ bookingEndTime }}
+                        </div>
+                    </div>
+                </div>
+                </div>
+                
             </div>
         </div>
     </div>
@@ -92,6 +163,7 @@ name: 'BookingPage',
             contact: "",
             propertyAddress: "",
             check: [],
+            check_make_booking : false,
 
         }
     },
@@ -128,7 +200,6 @@ name: 'BookingPage',
             "datetimeend": this.date_time_end,
             "status": "pending"
             });
-            console.log(raw)
             var requestOptions = {
             method: 'POST',
             headers: myHeaders,
@@ -137,13 +208,16 @@ name: 'BookingPage',
             };
 
             const data_fetch = await fetch("http://127.0.0.1:5800/make_booking", requestOptions)
-            this.check = await data_fetch.json()
-            console.log(data_fetch)
-            if (data_fetch['status'] == 200){
-                alert('Booking has been successfully created')
+           
+            let item = await data_fetch.json()
+            this.check = item
+
+            if (data_fetch['status'] != 200){
+                alert('Booking creation failed')
             } 
             else{
-                alert('Booking creation failed')
+                this.check_make_booking = true
+                console.log(this.check)
             }
                     },   
     },
