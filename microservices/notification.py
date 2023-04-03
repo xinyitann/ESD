@@ -116,7 +116,7 @@ def processNotification(routing_key, body):
         Property Title: {property_name}  \n
         Option Fee: {option_fee} \n
 
-        As the highest bidder, you are now required to proceed with the payment for the property within the next [insert payment duration here] days. You can make the payment by {payment_URL}. \n
+        As the highest bidder, you are now required to proceed with the payment for the property within the next 3 days. You can make the payment by {payment_URL}. \n
 
         Please note that if you fail to make the payment within the specified time, we reserve the right to offer the property to the next highest bidder or relist it for auction. \n
 
