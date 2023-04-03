@@ -46,15 +46,22 @@
         carouselNumCounter: 0,
         bid_list: null,
         bidBefore: false,
+        id: 0,
       };
     },
     async created(){
-      console.log(this.customer_id_prop)
       console.log(this.agent_id_prop)
       console.log(this.user_type)
 
+      if (this.user_type == "user"){
+        this.id = this.customer_id_prop
+      }
+      else{
+        this.id = this.agent_id_prop
+      }
+
       try {
-        var get_property_url = "http://localhost:5029/getbids/" + String(this.customer_id_prop);
+        var get_property_url = "http://localhost:5029/getbids/" + String(this.id);
         var response = await fetch(get_property_url);
 
         if (!response.ok) {
