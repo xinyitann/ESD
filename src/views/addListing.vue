@@ -108,6 +108,7 @@ name: 'AddListingPage',
             option_fee: '',
             neighbourhood: '',
             status: 'open',
+            file: '',
         }   
     },
     methods: {
@@ -117,10 +118,11 @@ name: 'AddListingPage',
            
             const formData = new FormData();
             formData.append('property_image', this.file);
-            let link = await axios.post('http://192.168.0.195:5200/download_image/', formData);
+            let link = await axios.post('http://127.0.0.1:5200/download_image/', formData);
           
             link =  '../src/assets/' + link['data']
             this.image = link
+            console.log(link)
             
 
 
@@ -175,6 +177,9 @@ name: 'AddListingPage',
 <style>
 
 </style>
+
+
+
 
 
 

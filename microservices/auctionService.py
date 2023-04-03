@@ -244,7 +244,7 @@ def get_starting_price(auction_id):
         return jsonify(
             {
                 "code": 200,
-                "data": list["starting_price"]
+                "starting price": list["starting_price"]
                     
             }
         )
@@ -267,7 +267,7 @@ def get_one_auction(auction_id):
         return jsonify(
             {
                 "code": 200,
-                "data": list["customer_id"]
+                "customer id": list["customer_id"]
             }
         )
     return jsonify(
@@ -287,7 +287,7 @@ def get_option_fee(auction_id):
         return jsonify(
             {
                 "code": 200,
-                "data": list["option_fee"]
+                "option fee": list["option_fee"]
             }
         )
     return jsonify(
