@@ -31,8 +31,11 @@
                     <p class="card-text">${{ property_estimated_cost }}</p>
 
                         <div class ="d-flex justify-content-between">
-                            <a class="btn btn-light float-end" type="button" style="background-color: #6d8363; color: white;" @click="closeBidding(jsonBodyClose)">
+                            <a v-if="close==false" class="btn btn-light float-end" type="button" style="background-color: #6d8363; color: white;" @click="closeBidding(jsonBodyClose);set_closed();">
                                 Close Bidding
+                            </a>
+                            <a v-else>
+
                             </a>
                             <a class="btn btn-light float-end" type="button" style="background-color: #447098; color: white;" data-bs-toggle="modal" data-bs-target="#modal">
                                 Edit Listing
@@ -140,7 +143,8 @@ export default {
             updatedBuildYear: this.property_build_year,
             updatedEstimatedCost: this.property_estimated_cost,
             image: 'room1.jpg',
-            updatedNeighbourhood: this.property_neighbourhood
+            updatedNeighbourhood: this.property_neighbourhood,
+            close: ''
         }
     },
     computed:{
@@ -227,6 +231,9 @@ export default {
                 alert("Something went wrong! Please try to update the details again.")
             }
         },
+        set_closed(){
+            this.close = true
+        }
     },
 }
 </script>
