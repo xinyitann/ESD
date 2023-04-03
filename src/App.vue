@@ -26,6 +26,7 @@ export default {
   methods: {
     GetData(data){
       this.agent_id = data
+      this.customer_id = data
     },
     GetAgent(data){
       this.agent_id = data
