@@ -18,8 +18,8 @@ class Property(db.Model):
     __tablename__ = 'property'
 
     property_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    agent_id = db.Column(db.Integer, db.ForeignKey('agent.agent_id'), nullable=False)
-    customer_id = db.Column(db.Integer, db.ForeignKey('customer.customer_id'), nullable=False)
+    agent_id = db.Column(db.Integer, db.ForeignKey('agent.agent_id', ondelete='CASCADE'), nullable=False)
+    customer_id = db.Column(db.Integer, db.ForeignKey('customer.customer_id', ondelete='CASCADE'), nullable=False)
     name = db.Column(db.String(32), nullable=False)
     address = db.Column(db.String(45), nullable=False)
     postalcode = db.Column(db.Integer, nullable=False)
@@ -31,7 +31,7 @@ class Property(db.Model):
     estimated_cost = db.Column(db.Float, nullable=False)
     neighbourhood = db.Column(db.String(45), nullable=False)
     image = db.Column(db.String, nullable=False)
-    auction_id = db.Column(db.Integer, db.ForeignKey('auctions.auction_id'), nullable=False)
+    auction_id = db.Column(db.Integer, db.ForeignKey('auctions.auction_id', ondelete='CASCADE'), nullable=False)
 
     def __init__(self, agent_id, customer_id, name, address, postalcode, property_type, square_feet, room, facing, build_year, estimated_cost, neighbourhood,image,auction_id):
         self.agent_id = agent_id
@@ -52,8 +52,8 @@ class Property(db.Model):
     def json(self):
         return {"property_id": self.property_id, "agent_id": self.agent_id, "customer_id": self.customer_id, "name": self.name, "address": self.address, "postalcode": self.postalcode, "property_type": self.property_type, "square_feet": self.square_feet, "room": self.room, "facing": self.facing, "build_year": self.build_year, "estimated_cost": self.estimated_cost, "neighbourhood":self.neighbourhood,"image": self.image, "auction_id":self.auction_id}
     
-    def json_without_image(self):
-        return {"property_id": self.property_id, "agent_id": self.agent_id, "customer_id": self.customer_id, "name": self.name, "address": self.address, "postalcode": self.postalcode, "property_type": self.property_type, "square_feet": self.square_feet, "room": self.room, "facing": self.facing, "build_year": self.build_year, "estimated_cost": self.estimated_cost, "neighbourhood":self.neighbourhood,"image": self.image, "auction_id":self.auction_id}
+    # def json_without_image(self):
+    #     return {"property_id": self.property_id, "agent_id": self.agent_id, "customer_id": self.customer_id, "name": self.name, "address": self.address, "postalcode": self.postalcode, "property_type": self.property_type, "square_feet": self.square_feet, "room": self.room, "facing": self.facing, "build_year": self.build_year, "estimated_cost": self.estimated_cost, "neighbourhood":self.neighbourhood,"image": self.image, "auction_id":self.auction_id}
 
 @app.route("/property")
 def get_all():
@@ -166,38 +166,26 @@ def find_by_property_id(property_id):
 
 @app.route("/property/agent/<agent_id>")
 def find_by_agent_id(agent_id):
-    # get the specific property (.first --> gets us the property if we dont have it we will get the list of property)
     agent_id = int(agent_id)
-    property_list = Property.query.all()
+    property_list = Property.query.filter_by(agent_id=agent_id).all()
+    if not property_list:
+        return jsonify(
+            {
+                "code": 404,
+                "message": f"No properties found for agent_id {agent_id}."
+            }
+        ), 404
+
     temp = []
     for item in property_list:
-        if item.agent_id == agent_id:
-            temp.append(item.json())
+        temp.append(item.json())
     return jsonify(
-        {
+        {   
             "code": 200,
             "data": temp
         }
     ), 200
 
-@app.route("/property/details/<property_id>")
-def find_by_property_id_no_image(property_id):
-    # get the specific property (.first --> gets us the property if we dont have it we will get the list of property)
-    property_id = int(property_id)
-    property = Property.query.filter_by(property_id=property_id).first()
-    if property:
-        return jsonify(
-            {
-                "code": 200,
-                "data": property.json_without_image()
-            }
-        )
-    return jsonify(
-        {
-            "code": 404,
-            "message": "Property not found."
-        }
-    ), 404
 
 # by default it is GET (for other methods you need to specify)
 @app.route("/property", methods=['POST'])
@@ -260,7 +248,7 @@ def update_property(property_id):
         print(data)
         # create a property obj
         property = Property.query.filter_by(property_id=property_id).first()
-        print(property.price)
+
         property.agent_id = data['agent_id']
         property.customer_id = data['customer_id']
         property.name = data['name']
@@ -313,54 +301,41 @@ def update_property(property_id):
 @app.route('/property/<string:property_id>', methods=['DELETE'])
 def delete_property(property_id):
  # check if the property exist
-    if(Property.query.filter_by(property_id=property_id).first()):
-        try:
-            # get the property
-            property = Property.query.filter_by(property_id=property_id).first()
-            # delete the property
-            db.session.delete(property)
-            db.session.commit()
-        except:
-            # if something went wrong return this message
-            return jsonify(
-                {
-                    "code": 500,
-                    "data": {
-                        "property_id": property_id
-                    },
-                    "message": "An error occurred creating the property."
+    property = Property.query.filter_by(property_id=property_id).first()
+    if property:
+        db.session.delete(property)
+        db.session.commit()
+        return jsonify(
+            {
+                "code": 200,
+                "data": {
+                    "property_id": property_id
                 }
-            ), 500
-
-        # else return that it is successful
-        return jsonify(
-            {
-                "code": 201,
-                "data": property.json()
             }
-        ), 201
-
-    else:
-        # if property cannot be found return 404
-        return jsonify(
-            {
-                "code": 404,
-                "message": "Property not found."
-            }
-        ), 404
-
+        )
+    return jsonify(
+        {
+            "code": 404,
+            "data": {
+                "property_id": property_id
+            },
+            "message": "property not found."
+        }
+    ), 404
+#get auction id by property id 
 @app.route("/property/auction/<string:property_id>",methods=['GET'])
 def get_auction(property_id):
     property = Property.query.filter_by(property_id=property_id).first()
     # print(property)
-    list = property.json_without_image()
     
     if property:
+        # return the name of the property
         return jsonify(
             {
                 "code": 200,
-                "data": list["auction_id"]
-                    
+                "data": {
+                    "auction_id": property.auction_id   
+                }
             }
         )
     return jsonify(
@@ -369,7 +344,7 @@ def get_auction(property_id):
             "message": "Auction not found."
         }
     ), 404
-
+# get property name by auction id
 @app.route("/property/name/<int:auction_id>", methods=['GET'])
 def get_property_name(auction_id):
     # filter properties by auction_id
@@ -400,7 +375,7 @@ def find_property_info_using_customerid(customer_id):
         return jsonify(
             {
                 "code": 200,
-                "data": property.json_without_image()
+                "data": property.json()
             }
         )
     return jsonify(

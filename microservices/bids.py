@@ -13,8 +13,8 @@ class Bids(db.Model):
     __tablename__ = 'bids'
 
     bid_id = db.Column(db.Integer, db.Sequence('seq_reg_id', start=1, increment=1), primary_key=True)
-    auction_id = db.Column(db.Integer, db.ForeignKey('auctions.auction_id'), nullable=False)
-    customer_id = db.Column(db.Integer, db.ForeignKey('customer.customer_id'), nullable=False)
+    auction_id = db.Column(db.Integer, db.ForeignKey('auctions.auction_id', ondelete='CASCADE'), nullable=False)
+    customer_id = db.Column(db.Integer, db.ForeignKey('customer.customer_id', ondelete='CASCADE'), nullable=False)
     bid_amount = db.Column(db.String(20), nullable=False)
     created_at = db.Column(db.DATETIME, nullable=False)
     updated_at = db.Column(db.DATETIME, nullable=False)
