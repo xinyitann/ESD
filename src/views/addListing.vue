@@ -161,6 +161,9 @@ name: 'AddListingPage',
             if(data_fetch['status']==201){
                 alert("Listing has been successfully created")
             }
+            else{
+                alert("Listing has been successfully created")
+            }
         },
         handleFileUpload(event) {
             this.file = event.target.files[0];
