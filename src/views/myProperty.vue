@@ -22,6 +22,8 @@
                 :estimated_cost= "properties.estimated_cost"
                 :property_add= "properties.address"
                 v-bind:key="properties"
+                :property_image = "properties.image"
+                :property_id = "properties.property_id"
                 
 
 
@@ -62,15 +64,16 @@ name: 'MyPropertyPage',
         .then((response) => response.json())
         .then((data) => {
             console.log(response);
+            console.log(data)
             
             if (data.code === 404) {
             // no book in db
             this.message = data.message;
             } else {
-            this.property_result = data.data.property_result.data;
-            console.log(this.property_result)
-
+            this.property_list = data.data;
+            console.log("property_list", this.property_list)
             }
+            
         })
         .catch((error) => {
             // Errors when calling the service; such as network error,

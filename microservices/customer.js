@@ -9,14 +9,14 @@ app.listen(5700, function() {
 });
 
 var mysql = require('mysql2');
-const con = mysql.createConnection(process.env.dbURL);
+// const con = mysql.createConnection(process.env.dbURL);
 
-// var con = mysql.createConnection({
-//     host: "host.docker.internal",
-//     user: "is213",
-//     password: "",
-//     database: "property_management"
-// });
+var con = mysql.createConnection({
+    host: "host.docker.internal",
+    user: "is213",
+    password: "",
+    database: "property_management"
+});
 
 class Customer {
     constructor(customer_id, name, phone, email) {
@@ -146,6 +146,7 @@ app.delete('/customer/:customer_id', function(req, res) {
 //GET CUSTOMER'S ID FROM EMAIL
 app.get('/customer/get_id_by_email/:email', function(req, res) {
     const email = req.params.email;
+    console.log(email)
     con.query("SELECT * FROM customer WHERE email = ?", [email], function (err, result) {
         if (err) throw err;
 
