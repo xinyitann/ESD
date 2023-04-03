@@ -118,6 +118,7 @@ name: 'AddListingPage',
            
             const formData = new FormData();
             formData.append('property_image', this.file);
+            alert("Listing has been successfully created")
             let link = await axios.post('http://127.0.0.1:5200/download_image/', formData);
           
             link =  '../src/assets/' + link['data']
@@ -149,21 +150,20 @@ name: 'AddListingPage',
             "neighbourhood": this.neighbourhood,
 
             });
+            
             console.log(raw)
             var requestOptions = {
             method: 'POST',
             headers: myHeaders,
             body: raw,
             };
-
             const data_fetch = await fetch("http://localhost:5200/add_listing", requestOptions)
             console.log(data_fetch)
-            if(data_fetch['status']==201){
-                alert("Listing has been successfully created")
-            }
-            else{
-                alert("Listing has been successfully created")
-            }
+            // if(data_fetch['status']==201){
+                
+            // }
+            
+
         },
         handleFileUpload(event) {
             this.file = event.target.files[0];
