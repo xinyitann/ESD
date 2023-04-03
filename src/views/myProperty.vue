@@ -12,13 +12,22 @@
 
             <MyPropertyCard v-for="properties in property_list"
                 :carouselNum="1"
+                :key="properties"
                 :property_name= "properties.name"
-                :estimated_cost= "properties.estimated_cost"
                 :property_add= "properties.address"
-                v-bind:key="properties"
+                :property_postal_code = "properties.postalcode"
+                :property_type = "properties.property_type"
+                :property_square_feet="properties.square_feet"
+                :property_room = "properties.room"
+                :property_facing = "properties.facing"
+                :property_build_year = "properties.build_year"
+                :property_estimated_cost = "properties.estimated_cost"
+                :property_neighbourhood = "properties.neighbourhood"
                 :property_image = "properties.image"
                 :property_id = "properties.property_id"
                 :auction_id = "properties.auction_id"
+                :property_agent_id = "properties.agent_id"
+                :property_customer_id = "properties.customer_id"
             ></MyPropertyCard>
 
         </div>
@@ -43,7 +52,7 @@ name: 'MyPropertyPage',
         search: "",
         agent_id:1
     };
-  },
+},
 
   methods: {
     findproperties() {
