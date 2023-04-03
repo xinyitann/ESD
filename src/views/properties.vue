@@ -42,6 +42,7 @@
           :property_add= "properties.address"
           :property_id_card="properties.property_id"
           :property_image="properties.image"
+          
 
           v-bind:key="properties"
           

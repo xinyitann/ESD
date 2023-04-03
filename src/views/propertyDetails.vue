@@ -72,23 +72,23 @@
                     <div class="row mb-3">
                         <div class="col">
                             <p class="text-center fw-bold">
-                                ${{bid_result.starting_price}}
+                                ${{property_result.estimated_cost}}
                             </p>
                             <p class="d-flex justify-content-center">
                                 <small class="text-body-secondary">Minimum Bid</small>
                             </p>
                         </div>
-                        <div class="col">
+                        <!-- <div class="col">
                             <p class="text-center fw-bold">
                                 $13771
                             </p>
                             <p class="d-flex justify-content-center">
                                 <small class="text-body-secondary">My Current Bid</small>
                             </p>
-                        </div>
+                        </div> -->
                         <div class="col">
                             <p class="text-center fw-bold">
-                                ${{bid_result.highest_bid}}
+                                ${{gethighestbid()}}
                             </p>
                             <p class="d-flex justify-content-center">
                                 <small class="text-body-secondary">Highest Bid</small>
@@ -102,9 +102,9 @@
                 </div>
                 <div v-else>
                     <p class="text-center fw-bold my-5"> Your bid is successful</p>
-                    <router-link to="/mybids">
+                    <!-- <router-link to="/mybids">
                         <button class="btn" type="button" style="background-color: #447098; color: white;" id="button-addon"  @click="submitBid()">View Bid</button>
-                    </router-link>
+                    </router-link> -->
                 </div>
             </div>
         </div>
@@ -150,13 +150,31 @@ name: 'PropertyDetailsPage',
         }
     },
 
-    created() {
+    async created() {
+
                 // on Vue instance created, load the book list
-                this.findpropertydetails();
-                this.findagentdetails();
-                this.findauctiondetails();
+            this.findpropertydetails();
+            this.findagentdetails();
+            this.findauctiondetails();
+            console.log(this.property_result.auction_id)
+
+            try {
+                var get_property_url = "http://localhost:5002/auctions/" + this.property_result.auction_id;
+                var response = await fetch(get_property_url);
+
+                if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                var data = await response.json();
+                console.log(data)
+
+            } catch (error) {
+                console.error(error);
+            }
+        },
                 
-            },
+    
     computed: {
         date_time_start(){
             let final = this.biddingDate
@@ -171,7 +189,10 @@ name: 'PropertyDetailsPage',
             timing = timing + ':' + '00'+':'+'00'
             final = final + ' ' + timing
             return final
-        }
+        },
+        
+
+
     },
 
     methods:{
@@ -249,7 +270,7 @@ name: 'PropertyDetailsPage',
 
         findauctiondetails() {
         console.log("here is auction")
-        var search_url = get_all_URL + '/'+ this.property_id_prop +'/'+this.customer_id
+        var search_url = get_all_URL + '/'+ this.property_id_prop +'/'+this.customer_id_prop
         console.log(search_url)
         const response = fetch(search_url)
         .then((response) => response.json())
@@ -313,7 +334,10 @@ name: 'PropertyDetailsPage',
                     },
         getimage(image){
         return require('@/assets/' + image)
-    }
+    },
+
+    
+
 
 
 
