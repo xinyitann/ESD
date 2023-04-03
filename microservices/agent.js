@@ -9,13 +9,16 @@ app.listen(5003, function() {
 });
 
 var mysql = require('mysql2');
-// const con = mysql.createConnection(process.env.dbURL);
-var con = mysql.createConnection({
-    host: "host.docker.internal",
-    user: "is213",
-    password: "",
-    database: "property_management"
-});
+
+console.log(process.env.dbURL)
+const con = mysql.createConnection(process.env.dbURL);
+console.log(process.env.dbURL)
+// var con = mysql.createConnection({
+//     host: "host.docker.internal",
+//     user: "is213",
+//     password: "",
+//     database: "property_management"
+// });
 
 class Agent {
     constructor(agent_id, name, phone, email) {
@@ -27,7 +30,6 @@ class Agent {
 
     json() {
         return {
-            "agent_id": this.agent_id,
             "name": this.name,
             "phone": this.phone,
             "email": this.email
@@ -61,7 +63,7 @@ app.get('/agent/:agent_id', function(req, res) {
 app.post('/agent', function(req, res) {
     console.log(req.body); // log the request body
     const { name, phone, email } = req.body;
-    const agent = new Agent(name, phone, email);
+    const agent = new Agent(null, name, phone, email); // pass null as agent_id to generate a new ID
 
     con.query("INSERT INTO agent SET ?", agent, function (err, result) {
         if (err) {
@@ -70,9 +72,11 @@ app.post('/agent', function(req, res) {
             return;
         }
         console.log(result);
-        res.status(201).json({ code: 201, data: agent.json() });
+        const newAgent = new Agent(result.insertId, name, phone, email); // create a new agent object with the generated ID
+        res.status(201).json({ code: 201, data: newAgent.json() });
     });
 });
+
 
 // UPDATE AN AGENT
 app.put('/agent/:agent_id', function(req, res) {

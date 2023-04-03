@@ -11,12 +11,12 @@ app.listen(5700, function() {
 var mysql = require('mysql2');
 // const con = mysql.createConnection(process.env.dbURL);
 
-var con = mysql.createConnection({
-    host: "host.docker.internal",
-    user: "is213",
-    password: "",
-    database: "property_management"
-});
+// var con = mysql.createConnection({
+//     host: "host.docker.internal",
+//     user: "is213",
+//     password: "",
+//     database: "property_management"
+// });
 
 class Customer {
     constructor(customer_id, name, phone, email) {
@@ -61,8 +61,8 @@ app.get('/customer/:customer_id', function(req, res) {
 //ADD AN CUSTOMER
 app.post('/customer', function(req, res) {
     console.log(req.body); // log the request body
-    const { customer_id, name, phone, email } = req.body;
-    const customer = new Customer(customer_id, name, phone, email);
+    const { name, phone, email } = req.body;
+    const customer = new Customer(null, name, phone, email); // pass null as customer_id to generate a new ID
 
     con.query("INSERT INTO customer SET ?", customer, function (err, result) {
         if (err) {
@@ -71,7 +71,8 @@ app.post('/customer', function(req, res) {
             return;
         }
         console.log(result);
-        res.status(201).json({ code: 201, data: customer.json() });
+        const newCustomer = new Customer(result.insertId, name, phone, email); // create a new Customer object with the generated ID
+        res.status(201).json({ code: 201, data: newCustomer.json() });
     });
 });
 
