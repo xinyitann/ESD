@@ -99,23 +99,23 @@ export default {
     //     this.product = data;
     //   });
 
-    try {
-      var get_option_fee_url = "http://localhost:5002/auctions/option_fee/" + String(this.optionFee);
-      var response = await fetch(get_option_fee_url);
+    // try {
+    //   var get_option_fee_url = "http://localhost:5002/auctions/option_fee/" + String(this.optionFee);
+    //   var response = await fetch(get_option_fee_url);
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
+    //   if (!response.ok) {
+    //     throw new Error(`HTTP error! status: ${response.status}`);
+    //   }
 
-      var data = await response.json();
-      // this.bidBefore = true;
-      // this.property_list = Reflect.get(data['data'], 'property_result');
-      // this.bid_list = Reflect.get(data['data'], 'bids_result');
-      console.log(data)
+    //   var data = await response.json();
+    //   // this.bidBefore = true;
+    //   // this.property_list = Reflect.get(data['data'], 'property_result');
+    //   // this.bid_list = Reflect.get(data['data'], 'bids_result');
+    //   console.log(data)
 
-    } catch (error) {
-      console.error(error);
-    }
+    // } catch (error) {
+    //   console.error(error);
+    // }
 
   },
   
@@ -130,7 +130,7 @@ export default {
                 {
                   amount: {
                     currency_code: "USD",
-                    value: this.optionFee
+                    value: parseFloat(this.optionFee)
                   }
                 }
               ]
