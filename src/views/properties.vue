@@ -36,7 +36,7 @@
 
       <!-- for testing-->
       
-        <PropertyCard v-for="properties in PO_property_list"
+        <!-- <PropertyCard v-for="properties in PO_property_list"
           :carouselNum="1"
           :property_name= "properties.name"
           :estimated_cost= "properties.estimated_cost"
@@ -45,7 +45,7 @@
           :property_image="properties.image"
           v-bind:key="properties"
           @submit_property_data="get_submit_data($event)"
-        ></PropertyCard>
+        ></PropertyCard> -->
 
         <!-- <PropertyDetails v-for="properties in property_list"
           :property_id="properties.id"
@@ -66,7 +66,19 @@
 
       <!-- for testing-->
       
-        <PropertyCard v-for="properties in ELSE_property_list"
+        <!-- <PropertyCard v-for="properties in ELSE_property_list"
+          :carouselNum="1"
+          :property_name= "properties.name"
+          :estimated_cost= "properties.estimated_cost"
+          :property_add= "properties.address"
+          :property_id_card="properties.property_id"
+          :property_image="properties.image"
+          v-bind:key="properties"
+          @submit_property_data="get_submit_data($event)"
+        ></PropertyCard> -->
+
+
+        <PropertyCard v-for="properties in property_list"
           :carouselNum="1"
           :property_name= "properties.name"
           :estimated_cost= "properties.estimated_cost"
@@ -96,7 +108,7 @@
 import PropertyCard from "@/components/propertyCard.vue";
 // import PropertyDetails from "./propertyDetails.vue"
 
-// const get_all_URL = "http://localhost:5106/search_list";
+const get_all_URL = "http://localhost:5106/search_list";
 
 export default {
   name: "PropertiesPage",
@@ -134,27 +146,27 @@ export default {
     };
   },
   methods: {
-    // findproperties() {
-    //     var search_url = get_all_URL + "/" + this.search
-    //   const response = fetch(search_url)
-    //     .then((response) => response.json())
-    //     .then((data) => {
-    //       console.log(response);
+    findproperties() {
+        var search_url = get_all_URL + "/" + this.search
+      const response = fetch(search_url)
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(response);
             
-    //       if (data.code === 404) {
-    //         // no book in db
-    //         this.message = data.message;
-    //       } else {
-    //         this.property_list = data.data.property_result.data.properties;
-    //       }
-    //       console.log(this.property_list)
-    //     })
-    //     .catch((error) => {
-    //       // Errors when calling the service; such as network error,
-    //       // service offline, etc
-    //       console.log(this.message + error);
-    //     });
-    // },
+          if (data.code === 404) {
+            // no book in db
+            this.message = data.message;
+          } else {
+            this.property_list = data.data.property_result.data.properties;
+          }
+          console.log(this.property_list)
+        })
+        .catch((error) => {
+          // Errors when calling the service; such as network error,
+          // service offline, etc
+          console.log(this.message + error);
+        });
+    },
     get_submit_data(data){
           this.selected_property_id = data
     }

@@ -40,16 +40,16 @@
                         </div>
                         <div class="col-12 col-md-6 px-5">
                             <div class="mb-3">
-                                <label for="estimatedCost" class="form-label">Property Type</label>
-                                <input v-model="property_type" type="text" class="form-control" id="estimatedCost">
+                                <label for="property_type" class="form-label">Property Type</label>
+                                <input v-model="property_type" type="text" class="form-control" id="property_type">
                             </div>
                             <div class="mb-3">
                                 <label for="facing" class="form-label">Facing</label>
                                 <input v-model="facing" type="text" class="form-control" id="facing">
                             </div>
                             <div class="mb-3">
-                                <label for="estimatedCost" class="form-label">Estimated Cost*</label>
-                                <input type="text" class="form-control" id="estimatedCost">
+                                <label for="estimated_cost" class="form-label">Estimated Cost*</label>
+                                <input v-model="estimated_cost" type="text" class="form-control" id="estimatedCost">
                             </div>
                             <div class="mb-3">
                                 <label for="optionFee" class="form-label">Option Fee*</label>
@@ -83,7 +83,7 @@
 
 <script>
 
-import axios from 'axios'
+// import axios from 'axios'
 
 
 export default {
@@ -116,14 +116,14 @@ name: 'AddListingPage',
             
 
            
-            const formData = new FormData();
-            formData.append('property_image', this.file);
-            alert("Listing has been successfully created")
-            let link = await axios.post('http://127.0.0.1:5200/download_image/', formData);
+            // const formData = new FormData();
+            // formData.append('property_image', this.file);
+            // alert("Listing has been successfully created")
+            // let link = await axios.post('http://127.0.0.1:5200/download_image/', formData);
           
-            link =  '../src/assets/' + link['data']
-            this.image = link
-            console.log(link)
+            // link =  '../src/assets/' + link['data']
+            // this.image = link
+            // console.log(link)
             
 
 
@@ -143,7 +143,7 @@ name: 'AddListingPage',
             "facing": this.facing,
             "build_year": this.build_year,
             "estimated_cost": this.estimated_cost,
-            "image": this.image,
+            "image": "room1.jpg",
             "status": this.status,
             "starting_price": this.starting_price,
             "option_fee": this.option_fee,
